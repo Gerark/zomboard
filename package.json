@@ -1,0 +1,14 @@
+{
+  "name": "zomboard",
+  "private": true,
+  "scripts": {
+    "build": "node scripts/build-pages.mjs",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=20.9.0"
+  },
+  "devDependencies": {
+    "sharp": "0.35.5"
+  }
+}

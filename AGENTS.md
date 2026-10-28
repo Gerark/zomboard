@@ -12,11 +12,11 @@
 ZomBoard is a public, read-only Project Zomboid mission board themed around the McCoy Logging Co. safehouse near Muldraugh, Knox County. The page opens directly onto compact mission cards below the ZomBoard brand header. There is no visible board heading, tagline, location/signal block, search, filtering, hero section, or emergency-broadcast strip.
 
 - It is a single-page static website using plain HTML, CSS, and two deferred classic JavaScript scripts: mission data first, then rendering and interactions.
-- There is no framework, package manifest, build process, backend, database, authentication, game integration, saved mission progress, or browser-storage layer.
+- There is no framework, backend, database, authentication, game integration, saved mission progress, or browser-storage layer. A Node.js build prepares GitHub Pages deployment output and per-mission sharing metadata; the runtime remains plain HTML, CSS and classic scripts.
 - Mission content is curated in source. Visitors can browse all missions, open briefings, and copy links; they cannot claim or complete missions.
 - Objective lists are informational numbered lists, not interactive checkboxes or completion tracking.
 - All mission images are local files: fourteen PNG screenshots, a PNG bunker tour flyer, and two SVG illustrations. Google Fonts is the only external resource service referenced by the site; CSS supplies fallback fonts.
-- Mission content requires JavaScript: the initial HTML contains an empty mission grid and no non-JavaScript mission fallback.
+- The main board and full briefings require JavaScript: the source HTML contains an empty mission grid. Generated share pages provide a title, teaser, image and briefing link without JavaScript.
 
 ## File responsibilities
 
@@ -25,12 +25,18 @@ ZomBoard is a public, read-only Project Zomboid mission board themed around the 
 | `index.html` | Page structure, metadata, font loading, brand header, accessible mission-section heading, quest sidebar, mission grid container, and dialog shell. |
 | `missions-data.js` | The `missions` array: mission content and display order. Loaded before `missions.js`. |
 | `missions.js` | HTML escaping, card/list/briefing templates, sidebar highlighting and scrolling, modal lifecycle, URL state, and clipboard handling. |
+| `share.js` | Continues visitors from generated share pages to the existing mission briefing, preserving additional query parameters and the hash. Loaded only on share pages. |
 | `styles.css` | Design tokens, component styles, image cropping, responsive layouts, focus styling, and reduced-motion overrides. |
 | `assets/` | Fifteen PNG mission images, two SVG mission illustrations, the social-preview image `hero-mccoy.svg`, and `favicon.svg`. |
 | `.nojekyll` | Disables Jekyll processing for direct static publication on GitHub Pages. Keep this file in the publishing root. |
 | `README.md` | End-user customization, local preview, GitHub Pages setup, and publishing instructions. |
+| `scripts/build-pages.mjs` | Validates curated mission data and local assets, copies the public website into `_site/`, generates per-mission metadata pages and copy-link configuration, and converts SVG preview images to PNG. |
+| `package.json`, `package-lock.json` | Build/test commands and locked development-only `sharp` dependency. No browser runtime dependency. |
+| `tests/` | Node built-in tests for generated metadata, image selection/conversion, output safety, content versions, share links, clipboard fallback and visitor navigation. |
+| `.github/workflows/pages.yml` | Tests/builds pushes and pull requests; deploys the generated artifact only for `main` pushes or manual runs on `main`. |
+| `_site/` | Ignored generated deployment output, including `share/`, PNG exports, and a build ownership marker. Never hand-edit or commit this directory. |
 
-Keep the site usable as directly served files. Do not introduce modules, a fetch-based data file, dependencies, a router, or a build tool without approval for that architectural change. Such changes must also account for the README's direct-file preview workflow.
+Keep the site usable as directly served source files. The owner approved the GitHub Actions build for mission link previews; this does not require a build for local source preview. Do not introduce browser modules, a fetch-based data file, runtime dependencies, a router, or additional tooling without approval for that architectural change. Such changes must also account for the README's direct-file preview workflow.
 
 ## Mission data contract
 
@@ -38,7 +44,7 @@ The `missions` array in `missions-data.js` is the source of truth for mission co
 
 | Field | Expected value and coupling |
 | --- | --- |
-| `id` | Unique, stable URL identifier. Existing shared links use `?mission=<id>`. Preserve existing IDs unless a link migration is explicitly approved. |
+| `id` | Unique, stable URL identifier using lowercase letters/digits with optional single hyphens between segments. Existing links use `?mission=<id>`; built share pages use `share/<id>.html`. Preserve existing IDs unless a link migration is explicitly approved. |
 | `number` | Two-digit display string such as `'01'`; independent of the array index and used in cards and briefings. Keep numbering consistent with ordering and narrative references. |
 | `title`, `kicker`, `teaser` | Plain text used in cards; title and kicker also appear in briefings. |
 | `category` | Exactly `'field'` or `'base'`; controls card classification. |
@@ -82,6 +88,10 @@ Keep both metadata descriptions in `index.html` generic, without a mission count
 - The close button, Escape cancellation, and backdrop clicks call `closeMission()`, which removes the query parameter and restores the prior focus if that element is still connected. If a list button opened the briefing and resizing has hidden the sidebar, focus returns to the matching card instead.
 - A `popstate` listener also opens or closes the dialog without rewriting the navigated URL. Its close branch uses the same focus-restoration helper, including the hidden-sidebar fallback. If an unknown ID arrives while a dialog is already open, the current briefing is left open. Reassess these paths if navigation behavior is changed.
 - Copying a mission link uses `navigator.clipboard.writeText`; failure or an unavailable clipboard falls back to a prompt containing the link. Test both paths when changing this feature.
+- The source HTML has a `MISSION_SHARE_CONFIG` comment marker. The build replaces it in the output with non-executable JSON (`mission-share-config`) mapping IDs to versioned relative share URLs. The source remains unchanged. Both deferred classic scripts retain their existing load order.
+- Built HTTP(S) pages copy the generated share URL for a mission, preserving other query parameters and the hash while removing `mission` from the share URL. Unbuilt source previews and file URLs keep the existing query-string links. Do not require generated files to browse the source locally.
+- Each generated share page has static metadata with the mission's title, teaser and first image, absolute public URLs, dimensions and image alternative text. PNG assets are reused directly; SVGs get PNG exports only in deployment output. There are no screenshots or new illustration generation steps. Share pages have no HTTP or meta-refresh redirect: `share.js` continues JavaScript-enabled visitors to the existing `index.html?mission=<id>` briefing. A visible link and content remain without JavaScript.
+- Share URL versions depend on preview content and first-image bytes. Image URLs are content-versioned as well. Old query-string links keep working but cannot have mission-specific metadata on static hosting. Existing Discord embeds may stay cached; confirm behavior with a newly copied URL after deployment.
 
 ## Rendering and content safety
 
@@ -106,7 +116,7 @@ Keep both metadata descriptions in `index.html` generic, without a mission count
 
 ## Local workflow and verification
 
-Run commands from the repository root. There is no configured install, build, lint, automated-test, or CI workflow; do not invent `npm` commands or add tooling solely for a routine edit.
+Run commands from the repository root. Source preview requires no installation or build. The configured build/test commands exist specifically for Pages sharing output; do not add a framework or unrelated tooling for routine edits.
 
 ```powershell
 python -m http.server 8000 --bind 127.0.0.1
@@ -115,6 +125,8 @@ python -m http.server 8000 --bind 127.0.0.1
 Open `http://127.0.0.1:8000/`. The README also supports opening `index.html` directly; check that workflow when changing URL handling, resource loading, or the clipboard fallback. Do not assume file URLs behave identically to HTTP. Stop a temporary server when it is no longer needed.
 
 If Node.js is available, run `node --check missions-data.js` and `node --check missions.js` to check syntax without installing anything. These checks do not validate DOM behavior or mission data consistency.
+
+For sharing or build changes, use `npm ci --ignore-scripts`, `npm test`, and `npm run build -- --base-url https://gerark.github.io/zomboard/`. GitHub Actions uses Node.js 24. Tests use Node's built-in runner and temporary fixtures under ignored `.cache/`. The build validates unique slug IDs, nonempty fields/objectives, valid categories/risks/numbers, related-mission targets and case-correct local PNG/SVG paths. It regenerates only its fixed `_site/` directory and refuses an existing output directory without its ownership marker. The artifact contains an explicit public-file list plus `assets/`, rather than the whole repository. Confirm all share pages have raw static metadata and valid first images. Live Discord behavior requires a deployed site; offline tests do not establish actual embed rendering or cache behavior.
 
 For approved behavior, content, or styling changes, select the relevant checks below and report what was actually verified:
 
@@ -129,10 +141,10 @@ For documentation-only changes, verify the described contracts against source an
 
 ## Publishing and handoff
 
-The hosting target is GitHub Pages for `Gerark/zomboard`, at `https://gerark.github.io/zomboard/`. The publishing source is the `main` branch, `/ (root)`, using **Deploy from a branch** in repository Settings > Pages. GitHub manages the Pages build/deployment workflow; no custom workflow or application build is required.
+The hosting target is GitHub Pages for `Gerark/zomboard`, at `https://gerark.github.io/zomboard/`. The prepared deployment uses `.github/workflows/pages.yml`; the owner must select **GitHub Actions** as the source in repository Settings > Pages, replacing the previous **Deploy from a branch** setting. The workflow tests and builds on pushes to `main` and pull requests targeting `main`, then deploys only `main` pushes or manual runs on `main`. It uses official actions pinned to verified commit IDs, locked npm dependencies, read-only build permissions and Pages/OIDC write permissions confined to the deployment job.
 
-The site requires `index.html`, `styles.css`, `missions-data.js`, `missions.js`, and `assets/`, with `.nojekyll` and `index.html` at the deployment root. Preserve relative URLs so assets and query-string mission links work under `/zomboard/`. Publishing from the root also makes documentation files publicly reachable; do not commit private material to this public repository.
+The deployed site contains `index.html`, `styles.css`, `missions-data.js`, `missions.js`, `share.js`, `assets/`, and generated `share/` pages, with `.nojekyll` and `index.html` at the deployment root. Only `_site/` is uploaded and deployed. Documentation, tests, build scripts, lockfiles and dependencies are excluded from the artifact. The repository itself is still public; do not commit private material. Preserve relative browser URLs so the board and query-string mission links work under `/zomboard/`. The build obtains the public base URL from Pages configuration for absolute preview metadata, including a configured custom domain.
 
-Pushes to `main` publish automatically after Pages is enabled. Before an authorized push, review the intended files and check the managed **pages build and deployment** run afterward. A deployment can be inspected in the repository's Actions tab. Feature branches do not publish to the live site.
+Pushes to `main` publish automatically after Pages is configured for GitHub Actions. Before an authorized push, review the intended files and check **Build and deploy GitHub Pages** afterward in the repository's Actions tab. Generated files stay in the deployment artifact and are never committed back. Feature branches and pull requests do not publish to the live site. No custom secret is required; standard Pages environment/branch protections still apply.
 
 Publishing requires the owner's instruction; do not infer permission to publish from an analysis-only request. Verify current hosting requirements if publishing is requested; do not assume the README's external service instructions are permanently current. Report the concrete change, verification performed, and unresolved issues. Keep this guide and the README aligned with any approved architectural or behavior changes.

@@ -17,6 +17,20 @@ let restoringFocus = false;
 
 const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (ch) => ({'&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'}[ch]));
 const pad = (n) => String(n).padStart(2, '0');
+const missionShareLinks = JSON.parse(document.getElementById('mission-share-config')?.textContent || '{}');
+
+function missionLink(id) {
+  const url = new URL(window.location.href);
+  if (missionShareLinks[id] && (url.protocol === 'https:' || url.protocol === 'http:')) {
+    const shareUrl = new URL(missionShareLinks[id], url);
+    url.pathname = shareUrl.pathname;
+    url.searchParams.delete('mission');
+    shareUrl.searchParams.forEach((value, key) => url.searchParams.set(key, value));
+  } else {
+    url.searchParams.set('mission', id);
+  }
+  return url.toString();
+}
 
 function getMissionImages(m) {
   return Array.isArray(m.images) && m.images.length
@@ -124,14 +138,13 @@ function showMission(id, updateUrl = true, opener = document.activeElement) {
   }
   dialogContent.querySelector('#copy-mission').addEventListener('click', async (event) => {
     const button = event.currentTarget;
-    const link = new URL(window.location.href);
-    link.searchParams.set('mission', m.id);
+    const link = missionLink(m.id);
     try {
-      await navigator.clipboard.writeText(link.toString());
+      await navigator.clipboard.writeText(link);
       button.textContent = '✓ LINK COPIED';
     } catch {
       button.textContent = 'SELECT URL TO COPY';
-      window.prompt('Copy this mission link:', link.toString());
+      window.prompt('Copy this mission link:', link);
     }
   });
 }
