@@ -1,4 +1,4 @@
-# Add a mission
+# Add a mission 
 
 1. Add the mission images to `assets/`.
 2. Open `missions-data.js` and duplicate a complete object inside the `missions` array, before the closing `];`. Separate objects with commas.
