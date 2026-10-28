@@ -1,12 +1,15 @@
 'use strict';
 
 // Edit titles, descriptions, crew sizes and image paths here.
-// To replace an illustration, put a new image in assets/ and update its image property.
+// Use image/imageAlt for one image, or images: [{ src, alt }, ...] for an ordered list.
 const missions = [
   {
     id: 'bunker', number: '01', title: 'THE BUNKER MYSTERY',
     kicker: 'RECONNAISSANCE', category: 'field', risk: 'HIGH',
-    image: 'assets/bunker.png', imageAlt: 'Annotated in-game map marking a possible bunker location in Knox County.',
+    images: [
+      { src: 'assets/bunker-flyer.png', alt: 'In-game tour flyer for a decommissioned nuclear bunker in March Ridge, with directions and a labeled floor plan.' },
+      { src: 'assets/bunker.png', alt: 'Annotated in-game map marking a possible bunker location in Knox County.' }
+    ],
     location: 'Unknown bunker · Knox County', crew: '3 recommended / 1 stealth specialist',
     teaser: 'Could be full of supplies. Could be absolutely nothing. Only one way to find out.',
     description: 'Rumors of a bunker nearby. Maybe military supplies, maybe forgotten treasures, maybe three cans of beans and a dead rat. Get eyes on the entrance and find out whether it is worth the trip. Go in loud with a squad, or send one sneaky bastard to scout it out.',

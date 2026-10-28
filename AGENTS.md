@@ -15,7 +15,7 @@ ZomBoard is a public, read-only Project Zomboid mission board themed around the 
 - There is no framework, package manifest, build process, backend, database, authentication, game integration, saved mission progress, or browser-storage layer.
 - Mission content is curated in source. Visitors can browse all missions, open briefings, and copy links; they cannot claim or complete missions.
 - Objective lists are informational numbered lists, not interactive checkboxes or completion tracking.
-- All mission images are local: twelve supplied PNG screenshots. Google Fonts is the only external resource service referenced by the site; CSS supplies fallback fonts.
+- All mission images are local PNG files: twelve screenshots and a bunker tour flyer. Google Fonts is the only external resource service referenced by the site; CSS supplies fallback fonts.
 - Mission content requires JavaScript: the initial HTML contains an empty mission grid and no non-JavaScript mission fallback.
 
 ## File responsibilities
@@ -26,7 +26,7 @@ ZomBoard is a public, read-only Project Zomboid mission board themed around the 
 | `missions-data.js` | The `missions` array: mission content and display order. Loaded before `missions.js`. |
 | `missions.js` | HTML escaping, card/list/briefing templates, sidebar highlighting and scrolling, modal lifecycle, URL state, and clipboard handling. |
 | `styles.css` | Design tokens, component styles, image cropping, responsive layouts, focus styling, and reduced-motion overrides. |
-| `assets/` | Twelve PNG screenshots, the social-preview image `hero-mccoy.svg`, and `favicon.svg`. |
+| `assets/` | Thirteen PNG mission images, the social-preview image `hero-mccoy.svg`, and `favicon.svg`. |
 | `.nojekyll` | Disables Jekyll processing for direct static publication on GitHub Pages. Keep this file in the publishing root. |
 | `README.md` | End-user customization, local preview, GitHub Pages setup, and publishing instructions. |
 
@@ -34,7 +34,7 @@ Keep the site usable as directly served files. Do not introduce modules, a fetch
 
 ## Mission data contract
 
-The `missions` array in `missions-data.js` is the source of truth for mission content and display order. All fields below are expected except optional `imageAlt`; there is no runtime schema validation.
+The `missions` array in `missions-data.js` is the source of truth for mission content and display order. All fields below are expected except optional `images` and `imageAlt`. Supply either a nonempty `images` array or the single-image `image` field; there is no runtime schema validation.
 
 | Field | Expected value and coupling |
 | --- | --- |
@@ -43,8 +43,9 @@ The `missions` array in `missions-data.js` is the source of truth for mission co
 | `title`, `kicker`, `teaser` | Plain text used in cards; title and kicker also appear in briefings. |
 | `category` | Exactly `'field'` or `'base'`; controls card classification. |
 | `risk` | Uppercase `'LOW'`, `'MEDIUM'`, `'HIGH'`, or `'SEVERE'`; lowercased to form CSS classes. |
-| `image` | Existing, case-correct local asset path such as `'assets/bunker.png'`. |
-| `imageAlt` | Optional plain-text image description for the briefing. Provide it for informative screenshots and maps; decorative placeholders may omit it. Card thumbnails remain decorative. |
+| `images` | Optional ordered array of `{ src, alt }` objects. Each `src` is an existing, case-correct local asset path; `alt` is optional plain text, required by convention for informative images. The first image is the card thumbnail; all images appear in the briefing in order. A nonempty array takes precedence over `image` and `imageAlt`. |
+| `image` | Single-image asset path such as `'assets/bunker.png'`, used when `images` is absent or empty. Must exist and match filename casing. |
+| `imageAlt` | Optional plain-text description for the single-image briefing. Provide it for informative screenshots and maps; decorative placeholders may omit it. Card thumbnails remain decorative. |
 | `location`, `crew` | Plain text shown in briefings; crew also appears on cards. Requirements are descriptive, not enforced. |
 | `description`, `note` | Plain-text briefing copy and field notes. |
 | `objectives` | Nonempty array of plain-text strings, rendered in order. |
@@ -52,6 +53,8 @@ The `missions` array in `missions-data.js` is the source of truth for mission co
 The baseline is twelve missions: eight field runs and four base jobs. Existing IDs, in order, are `bunker`, `groceries`, `palisade`, `coop`, `chickens`, `mechanics`, `police`, `greenes`, `garden`, `vhs`, `dumbbell`, and `drag-race`. The VHS quest collects tapes from the movie store in Muldraugh and uses `assets/vhs.png`. Operation Dumbbell recovers gym equipment and snacks before setting up a safehouse workout area, and uses `assets/dumbbell.png`. The drag-race quest recovers one more fast car to race against the car already brought home, then prepares both cars and scouts a highway stretch; it uses `assets/drag-race.png`. Its NOS reference is narrative banter, not a confirmed game mechanic or required item.
 
 Narrative dependencies are not executable rules. For example, the garden's note refers to supplies from mission 08; changing mission ordering or numbering can invalidate this copy.
+
+The bunker uses an ordered `images` list: `assets/bunker-flyer.png` first and the retained annotated map `assets/bunker.png` second. Other missions retain their single-image fields.
 
 ### Mission counts
 
@@ -90,9 +93,9 @@ Keep both metadata descriptions in `index.html` generic, without a mission count
 - Typography uses Barlow Condensed for display text, IBM Plex Mono for labels, and DM Sans for body copy. Verify fallback-font layout if fonts are unavailable.
 - Default mission layout is a 232px quest sidebar, a 24px gap, and three card columns within the existing 1220px wrapper. The sidebar sticks 24px from the viewport top, uses at most `100dvh - 48px` in height, and scrolls internally when needed. At widths up to 1100px it is hidden (including keyboard access); the grid keeps three columns, then two up to 820px, and one up to 550px. Cards use compact padding and typography, with shorter images on mobile.
 - Briefing titles use `clamp(30px, 4.5vw, 46px)`, facts use 13px type, text sections use 16px spacing, and objective rows use 8px vertical padding. Preserve the top clearance for the sticky close button on desktop and mobile.
-- Card thumbnails are cropped with `object-fit: cover`. Briefing images appear directly after field notes and before the action controls, use their natural aspect ratio without cropping, and **View full image** opens the original asset in a new tab. Preserve full map annotations in briefings; do not reintroduce a fixed image height there. The social-preview SVG has a `1000 650` viewBox.
+- Card thumbnails use the first image and are cropped with `object-fit: cover`. Briefing images appear in source order directly after field notes and before the action controls, using their natural aspect ratio without cropping. Each has a **View full image** link that opens the original asset in a new tab; multiple images and their links have matching image numbers. Preserve full map annotations in briefings; do not reintroduce a fixed image height there. The social-preview SVG has a `1000 650` viewBox.
 - Preserve real buttons, `aria-live` on the grid, dialog labeling, keyboard access, visible focus, and reduced-motion overrides.
-- Card thumbnails use empty alternative text; briefing images use `imageAlt` when provided. Keep informative screenshot descriptions accurate and preserve uncertainty in annotated possible locations. A visually hidden `h1` labels the mission section without adding a visible board heading; card titles are `h2` elements.
+- Card thumbnails use empty alternative text; briefing images use each image's `alt`, or the legacy `imageAlt` for single-image fields. Keep informative screenshot descriptions accurate and preserve uncertainty in annotated possible locations. A visually hidden `h1` labels the mission section without adding a visible board heading; card titles are `h2` elements.
 - Use the existing English setting and darkly humorous game-fiction voice. Keep functional controls clear.
 
 ## Local workflow and verification

@@ -18,12 +18,19 @@ let restoringFocus = false;
 const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (ch) => ({'&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'}[ch]));
 const pad = (n) => String(n).padStart(2, '0');
 
+function getMissionImages(m) {
+  return Array.isArray(m.images) && m.images.length
+    ? m.images
+    : [{ src: m.image, alt: m.imageAlt || '' }];
+}
+
 function cardHTML(m) {
   const field = m.category === 'field';
+  const image = getMissionImages(m)[0];
   return `<article class="mission-card" data-mission-id="${escapeHtml(m.id)}">
     <button class="card-button" type="button" data-open="${escapeHtml(m.id)}" aria-label="Read mission ${escapeHtml(m.title)}">
       <div class="card-image">
-        <img src="${escapeHtml(m.image)}" alt="" loading="lazy">
+        <img src="${escapeHtml(image.src)}" alt="" loading="lazy">
         <div class="card-image-grain"></div>
         <span class="card-num">NO. ${escapeHtml(m.number)}</span>
         <span class="card-type">${field ? '↗ FIELD OPERATION' : '⌂ HOMEFRONT'}</span>
@@ -88,6 +95,7 @@ function scheduleSidebarScroll(id) {
 function showMission(id, updateUrl = true, opener = document.activeElement) {
   const m = missions.find((item) => item.id === id);
   if (!m) return;
+  const images = getMissionImages(m);
   if (!dialog.open) priorFocus = opener;
   clearSidebarInteraction();
   dialogContent.innerHTML = `<div class="dossier-body">
@@ -101,8 +109,8 @@ function showMission(id, updateUrl = true, opener = document.activeElement) {
       <p class="dossier-description">${escapeHtml(m.description)}</p>
       <h3>MISSION OBJECTIVES</h3><ol class="objective-list">${m.objectives.map((o, i) => `<li><span>${pad(i + 1)}</span>${escapeHtml(o)}</li>`).join('')}</ol>
       <div class="dossier-note"><strong>FIELD NOTES /</strong> ${escapeHtml(m.note)}</div>
-      <div class="dossier-image"><img src="${escapeHtml(m.image)}" alt="${escapeHtml(m.imageAlt || '')}"><span>DOSSIER ${escapeHtml(m.number)} / ${pad(missions.length)}</span></div>
-      <div class="dossier-actions"><button type="button" id="copy-mission" class="copy-button">⧉ COPY MISSION LINK</button><a class="copy-button" href="${escapeHtml(m.image)}" target="_blank" rel="noopener">VIEW FULL IMAGE ↗</a><span>RETURN ALIVE. REPORT BACK.</span></div>
+      ${images.map((image, i) => `<div class="dossier-image"><img src="${escapeHtml(image.src)}" alt="${escapeHtml(image.alt || '')}"><span>DOSSIER ${escapeHtml(m.number)} / ${pad(missions.length)}${images.length > 1 ? ` · IMAGE ${i + 1} / ${images.length}` : ''}</span></div>`).join('')}
+      <div class="dossier-actions"><button type="button" id="copy-mission" class="copy-button">⧉ COPY MISSION LINK</button>${images.map((image, i) => `<a class="copy-button" href="${escapeHtml(image.src)}" target="_blank" rel="noopener">VIEW FULL IMAGE${images.length > 1 ? ` ${i + 1} / ${images.length}` : ''} ↗</a>`).join('')}<span>RETURN ALIVE. REPORT BACK.</span></div>
     </div>`;
 
   if (!dialog.open) dialog.showModal();
