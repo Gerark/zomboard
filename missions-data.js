@@ -19,7 +19,10 @@ const missions = [
   {
     id: 'groceries', number: '02', title: 'THE PRICE OF GROCERIES',
     kicker: 'SUPPLY RUN', category: 'field', risk: 'SEVERE',
-    image: 'assets/grocery.png', imageAlt: 'Annotated map marking a canned-food location in Muldraugh and the McCoy safehouse.',
+    images: [
+      { src: 'assets/grocery-store.png', alt: 'Food Market grocery store exterior and parking lot.' },
+      { src: 'assets/grocery.png', alt: 'Annotated map marking a canned-food location in Muldraugh and the McCoy safehouse.' }
+    ],
     location: 'Grocery Store · Muldraugh', crew: '3 recommended / 2 if we are smart',
     teaser: 'The shelves might have food. The previous customers definitely never left.',
     description: 'The grocery store is crawling with zombies. Unfortunately, it is also crawling with the possibility of actual food. Assemble a squad, sweep the perimeter, clear the aisles and take everything useful before the local population notices the sale.',
@@ -69,7 +72,10 @@ const missions = [
   {
     id: 'police', number: '07', title: 'THE SOUND OF FREEDOM',
     kicker: 'AMMUNITION & DRILLS', category: 'field', risk: 'SEVERE',
-    image: 'assets/police.png', imageAlt: 'Annotated map marking Muldraugh Police Station near Wilson Street.',
+    images: [
+      { src: 'assets/police-station.png', alt: 'Police station entrance with metal barriers and radio dishes on the roof.' },
+      { src: 'assets/police.png', alt: 'Annotated map marking Muldraugh Police Station near Wilson Street.' }
+    ],
     location: 'Muldraugh Police Station / Safehouse', crew: '3 survivors minimum',
     teaser: 'First we find bullets. Then we find out whether our walls actually work.',
     description: 'Our ammunition stash is looking sad. Raid the Muldraugh police station for supplies, then arrange a controlled test of our defenses back at McCoy. Lure a small group of zombies toward the base and practise holding the line. Emphasis on small.',

@@ -15,7 +15,7 @@ ZomBoard is a public, read-only Project Zomboid mission board themed around the 
 - There is no framework, package manifest, build process, backend, database, authentication, game integration, saved mission progress, or browser-storage layer.
 - Mission content is curated in source. Visitors can browse all missions, open briefings, and copy links; they cannot claim or complete missions.
 - Objective lists are informational numbered lists, not interactive checkboxes or completion tracking.
-- All mission images are local PNG files: twelve screenshots and a bunker tour flyer. Google Fonts is the only external resource service referenced by the site; CSS supplies fallback fonts.
+- All mission images are local PNG files: fourteen screenshots and a bunker tour flyer. Google Fonts is the only external resource service referenced by the site; CSS supplies fallback fonts.
 - Mission content requires JavaScript: the initial HTML contains an empty mission grid and no non-JavaScript mission fallback.
 
 ## File responsibilities
@@ -26,7 +26,7 @@ ZomBoard is a public, read-only Project Zomboid mission board themed around the 
 | `missions-data.js` | The `missions` array: mission content and display order. Loaded before `missions.js`. |
 | `missions.js` | HTML escaping, card/list/briefing templates, sidebar highlighting and scrolling, modal lifecycle, URL state, and clipboard handling. |
 | `styles.css` | Design tokens, component styles, image cropping, responsive layouts, focus styling, and reduced-motion overrides. |
-| `assets/` | Thirteen PNG mission images, the social-preview image `hero-mccoy.svg`, and `favicon.svg`. |
+| `assets/` | Fifteen PNG mission images, the social-preview image `hero-mccoy.svg`, and `favicon.svg`. |
 | `.nojekyll` | Disables Jekyll processing for direct static publication on GitHub Pages. Keep this file in the publishing root. |
 | `README.md` | End-user customization, local preview, GitHub Pages setup, and publishing instructions. |
 
@@ -54,7 +54,7 @@ The baseline is twelve missions: eight field runs and four base jobs. Existing I
 
 Narrative dependencies are not executable rules. For example, the garden's note refers to supplies from mission 08; changing mission ordering or numbering can invalidate this copy.
 
-The bunker uses an ordered `images` list: `assets/bunker-flyer.png` first and the retained annotated map `assets/bunker.png` second. Other missions retain their single-image fields.
+The bunker uses an ordered `images` list: `assets/bunker-flyer.png` first and the retained annotated map `assets/bunker.png` second. The groceries quest likewise uses `assets/grocery-store.png` first and its retained annotated map `assets/grocery.png` second. The police raid uses `assets/police-station.png` first and its retained annotated map `assets/police.png` second. Other missions retain their single-image fields.
 
 ### Mission counts
 
