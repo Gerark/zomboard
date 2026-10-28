@@ -6,9 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="dark">
   <meta name="theme-color" content="#111712">
-  <meta name="description" content="ZomBoard, the McCoy safehouse mission board. Ten jobs, questionable odds, one safehouse.">
+  <meta name="description" content="ZomBoard, the McCoy safehouse mission board. Eleven jobs, questionable odds, one safehouse.">
   <meta property="og:title" content="ZomBoard | Knox County">
-  <meta property="og:description" content="Ten jobs. One safehouse. Pick a mission, don't get bitten.">
+  <meta property="og:description" content="Eleven jobs. One safehouse. Pick a mission, don't get bitten.">
   <meta property="og:type" content="website">
   <meta property="og:image" content="assets/hero-mccoy.svg">
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg?v=2">
@@ -30,7 +30,13 @@
     <main>
       <section class="mission-section wrapper" id="missions" aria-labelledby="missions-title">
         <h1 id="missions-title" class="sr-only">Missions</h1>
-        <div id="mission-grid" class="mission-grid" aria-live="polite"></div>
+        <div class="mission-layout">
+          <aside class="mission-sidebar" aria-labelledby="quest-list-title">
+            <h2 id="quest-list-title">QUEST LIST</h2>
+            <ol id="mission-list" class="mission-list"></ol>
+          </aside>
+          <div id="mission-grid" class="mission-grid" aria-live="polite"></div>
+        </div>
       </section>
     </main>
   </div>

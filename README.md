@@ -32,9 +32,9 @@ See [GitHub's publishing-source documentation](https://docs.github.com/en/pages/
 
 ## Customize missions and artwork
 
-**Text:** Edit the ten mission objects at the top of `missions.js`. Each includes title, description, crew, risk, location, status, objectives, and image path. Use `status: 'claimed'` or `status: 'available'`.
+**Text:** Edit the eleven mission objects at the top of `missions.js`. Each includes title, description, crew, risk, location, status, objectives, and image path. The `status` field retains `'claimed'` or `'available'` as internal metadata; it does not display badges or change card styling. The palisade's contractor note is the only visible assignment indicator.
 
-**Images:** Mission artwork lives in `assets/` and is selected by each mission's `image` property in `missions.js`. Eight missions use supplied PNG screenshots: bunker, groceries, palisade, chickens, mechanics, police, rooftop garden, and VHS collection. The chicken-coop and Greene's missions keep their SVG placeholders. Original SVG files are retained.
+**Images:** Mission artwork lives in `assets/` and is selected by each mission's `image` property in `missions.js`. Eight missions use supplied PNG screenshots: bunker, groceries, palisade, chickens, mechanics, police, rooftop garden, and VHS collection. The chicken-coop, Greene's and Operation Dumbbell missions use SVG illustrations. Original SVG files are retained.
 
 - To replace an image, put a `.jpg`, `.png`, `.webp`, or `.svg` file in `assets/` and update that mission's `image` path. Add an `imageAlt` description when the image contains useful visual information.
 - Card thumbnails are cropped; briefing images appear below the field notes and retain their full aspect ratio so map annotations remain visible. **View full image** opens the original asset in a new tab for closer inspection.
@@ -45,10 +45,11 @@ See [GitHub's publishing-source documentation](https://docs.github.com/en/pages/
 
 ## Features
 
-- Ten missions, including VHS collection from the movie store in Muldraugh, with the palisade mission marked claimed
+- Eleven missions, including VHS collection and Operation Dumbbell's gym supply run and safehouse workout area, with a contractor note for the palisade mission
 - Compact cards in a responsive layout for desktop, tablet, and mobile
+- Sticky quest list beside three card columns on desktop: hover or keyboard-focus a title to highlight and reveal its card; click to open its briefing. The list is hidden at widths of 1100px and below, with three, two, or one card columns as space decreases.
 - All missions displayed together, without search or filters
-- Detailed mission briefings with objective checklists
+- Compact mission briefings with one wrapping row of category, risk, location, and crew facts, plus numbered objectives
 - Links directly to any mission using `?mission=bunker` etc.
 - Read-only: visitors cannot claim or complete missions
 

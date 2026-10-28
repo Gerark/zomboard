@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 650" width="1000" height="650" role="img">
+  <defs>
+    <linearGradient id="wall" x2="0" y2="1">
+      <stop stop-color="#526052"/>
+      <stop offset="1" stop-color="#22352c"/>
+    </linearGradient>
+    <linearGradient id="metal" x2="0" y2="1">
+      <stop stop-color="#879087"/>
+      <stop offset=".45" stop-color="#4b5951"/>
+      <stop offset="1" stop-color="#1c2923"/>
+    </linearGradient>
+    <radialGradient id="light">
+      <stop stop-color="#dcc395" stop-opacity=".35"/>
+      <stop offset="1" stop-color="#dcc395" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="vignette">
+      <stop offset=".5" stop-color="#081310" stop-opacity="0"/>
+      <stop offset="1" stop-color="#081310" stop-opacity=".72"/>
+    </radialGradient>
+    <filter id="grit">
+      <feTurbulence type="fractalNoise" baseFrequency=".48" numOctaves="3" seed="11" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer><feFuncA type="linear" slope=".16"/></feComponentTransfer>
+    </filter>
+  </defs>
+  <rect width="1000" height="650" fill="url(#wall)"/>
+  <path d="M0 108H1000M0 222H1000M0 336H1000M132 0V108M389 0V108M646 0V108M903 0V108M260 108V222M517 108V222M774 108V222M132 222V336M389 222V336M646 222V336M903 222V336" fill="none" stroke="#1c2a23" stroke-width="6" opacity=".35"/>
+  <circle cx="740" cy="180" r="440" fill="url(#light)"/>
+  <path d="M0 442H1000V650H0Z" fill="#28372d"/>
+  <path d="M0 443H1000" stroke="#899079" stroke-width="10"/>
+  <path d="M84 650L390 443M370 650L495 443M690 650L610 443M984 650L720 443" stroke="#15231c" stroke-width="5" opacity=".6"/>
+  <g transform="translate(151 150) rotate(-7 112 130)">
+    <path d="M0 0H224V260H0Z" fill="#c8bd99" stroke="#28362c" stroke-width="8"/>
+    <path d="M75 0V260M150 0V260" stroke="#8e8b70" stroke-width="3"/>
+    <path d="M17 25H207V80H17Z" fill="#bc6548"/>
+    <text x="112" y="63" text-anchor="middle" fill="#f0e3c6" font-family="monospace" font-size="37" font-weight="bold">GYM</text>
+    <path d="M40 135H184" stroke="#35483a" stroke-width="14"/>
+    <path d="M53 111V159M72 102V168M152 102V168M171 111V159" stroke="#35483a" stroke-width="16"/>
+    <path d="M24 199H65M89 199H136M165 199H202M24 215H59M89 215H130M165 215H196M24 231H65M89 231H136M165 231H202" stroke="#72765c" stroke-width="5"/>
+  </g>
+  <g stroke="#1a2921" stroke-width="9" stroke-linejoin="round">
+    <path d="M487 421V263M780 421V263" fill="none" stroke="#7a816e" stroke-width="15"/>
+    <path d="M466 421H509M758 421H802" stroke="#7a816e" stroke-width="15"/>
+    <path d="M449 288H817" stroke="#9b9e86" stroke-width="17"/>
+    <rect x="492" y="238" width="29" height="100" rx="6" fill="url(#metal)"/>
+    <rect x="522" y="221" width="38" height="134" rx="7" fill="url(#metal)"/>
+    <rect x="709" y="221" width="38" height="134" rx="7" fill="url(#metal)"/>
+    <rect x="748" y="238" width="29" height="100" rx="6" fill="url(#metal)"/>
+    <path d="M526 392L728 392L765 433H488Z" fill="#9e6349"/>
+    <path d="M515 432L502 510M734 432L750 510" stroke="#788270" stroke-width="17"/>
+  </g>
+  <ellipse cx="457" cy="530" rx="185" ry="27" fill="#101d17" opacity=".65"/>
+  <g transform="translate(300 470) rotate(-9 150 30)" stroke="#18271f" stroke-width="8">
+    <path d="M0 30H309" stroke="#a7aa91" stroke-width="21"/>
+    <rect x="20" y="-8" width="25" height="76" rx="5" fill="url(#metal)"/>
+    <rect x="48" y="-24" width="42" height="108" rx="8" fill="url(#metal)"/>
+    <rect x="221" y="-24" width="42" height="108" rx="8" fill="url(#metal)"/>
+    <rect x="266" y="-8" width="25" height="76" rx="5" fill="url(#metal)"/>
+    <path d="M106 20V40M122 20V40M138 20V40M154 20V40M170 20V40M186 20V40M202 20V40" stroke="#697967" stroke-width="4"/>
+  </g>
+  <g transform="translate(731 450) rotate(8)">
+    <rect width="43" height="90" rx="8" fill="#b66a4c" stroke="#1c2a22" stroke-width="6"/>
+    <ellipse cx="21.5" cy="2" rx="19" ry="6" fill="#b3b59e"/>
+    <path d="M25 20L11 45H24L17 70L33 39H21Z" fill="#ece0b9"/>
+  </g>
+  <g transform="translate(799 490) rotate(-12)">
+    <path d="M0 0H93L101 32H-6Z" fill="#c2ac76" stroke="#253429" stroke-width="5"/>
+    <path d="M12 3V28M84 3V28" stroke="#a86549" stroke-width="9"/>
+    <path d="M26 11H71M31 21H66" stroke="#66704f" stroke-width="5"/>
+  </g>
+  <path d="M81 572L242 556M632 585L836 568M124 605L190 598" stroke="#9aa68c" stroke-width="4" opacity=".16"/>
+  <rect width="1000" height="650" fill="url(#vignette)"/>
+  <rect width="1000" height="650" filter="url(#grit)" opacity=".55"/>
+  <path d="M22 20H87M22 20V72M978 20H913M978 20V72M22 630H87M22 630V578M978 630H913M978 630V578" fill="none" stroke="#d9c4a4" stroke-width="2" stroke-opacity=".37"/>
+</svg>

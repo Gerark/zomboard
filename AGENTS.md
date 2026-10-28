@@ -15,15 +15,15 @@ ZomBoard is a public, read-only Project Zomboid mission board themed around the 
 - There is no framework, package manifest, build process, backend, database, authentication, game integration, saved mission progress, or browser-storage layer.
 - Mission availability is curated in source. Visitors can browse all missions, open briefings, and copy links; they cannot claim or complete missions.
 - Objective lists are informational numbered lists, not interactive checkboxes. The README's word "checklists" does not imply completion tracking.
-- All mission images are local: eight supplied PNG screenshots and SVG placeholders for the chicken-coop and Greene's missions. Google Fonts is the only external resource service referenced by the site; CSS supplies fallback fonts.
+- All mission images are local: eight supplied PNG screenshots and SVG illustrations for the chicken-coop, Greene's and Operation Dumbbell missions. Google Fonts is the only external resource service referenced by the site; CSS supplies fallback fonts.
 - Mission content requires JavaScript: the initial HTML contains an empty mission grid and no non-JavaScript mission fallback.
 
 ## File responsibilities
 
 | Path | Responsibility |
 | --- | --- |
-| `index.html` | Page structure, metadata, font loading, brand header, accessible mission-section heading, mission grid container, and dialog shell. |
-| `missions.js` | The `missions` array, HTML escaping, card and briefing templates, modal lifecycle, URL state, and clipboard handling. |
+| `index.html` | Page structure, metadata, font loading, brand header, accessible mission-section heading, quest sidebar, mission grid container, and dialog shell. |
+| `missions.js` | The `missions` array, HTML escaping, card/list/briefing templates, sidebar highlighting and scrolling, modal lifecycle, URL state, and clipboard handling. |
 | `styles.css` | Design tokens, component styles, illustration cropping, responsive layouts, focus styling, and reduced-motion overrides. |
 | `assets/` | Eight PNG screenshots, retained SVG mission placeholders, the social-preview image `hero-mccoy.svg`, and `favicon.svg`. |
 | `.nojekyll` | Disables Jekyll processing for direct static publication on GitHub Pages. Keep this file in the publishing root. |
@@ -41,7 +41,7 @@ The `missions` array at the top of `missions.js` is the source of truth for miss
 | `number` | Two-digit display string such as `'01'`; independent of the array index and used in cards and briefings. Keep numbering consistent with ordering and narrative references. |
 | `title`, `kicker`, `teaser` | Plain text used in cards; title and kicker also appear in briefings. |
 | `category` | Exactly `'field'` or `'base'`; controls card classification. |
-| `status` | Exactly `'available'` or `'claimed'`; controls assignment badges and claimed-card styling. |
+| `status` | Exactly `'available'` or `'claimed'`; retained as internal authoring metadata. Do not render availability or assignment badges, image status labels, or special card styling. The palisade's contractor note is the only visible assignment indicator. |
 | `risk` | Uppercase `'LOW'`, `'MEDIUM'`, `'HIGH'`, or `'SEVERE'`; lowercased to form CSS classes. |
 | `image` | Existing, case-correct local asset path such as `'assets/bunker.png'`. |
 | `imageAlt` | Optional plain-text image description for the briefing. Provide it for informative screenshots and maps; decorative placeholders may omit it. Card thumbnails remain decorative. |
@@ -49,7 +49,7 @@ The `missions` array at the top of `missions.js` is the source of truth for miss
 | `description`, `note` | Plain-text briefing copy and field notes. |
 | `objectives` | Nonempty array of plain-text strings, rendered in order. |
 
-The baseline is ten missions: six field runs, four base jobs, and one claimed mission (`palisade`). Existing IDs, in order, are `bunker`, `groceries`, `palisade`, `coop`, `chickens`, `mechanics`, `police`, `greenes`, `garden`, and `vhs`. The VHS quest collects tapes from the movie store in Muldraugh and uses `assets/vhs.png`.
+The baseline is eleven missions: seven field runs, four base jobs, and one claimed mission (`palisade`). Existing IDs, in order, are `bunker`, `groceries`, `palisade`, `coop`, `chickens`, `mechanics`, `police`, `greenes`, `garden`, `vhs`, and `dumbbell`. The VHS quest collects tapes from the movie store in Muldraugh and uses `assets/vhs.png`. Operation Dumbbell recovers gym equipment and snacks before setting up a safehouse workout area, and uses `assets/dumbbell.svg`.
 
 Narrative dependencies are not executable rules. For example, the garden's note refers to supplies from mission 08; changing mission ordering or numbering can invalidate this copy.
 
@@ -57,27 +57,32 @@ Narrative dependencies are not executable rules. For example, the garden's note 
 
 Adding, removing, or recategorizing missions requires checking all affected representations:
 
-- `index.html`: metadata descriptions that say "Ten".
+- `index.html`: metadata descriptions that say "Eleven".
 - `missions.js`: the briefing denominator derives the total from the array.
 - `README.md`: mission totals, customization instructions, and claimed-mission description.
 
 ## Runtime behavior and DOM contracts
 
-- The script is loaded with `defer`. It assumes the required HTML elements exist when it runs: `mission-grid`, `mission-dialog`, `dialog-content`, and `dialog-close`.
+- The script is loaded with `defer`. It assumes the required HTML elements exist when it runs: `mission-grid`, `mission-list`, `mission-dialog`, `dialog-content`, and `dialog-close`.
 - Briefing markup supplies `dialog-title`, matching the dialog's `aria-labelledby`, and `copy-mission`, whose listener is attached after each briefing render.
 - `render()` displays the complete mission array in source order. There is no footer, assignment counter, search, filter state, or no-results UI.
-- `render()` replaces the grid's entire `innerHTML`. Card clicks use delegation through `data-open`. Avoid per-card listeners that would disappear on re-render.
+- `render()` replaces the grid and quest list contents from the same mission array and refreshes their ID maps. Both sets of buttons use delegated `data-open` clicks; cards expose `data-mission-id` for sidebar highlighting. Avoid per-card or per-entry listeners that would disappear on re-render.
+- Desktop quest-list hover and keyboard focus highlight the matching card and entry. After 150ms, an offscreen card scrolls into view with 24px clearance where possible; oversized cards align at the top. Reduced motion uses instant scrolling. Hover/focus do not change the URL or move focus to the card.
+- Only actual pointer movement selects a hovered entry, preventing scrolling from repeatedly selecting rows under a stationary pointer. Pending scrolling and highlights clear when the dialog opens or the sidebar breakpoint changes; leaving an entry cancels its pending scroll.
 - `showMission()` looks up an exact ID, renders a briefing, opens the native `<dialog>` if necessary, and normally sets the `mission` query parameter.
+- Briefings start with the title and one wrapping row of category, risk, location, and crew facts. Labels and values sit inline without outlined badges or separate label/value blocks. Keep long values readable without truncation.
+- Omit company branding from briefing chrome and administrative locations. Use `Safehouse`, `Safehouse vehicle yard`, `Safehouse rooftop`, and `Muldraugh Police Station / Safehouse` where applicable. Preserve McCoy references in narrative titles, descriptions, objectives, and accurate image descriptions.
+- The palisade note reads: "Our contractor has taken this job. Respect the craftsmanship." No other assignment indicator is displayed, including on its grid card.
 - Opening and closing a briefing use `history.replaceState`, not `pushState`. Opening a card does not create a new Back-button history entry. Other query parameters and the hash are preserved.
 - A valid `?mission=bunker`-style URL opens a briefing on initial load. Unknown IDs are ignored; the invalid parameter remains in the URL.
-- The close button, Escape cancellation, and backdrop clicks call `closeMission()`, which removes the query parameter and restores the prior focus if that element is still connected.
-- A `popstate` listener also opens or closes the dialog. Its close branch calls `dialog.close()` directly, bypassing the explicit focus-restoration helper. If an unknown ID arrives while a dialog is already open, the current briefing is left open. Reassess these paths if navigation behavior is changed.
+- The close button, Escape cancellation, and backdrop clicks call `closeMission()`, which removes the query parameter and restores the prior focus if that element is still connected. If a list button opened the briefing and resizing has hidden the sidebar, focus returns to the matching card instead.
+- A `popstate` listener also opens or closes the dialog without rewriting the navigated URL. Its close branch uses the same focus-restoration helper, including the hidden-sidebar fallback. If an unknown ID arrives while a dialog is already open, the current briefing is left open. Reassess these paths if navigation behavior is changed.
 - Copying a mission link uses `navigator.clipboard.writeText`; failure or an unavailable clipboard falls back to a prompt containing the link. Test both paths when changing this feature.
 
 ## Rendering and content safety
 
 - Rendering uses template strings and `innerHTML`. Preserve `escapeHtml()` for text and quoted attribute values already passed through it; do not treat mission copy as HTML.
-- `number` and the class interpolation derived from `risk` are currently inserted without HTML escaping. Their safety depends on the controlled data contract above. Treat future external or visitor-supplied data as a separate design change requiring validation and a rendering review.
+- The class interpolation derived from `risk` is inserted without HTML escaping. Its safety depends on the controlled data contract above. Treat future external or visitor-supplied data as a separate design change requiring validation and a rendering review.
 - Escaping an image path does not validate its URL or make it a local asset. Keep paths within the intended public assets unless remote resources are explicitly approved.
 - Duplicate IDs select the first matching mission; missing or mistyped fields can break rendering. Validate data consistency when editing mission content.
 - Keep paths relative and match filename casing. A path that works on Windows can fail on a case-sensitive host.
@@ -85,9 +90,10 @@ Adding, removing, or recategorizing missions requires checking all affected repr
 
 ## Visual and accessibility conventions
 
-- Preserve the established survivor-bulletin style: dark green surfaces, cream text, orange accents, condensed display headings, monospaced labels, grain, stamps, and illustrated cards. Use the existing `:root` tokens before adding competing values.
+- Preserve the established survivor-bulletin style: dark green surfaces, cream text, orange accents, condensed display headings, monospaced labels, grain, and illustrated cards. Use the existing `:root` tokens before adding competing values.
 - Typography uses Barlow Condensed for display text, IBM Plex Mono for labels, and DM Sans for body copy. Verify fallback-font layout if fonts are unavailable.
-- Default mission layout is four columns; at widths up to 1100px it becomes three, up to 820px it becomes two, and up to 550px it becomes one. Cards use compact padding and typography, with shorter images on mobile.
+- Default mission layout is a 232px quest sidebar, a 24px gap, and three card columns within the existing 1220px wrapper. The sidebar sticks 24px from the viewport top, uses at most `100dvh - 48px` in height, and scrolls internally when needed. At widths up to 1100px it is hidden (including keyboard access); the grid keeps three columns, then two up to 820px, and one up to 550px. Cards use compact padding and typography, with shorter images on mobile.
+- Briefing titles use `clamp(30px, 4.5vw, 46px)`, facts use 13px type, text sections use 16px spacing, and objective rows use 8px vertical padding. Preserve the top clearance for the sticky close button on desktop and mobile.
 - Card thumbnails are cropped with `object-fit: cover`. Briefing images appear directly after field notes and before the action controls, use their natural aspect ratio without cropping, and **View full image** opens the original asset in a new tab. Preserve full map annotations in briefings; do not reintroduce a fixed image height there. The retained non-favicon SVGs have a `1000 650` viewBox.
 - Preserve real buttons, `aria-live` on the grid, dialog labeling, keyboard access, visible focus, and reduced-motion overrides.
 - Card thumbnails use empty alternative text; briefing images use `imageAlt` when provided. Keep informative screenshot descriptions accurate and preserve uncertainty in annotated possible locations. A visually hidden `h1` labels the mission section without adding a visible board heading; card titles are `h2` elements.
@@ -109,9 +115,9 @@ For approved behavior, content, or styling changes, select the relevant checks b
 
 1. Confirm expected mission totals, unique IDs, valid field values, matching metadata and briefing totals, existing image paths, and successful asset loading. Check the browser console for errors.
 2. Confirm all missions render in source order and the page initializes without references to removed footer/search/filter elements.
-3. Open available and claimed briefings. Verify their copy, objectives, badges, and images; close using the button, Escape, and the backdrop, including keyboard focus return.
+3. Open each briefing. Verify the inline facts, copy, objectives, and images, with no visible availability/assignment badges or company overline. Only the palisade has its contractor note. Close using the button, Escape, and the backdrop, including keyboard focus return.
 4. Load and reload a valid deep link, try an unknown ID, copy a link successfully and through the fallback, and check Back/Forward behavior. Include unrelated query parameters and a hash when URL logic changes.
-5. Inspect desktop, tablet, and narrow mobile widths, including breakpoint boundaries. Check long titles and crew labels, badge wrapping, image cropping, dialog scrolling, zoom, and horizontal overflow.
+5. Inspect desktop, tablet, and narrow mobile widths, including breakpoint boundaries. Check long titles, wrapping facts (especially bunker crew and Operation Dumbbell location/crew), image cropping, dialog scrolling, close-button clearance, zoom, and horizontal overflow.
 6. Check keyboard navigation, focus visibility, reduced motion, and fallback-font rendering when the affected change warrants it. Static source inspection alone does not establish browser or accessibility compatibility.
 
 For documentation-only changes, verify the described contracts against source and confirm the site files remain unchanged; a browser smoke test is not required. Avoid adding a test framework without a demonstrated need and approval.
