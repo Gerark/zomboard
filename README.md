@@ -1,60 +1,41 @@
 # ZomBoard
 
-A standalone, read-only Project Zomboid mission board. No accounts, backend, database, frameworks, or build steps are required.
+A public, read-only Project Zomboid mission board. Visitors can browse briefings and copy mission links; they cannot claim or complete missions. Built with plain HTML, CSS, and JavaScript, with no dependencies or build step.
 
-## Publish with GitHub Pages
-
-Repository: [Gerark/zomboard](https://github.com/Gerark/zomboard)
-
-Site address after deployment: [gerark.github.io/zomboard](https://gerark.github.io/zomboard/)
-
-### One-time setup
-
-1. Commit and push the site files to the repository's `main` branch, with `index.html` at the repository root.
-2. Open the repository's [Settings → Pages](https://github.com/Gerark/zomboard/settings/pages).
-3. Under **Build and deployment**, select **Deploy from a branch**.
-4. Select branch **main**, folder **/ (root)**, and click **Save**.
-5. Wait for the **pages build and deployment** run in [Actions](https://github.com/Gerark/zomboard/actions) to finish, then open the site address above.
-
-The root `.nojekyll` file tells GitHub Pages to serve these static files without Jekyll processing. No custom workflow, package installation, build command, deployment token, or custom domain is needed. GitHub manages the deployment workflow.
-
-### Publish updates
-
-Commit the intended changes and push them to `main`. GitHub Pages redeploys automatically; check Actions if an update does not appear. Other branches do not publish to the live site.
-
-Keep `index.html`, `styles.css`, `missions.js`, `.nojekyll`, and `assets/` in their current relative locations. Relative URLs allow the site and links such as [`?mission=bunker`](https://gerark.github.io/zomboard/?mission=bunker) to work under the `/zomboard/` project path. No SPA rewrite or `404.html` workaround is needed for query-string mission links.
-
-Important: Anyone with the public site link can view the board. There is no authentication.
-
-With publication from the repository root, documentation files are also publicly reachable. Keep private files and credentials out of this public repository.
-
-See [GitHub's publishing-source documentation](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site) for the hosting settings.
-
-## Customize missions and artwork
-
-**Text:** Edit the eleven mission objects at the top of `missions.js`. Each includes title, description, crew, risk, location, status, objectives, and image path. The `status` field retains `'claimed'` or `'available'` as internal metadata; it does not display badges or change card styling. The palisade's contractor note is the only visible assignment indicator.
-
-**Images:** Mission artwork lives in `assets/` and is selected by each mission's `image` property in `missions.js`. Eight missions use supplied PNG screenshots: bunker, groceries, palisade, chickens, mechanics, police, rooftop garden, and VHS collection. The chicken-coop, Greene's and Operation Dumbbell missions use SVG illustrations. Original SVG files are retained.
-
-- To replace an image, put a `.jpg`, `.png`, `.webp`, or `.svg` file in `assets/` and update that mission's `image` path. Add an `imageAlt` description when the image contains useful visual information.
-- Card thumbnails are cropped; briefing images appear below the field notes and retain their full aspect ratio so map annotations remain visible. **View full image** opens the original asset in a new tab for closer inspection.
-- The social-preview illustration is `assets/hero-mccoy.svg`; update `og:image` in `index.html` to change it.
-- The retained SVG illustrations are placeholders and may be replaced.
-
-**Design:** Modify `styles.css` to change the layout, typography, colors, and card style.
-
-## Features
-
-- Eleven missions, including VHS collection and Operation Dumbbell's gym supply run and safehouse workout area, with a contractor note for the palisade mission
-- Compact cards in a responsive layout for desktop, tablet, and mobile
-- Sticky quest list beside three card columns on desktop: hover or keyboard-focus a title to highlight and reveal its card; click to open its briefing. The list is hidden at widths of 1100px and below, with three, two, or one card columns as space decreases.
-- All missions displayed together, without search or filters
-- Compact mission briefings with one wrapping row of category, risk, location, and crew facts, plus numbered objectives
-- Links directly to any mission using `?mission=bunker` etc.
-- Read-only: visitors cannot claim or complete missions
+Site: [gerark.github.io/zomboard](https://gerark.github.io/zomboard/)
 
 ## Local preview
 
-You can double-click `index.html`, or run `python -m http.server 8000` in this folder and open `http://localhost:8000`.
+Open `index.html` directly, or run this from the repository root:
 
-Google Fonts are loaded from Google when online; the site has local font fallbacks and all mission images are stored within this folder.
+```powershell
+python -m http.server 8000 --bind 127.0.0.1
+```
+
+Then visit [localhost:8000](http://127.0.0.1:8000/). JavaScript is required to display missions.
+
+## Edit missions
+
+Mission content lives in the `const missions` array in [`missions-data.js`](missions-data.js). Rendering and interactions live in `missions.js`.
+
+To add a mission:
+
+1. Put its image in `assets/` (`.png`, `.jpg`, `.webp`, or `.svg`).
+2. Copy a complete mission object inside the `missions` array in `missions-data.js`, before the closing `];`. Separate objects with commas. Array order controls the card and quest-list order.
+3. Give it a unique, stable `id` such as `'medical-run'` and the next two-digit `number` such as `'12'`. Preserve existing IDs so shared links keep working, and check numbered narrative references if you reorder missions.
+4. Replace `title`, `kicker`, `teaser`, `description`, `location`, `crew`, `note`, and the nonempty `objectives` list with plain text. Set `category` to `'field'` or `'base'`, `status` to `'available'` or `'claimed'`, and `risk` to `'LOW'`, `'MEDIUM'`, `'HIGH'`, or `'SEVERE'`. Status is internal metadata; it does not display assignment badges.
+5. Set `image` to the relative path, such as `'assets/medical-run.png'`, with matching filename casing. Add `imageAlt` for informative screenshots or maps. This is JavaScript: escape apostrophes inside single-quoted strings (`'don\'t'`) or use double quotes (`"don't"`).
+6. Update both mission-count descriptions in `index.html`. Preview the board, open the new briefing, check its image and objectives, and test a link such as `?mission=medical-run`. If Node.js is installed, run `node --check missions-data.js` to catch syntax errors.
+7. Include the data file, new image, and metadata changes together in your commit. Publishing follows the steps below.
+
+Page structure and metadata live in `index.html`; layout, colors, and typography live in `styles.css`.
+
+## Publish with GitHub Pages
+
+1. Push the site files to `main` in [Gerark/zomboard](https://github.com/Gerark/zomboard), with `index.html` at the repository root.
+2. In [Settings → Pages](https://github.com/Gerark/zomboard/settings/pages), select **Deploy from a branch**, **main**, **/ (root)**, then **Save**.
+3. Check the **pages build and deployment** run in [Actions](https://github.com/Gerark/zomboard/actions).
+
+Later pushes to `main` publish automatically. Keep `index.html`, `styles.css`, `missions-data.js`, `missions.js`, `.nojekyll`, and `assets/` in their current relative locations. No custom build or workflow is required. See [GitHub's publishing-source documentation](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site).
+
+The site and root documentation are public. Keep private information and credentials out of the repository.

@@ -11,10 +11,10 @@
 
 ZomBoard is a public, read-only Project Zomboid mission board themed around the McCoy Logging Co. safehouse near Muldraugh, Knox County. The page opens directly onto compact mission cards below the ZomBoard brand header. There is no visible board heading, tagline, location/signal block, search, filtering, hero section, or emergency-broadcast strip.
 
-- It is a single-page static website using plain HTML, CSS, and a deferred classic JavaScript script.
+- It is a single-page static website using plain HTML, CSS, and two deferred classic JavaScript scripts: mission data first, then rendering and interactions.
 - There is no framework, package manifest, build process, backend, database, authentication, game integration, saved mission progress, or browser-storage layer.
 - Mission availability is curated in source. Visitors can browse all missions, open briefings, and copy links; they cannot claim or complete missions.
-- Objective lists are informational numbered lists, not interactive checkboxes. The README's word "checklists" does not imply completion tracking.
+- Objective lists are informational numbered lists, not interactive checkboxes or completion tracking.
 - All mission images are local: eight supplied PNG screenshots and SVG illustrations for the chicken-coop, Greene's and Operation Dumbbell missions. Google Fonts is the only external resource service referenced by the site; CSS supplies fallback fonts.
 - Mission content requires JavaScript: the initial HTML contains an empty mission grid and no non-JavaScript mission fallback.
 
@@ -23,9 +23,10 @@ ZomBoard is a public, read-only Project Zomboid mission board themed around the 
 | Path | Responsibility |
 | --- | --- |
 | `index.html` | Page structure, metadata, font loading, brand header, accessible mission-section heading, quest sidebar, mission grid container, and dialog shell. |
-| `missions.js` | The `missions` array, HTML escaping, card/list/briefing templates, sidebar highlighting and scrolling, modal lifecycle, URL state, and clipboard handling. |
+| `missions-data.js` | The `missions` array: mission content and display order. Loaded before `missions.js`. |
+| `missions.js` | HTML escaping, card/list/briefing templates, sidebar highlighting and scrolling, modal lifecycle, URL state, and clipboard handling. |
 | `styles.css` | Design tokens, component styles, illustration cropping, responsive layouts, focus styling, and reduced-motion overrides. |
-| `assets/` | Eight PNG screenshots, retained SVG mission placeholders, the social-preview image `hero-mccoy.svg`, and `favicon.svg`. |
+| `assets/` | Eight PNG screenshots, three SVG mission illustrations, the social-preview image `hero-mccoy.svg`, and `favicon.svg`. |
 | `.nojekyll` | Disables Jekyll processing for direct static publication on GitHub Pages. Keep this file in the publishing root. |
 | `README.md` | End-user customization, local preview, GitHub Pages setup, and publishing instructions. |
 
@@ -33,7 +34,7 @@ Keep the site usable as directly served files. Do not introduce modules, a fetch
 
 ## Mission data contract
 
-The `missions` array at the top of `missions.js` is the source of truth for mission content and display order. All fields below are expected except optional `imageAlt`; there is no runtime schema validation.
+The `missions` array in `missions-data.js` is the source of truth for mission content and display order. All fields below are expected except optional `imageAlt`; there is no runtime schema validation.
 
 | Field | Expected value and coupling |
 | --- | --- |
@@ -59,11 +60,10 @@ Adding, removing, or recategorizing missions requires checking all affected repr
 
 - `index.html`: metadata descriptions that say "Eleven".
 - `missions.js`: the briefing denominator derives the total from the array.
-- `README.md`: mission totals, customization instructions, and claimed-mission description.
 
 ## Runtime behavior and DOM contracts
 
-- The script is loaded with `defer`. It assumes the required HTML elements exist when it runs: `mission-grid`, `mission-list`, `mission-dialog`, `dialog-content`, and `dialog-close`.
+- Both scripts are loaded with `defer`, with `missions-data.js` before `missions.js`. Keep them as classic scripts in this order so the shared `missions` binding and direct-file preview work. The runtime assumes the required HTML elements exist when it runs: `mission-grid`, `mission-list`, `mission-dialog`, `dialog-content`, and `dialog-close`.
 - Briefing markup supplies `dialog-title`, matching the dialog's `aria-labelledby`, and `copy-mission`, whose listener is attached after each briefing render.
 - `render()` displays the complete mission array in source order. There is no footer, assignment counter, search, filter state, or no-results UI.
 - `render()` replaces the grid and quest list contents from the same mission array and refreshes their ID maps. Both sets of buttons use delegated `data-open` clicks; cards expose `data-mission-id` for sidebar highlighting. Avoid per-card or per-entry listeners that would disappear on re-render.
@@ -109,7 +109,7 @@ python -m http.server 8000 --bind 127.0.0.1
 
 Open `http://127.0.0.1:8000/`. The README also supports opening `index.html` directly; check that workflow when changing URL handling, resource loading, or the clipboard fallback. Do not assume file URLs behave identically to HTTP. Stop a temporary server when it is no longer needed.
 
-If Node.js is available, `node --check missions.js` checks syntax without installing anything. It does not validate DOM behavior or mission data.
+If Node.js is available, run `node --check missions-data.js` and `node --check missions.js` to check syntax without installing anything. These checks do not validate DOM behavior or mission data consistency.
 
 For approved behavior, content, or styling changes, select the relevant checks below and report what was actually verified:
 
@@ -126,7 +126,7 @@ For documentation-only changes, verify the described contracts against source an
 
 The hosting target is GitHub Pages for `Gerark/zomboard`, at `https://gerark.github.io/zomboard/`. The publishing source is the `main` branch, `/ (root)`, using **Deploy from a branch** in repository Settings > Pages. GitHub manages the Pages build/deployment workflow; no custom workflow or application build is required.
 
-The site requires `index.html`, `styles.css`, `missions.js`, and `assets/`, with `.nojekyll` and `index.html` at the deployment root. Preserve relative URLs so assets and query-string mission links work under `/zomboard/`. Publishing from the root also makes documentation files publicly reachable; do not commit private material to this public repository.
+The site requires `index.html`, `styles.css`, `missions-data.js`, `missions.js`, and `assets/`, with `.nojekyll` and `index.html` at the deployment root. Preserve relative URLs so assets and query-string mission links work under `/zomboard/`. Publishing from the root also makes documentation files publicly reachable; do not commit private material to this public repository.
 
 Pushes to `main` publish automatically after Pages is enabled. Before an authorized push, review the intended files and check the managed **pages build and deployment** run afterward. A deployment can be inspected in the repository's Actions tab. Feature branches do not publish to the live site.
 
