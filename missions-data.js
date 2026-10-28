@@ -36,7 +36,8 @@ const missions = [
   {
     id: 'coop', number: '04', title: 'OPERATION CLUCK FORTRESS',
     kicker: 'BASE CONSTRUCTION', category: 'base', risk: 'LOW',
-    image: 'assets/chicken-coop.svg', location: 'Safehouse', crew: '1 survivor minimum',
+    image: 'assets/chicken-coop.png', imageAlt: 'Chickens on grass beside a small coop and a metal barrel.',
+    location: 'Safehouse', crew: '1 survivor minimum',
     teaser: 'The apocalypse took civilization. Not our right to fresh eggs.',
     description: 'Establish our very own feathered fortress. Build a chicken house and a secure first fence so future residents have somewhere to sleep, eat, and silently judge us from. Make it cozy. Make it sturdy. Do not let the chickens run the place.',
     objectives: ['Choose a safe spot for the enclosure', 'Build a fence and chicken house', 'Prepare the area for incoming livestock'],
@@ -75,7 +76,8 @@ const missions = [
   {
     id: 'greenes', number: '08', title: 'GREEN THUMBS, RED STREETS',
     kicker: 'FARMING SUPPLIES', category: 'field', risk: 'MEDIUM',
-    image: 'assets/greenes.svg', location: "Greene's · Muldraugh", crew: '1 survivor minimum',
+    image: 'assets/greenes.png', imageAlt: 'A survivor outside Greene’s store, with a station wagon parked in front.',
+    location: "Greene's · Muldraugh", crew: '1 survivor minimum',
     teaser: 'We cannot live on canned beans forever. Probably.',
     description: 'The rooftop garden needs a proper start. Head into Muldraugh and search Greene’s for useful gardening supplies, tools, seeds and anything else that might convince a potato to grow above a lumber yard.',
     objectives: ['Search the store for seeds and gardening tools', 'Collect useful farming supplies', 'Bring everything back for the rooftop project'],

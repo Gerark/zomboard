@@ -15,7 +15,7 @@ ZomBoard is a public, read-only Project Zomboid mission board themed around the 
 - There is no framework, package manifest, build process, backend, database, authentication, game integration, saved mission progress, or browser-storage layer.
 - Mission content is curated in source. Visitors can browse all missions, open briefings, and copy links; they cannot claim or complete missions.
 - Objective lists are informational numbered lists, not interactive checkboxes or completion tracking.
-- All mission images are local: ten supplied PNG screenshots and SVG illustrations for the chicken-coop and Greene's missions. Google Fonts is the only external resource service referenced by the site; CSS supplies fallback fonts.
+- All mission images are local: twelve supplied PNG screenshots. Google Fonts is the only external resource service referenced by the site; CSS supplies fallback fonts.
 - Mission content requires JavaScript: the initial HTML contains an empty mission grid and no non-JavaScript mission fallback.
 
 ## File responsibilities
@@ -25,8 +25,8 @@ ZomBoard is a public, read-only Project Zomboid mission board themed around the 
 | `index.html` | Page structure, metadata, font loading, brand header, accessible mission-section heading, quest sidebar, mission grid container, and dialog shell. |
 | `missions-data.js` | The `missions` array: mission content and display order. Loaded before `missions.js`. |
 | `missions.js` | HTML escaping, card/list/briefing templates, sidebar highlighting and scrolling, modal lifecycle, URL state, and clipboard handling. |
-| `styles.css` | Design tokens, component styles, illustration cropping, responsive layouts, focus styling, and reduced-motion overrides. |
-| `assets/` | Ten PNG screenshots, three SVG mission illustrations, the social-preview image `hero-mccoy.svg`, and `favicon.svg`. |
+| `styles.css` | Design tokens, component styles, image cropping, responsive layouts, focus styling, and reduced-motion overrides. |
+| `assets/` | Twelve PNG screenshots, the social-preview image `hero-mccoy.svg`, and `favicon.svg`. |
 | `.nojekyll` | Disables Jekyll processing for direct static publication on GitHub Pages. Keep this file in the publishing root. |
 | `README.md` | End-user customization, local preview, GitHub Pages setup, and publishing instructions. |
 
@@ -90,7 +90,7 @@ Keep both metadata descriptions in `index.html` generic, without a mission count
 - Typography uses Barlow Condensed for display text, IBM Plex Mono for labels, and DM Sans for body copy. Verify fallback-font layout if fonts are unavailable.
 - Default mission layout is a 232px quest sidebar, a 24px gap, and three card columns within the existing 1220px wrapper. The sidebar sticks 24px from the viewport top, uses at most `100dvh - 48px` in height, and scrolls internally when needed. At widths up to 1100px it is hidden (including keyboard access); the grid keeps three columns, then two up to 820px, and one up to 550px. Cards use compact padding and typography, with shorter images on mobile.
 - Briefing titles use `clamp(30px, 4.5vw, 46px)`, facts use 13px type, text sections use 16px spacing, and objective rows use 8px vertical padding. Preserve the top clearance for the sticky close button on desktop and mobile.
-- Card thumbnails are cropped with `object-fit: cover`. Briefing images appear directly after field notes and before the action controls, use their natural aspect ratio without cropping, and **View full image** opens the original asset in a new tab. Preserve full map annotations in briefings; do not reintroduce a fixed image height there. The retained non-favicon SVGs have a `1000 650` viewBox.
+- Card thumbnails are cropped with `object-fit: cover`. Briefing images appear directly after field notes and before the action controls, use their natural aspect ratio without cropping, and **View full image** opens the original asset in a new tab. Preserve full map annotations in briefings; do not reintroduce a fixed image height there. The social-preview SVG has a `1000 650` viewBox.
 - Preserve real buttons, `aria-live` on the grid, dialog labeling, keyboard access, visible focus, and reduced-motion overrides.
 - Card thumbnails use empty alternative text; briefing images use `imageAlt` when provided. Keep informative screenshot descriptions accurate and preserve uncertainty in annotated possible locations. A visually hidden `h1` labels the mission section without adding a visible board heading; card titles are `h2` elements.
 - Use the existing English setting and darkly humorous game-fiction voice. Keep functional controls clear.
