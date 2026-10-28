@@ -4,7 +4,7 @@
 2. Open `missions-data.js` and duplicate a complete object inside the `missions` array, before the closing `];`. Separate objects with commas.
 3. Set a unique `id`, the next two-digit `number`, and replace the mission text and objectives.
 4. Set `category` to `'field'` or `'base'` and `risk` to `'LOW'`, `'MEDIUM'`, `'HIGH'`, or `'SEVERE'`.
-5. For one image, set `image` to the asset path, such as `'assets/medical-run.png'`, matching filename casing. Add `imageAlt` for screenshots or maps. For multiple images, use the ordered `images` list below.
+5. For one image, set `image` to the asset path, such as `'assets/medical-run.png'`, matching filename casing. Local PNG screenshots and SVG illustrations are supported. Match the original SVG style for new illustrated art, as in `assets/cemetery.svg` and `assets/winter-stove.svg`. Add descriptive `imageAlt` text. For multiple images, use the ordered `images` list below.
 6. Open `index.html` in a browser and check the new mission's card, briefing, objectives, images, and full-image links.
 
 ## Multiple images

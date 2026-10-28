@@ -136,7 +136,7 @@ const missions = [
   {
     id: 'seb', number: '13', title: 'A PROPER GOODBYE',
     kicker: 'RECOVERY & REMEMBRANCE', category: 'field', risk: 'HIGH',
-    image: 'assets/cemetery.png', imageAlt: 'Illustration of a simple grave marker and shovel in a small fenced cemetery beside a lumber-yard safehouse at sunset.',
+    image: 'assets/cemetery.svg', imageAlt: 'A simple SVG illustration of Seb’s wooden grave marker, fresh earth and a shovel inside the safehouse fence.',
     location: 'Search area unconfirmed / Safehouse grounds', crew: '2 survivors recommended',
     teaser: 'Find Seb’s fallen survivor. Bring our friend home and give him a place to rest.',
     description: 'Seb’s survivor did not make it. Find out where he fell and track him down. If he is still walking, put him down so we can bring him home for a proper burial. Set aside a quiet corner of the safehouse grounds for a cemetery, somewhere we can remember the people who helped us get this far.',
@@ -146,7 +146,7 @@ const missions = [
   {
     id: 'winter', number: '14', title: 'WINTER IS COMING',
     kicker: 'WINTER PREPARATION', category: 'base', risk: 'MEDIUM',
-    image: 'assets/winter-stove.png', imageAlt: 'Illustration of a wood stove and stacked firewood in a small timber-partitioned safehouse room, with snow outside the window.',
+    image: 'assets/winter-stove.svg', imageAlt: 'A simple SVG illustration of a wood stove, stacked logs and a bed in a small timber room, with snow outside the window.',
     location: 'Knox County / Safehouse', crew: '2 haulers + 1 builder recommended',
     teaser: 'Retrieve a stove, build smaller rooms and give winter a reason to stay outside.',
     description: 'The safehouse has plenty of space. Unfortunately, most of it will be cold. Find a wood stove, work out how to move it and bring it home before winter arrives. Partition the open interior into smaller enclosed rooms so we have manageable spaces to heat, then set up a warm refuge and a fuel reserve. Test the arrangement before the first freeze makes the decisions for us.',
