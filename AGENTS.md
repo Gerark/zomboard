@@ -9,11 +9,11 @@
 
 ## Product and architecture
 
-ZomBoard is a public, read-only Project Zomboid mission board themed around the McCoy Logging Co. safehouse near Muldraugh, Knox County. The page opens directly onto the job board below the ZomBoard brand header; there is no hero section or emergency-broadcast strip.
+ZomBoard is a public, read-only Project Zomboid mission board themed around the McCoy Logging Co. safehouse near Muldraugh, Knox County. The page opens directly onto compact mission cards below the ZomBoard brand header. There is no visible board heading, tagline, location/signal block, search, filtering, hero section, or emergency-broadcast strip.
 
 - It is a single-page static website using plain HTML, CSS, and a deferred classic JavaScript script.
 - There is no framework, package manifest, build process, backend, database, authentication, game integration, saved mission progress, or browser-storage layer.
-- Mission availability is curated in source. Visitors can browse, filter, search, open briefings, and copy links; they cannot claim or complete missions.
+- Mission availability is curated in source. Visitors can browse all missions, open briefings, and copy links; they cannot claim or complete missions.
 - Objective lists are informational numbered lists, not interactive checkboxes. The README's word "checklists" does not imply completion tracking.
 - All illustrations are local SVGs. Google Fonts is the only external resource service referenced by the site; CSS supplies fallback fonts.
 - Mission content requires JavaScript: the initial HTML contains an empty mission grid and no non-JavaScript mission fallback.
@@ -22,8 +22,8 @@ ZomBoard is a public, read-only Project Zomboid mission board themed around the 
 
 | Path | Responsibility |
 | --- | --- |
-| `index.html` | Page structure, metadata, font loading, brand header, filter controls, search input, mission grid container, footer, and dialog shell. |
-| `missions.js` | The `missions` array, HTML escaping, card and briefing templates, filtering, search, modal lifecycle, URL state, and clipboard handling. |
+| `index.html` | Page structure, metadata, font loading, brand header, accessible mission-section heading, mission grid container, footer, and dialog shell. |
+| `missions.js` | The `missions` array, HTML escaping, card and briefing templates, modal lifecycle, URL state, and clipboard handling. |
 | `styles.css` | Design tokens, component styles, illustration cropping, responsive layouts, focus styling, and reduced-motion overrides. |
 | `assets/` | Nine mission illustrations, the social-preview image `hero-mccoy.svg`, and `favicon.svg`. |
 | `.nojekyll` | Disables Jekyll processing for direct static publication on GitHub Pages. Keep this file in the publishing root. |
@@ -40,8 +40,8 @@ The `missions` array at the top of `missions.js` is the source of truth for miss
 | `id` | Unique, stable URL identifier. Existing shared links use `?mission=<id>`. Preserve existing IDs unless a link migration is explicitly approved. |
 | `number` | Two-digit display string such as `'01'`; independent of the array index and used in cards and briefings. Keep numbering consistent with ordering and narrative references. |
 | `title`, `kicker`, `teaser` | Plain text used in cards; title and kicker also appear in briefings. |
-| `category` | Exactly `'field'` or `'base'`; controls category filters and card classification. |
-| `status` | Exactly `'available'` or `'claimed'`; controls assignment badges and the claimed filter. |
+| `category` | Exactly `'field'` or `'base'`; controls card classification. |
+| `status` | Exactly `'available'` or `'claimed'`; controls assignment badges and claimed-card styling. |
 | `risk` | Uppercase `'LOW'`, `'MEDIUM'`, `'HIGH'`, or `'SEVERE'`; lowercased to form CSS classes. |
 | `image` | Existing, case-correct local asset path such as `'assets/bunker.svg'`. |
 | `location`, `crew` | Plain text shown in briefings; crew also appears on cards. Requirements are descriptive, not enforced. |
@@ -56,19 +56,16 @@ Narrative dependencies are not executable rules. For example, the garden's note 
 
 Adding, removing, or recategorizing missions requires checking all affected representations:
 
-- `index.html`: filter button counts, job-board heading count, initial display count, metadata descriptions, and copy that says "Nine".
-- `missions.js`: the briefing's literal `/ 09` denominator. Only the footer count in `render()` derives both its visible count and total from the array.
+- `index.html`: initial assignment count and metadata descriptions that say "Nine".
+- `missions.js`: the briefing's literal `/ 09` denominator. The footer count in `render()` derives the total from the array.
 - `README.md`: mission totals, customization instructions, and claimed-mission description.
-
-Filter button counts represent the complete dataset, not the current search results. Do not change this meaning unintentionally.
 
 ## Runtime behavior and DOM contracts
 
-- The script is loaded with `defer`. It assumes the required HTML elements exist when it runs: `mission-grid`, `filters`, `search`, `mission-dialog`, `dialog-content`, `dialog-close`, `no-results`, and `display-count`.
+- The script is loaded with `defer`. It assumes the required HTML elements exist when it runs: `mission-grid`, `mission-dialog`, `dialog-content`, `dialog-close`, and `display-count`.
 - Briefing markup supplies `dialog-title`, matching the dialog's `aria-labelledby`, and `copy-mission`, whose listener is attached after each briefing render.
-- `render()` replaces the grid's entire `innerHTML`. Card clicks use delegation through `data-open`; filter clicks use `data-filter`. Avoid per-card listeners that would disappear on re-render.
-- Search and the selected filter are combined. Search trims input and performs a case-insensitive substring match across title, kicker, location, teaser, crew, and risk. It does not search description, objectives, note, status, ID, or number.
-- Search and filter state live only in memory and are not encoded in links or persisted across reloads.
+- `render()` displays the complete mission array in source order and updates the assignment total. There is no search, filter state, or no-results UI.
+- `render()` replaces the grid's entire `innerHTML`. Card clicks use delegation through `data-open`. Avoid per-card listeners that would disappear on re-render.
 - `showMission()` looks up an exact ID, renders a briefing, opens the native `<dialog>` if necessary, and normally sets the `mission` query parameter.
 - Opening and closing a briefing use `history.replaceState`, not `pushState`. Opening a card does not create a new Back-button history entry. Other query parameters and the hash are preserved.
 - A valid `?mission=bunker`-style URL opens a briefing on initial load. Unknown IDs are ignored; the invalid parameter remains in the URL.
@@ -89,10 +86,10 @@ Filter button counts represent the complete dataset, not the current search resu
 
 - Preserve the established survivor-bulletin style: dark green surfaces, cream text, orange accents, condensed display headings, monospaced labels, grain, stamps, and illustrated cards. Use the existing `:root` tokens before adding competing values.
 - Typography uses Barlow Condensed for display text, IBM Plex Mono for labels, and DM Sans for body copy. Verify fallback-font layout if fonts are unavailable.
-- Default mission layout is three columns; at widths up to 820px it becomes two, and at widths up to 550px it becomes one. The 1100px breakpoint adjusts spacing and typography.
+- Default mission layout is four columns; at widths up to 1100px it becomes three, up to 820px it becomes two, and up to 550px it becomes one. Cards use compact padding and typography, with shorter images on mobile.
 - Artwork is cropped with `object-fit: cover`; the supplied non-favicon SVGs have a `1000 650` viewBox. Keep important content away from crop edges when replacing images.
-- Preserve real buttons, the search label, filter `aria-pressed` state, `aria-live` on the grid, dialog labeling, keyboard access, visible focus, and reduced-motion overrides.
-- Card and briefing images currently use empty alternative text. Reconsider alternatives if replacement artwork conveys information absent from the accompanying copy. The job-board title is the page's main `h1`.
+- Preserve real buttons, `aria-live` on the grid, dialog labeling, keyboard access, visible focus, and reduced-motion overrides.
+- Card and briefing images currently use empty alternative text. Reconsider alternatives if replacement artwork conveys information absent from the accompanying copy. A visually hidden `h1` labels the mission section without adding a visible board heading; card titles are `h2` elements.
 - Use the existing English setting and darkly humorous game-fiction voice. Keep functional controls clear.
 
 ## Local workflow and verification
@@ -110,10 +107,10 @@ If Node.js is available, `node --check missions.js` checks syntax without instal
 For approved behavior, content, or styling changes, select the relevant checks below and report what was actually verified:
 
 1. Confirm expected mission totals, unique IDs, valid field values, matching HTML counters, existing image paths, and successful asset loading. Check the browser console for errors.
-2. Exercise all four filters, search alone and with a filter, whitespace-only input, no results, and clearing the search. Check that the empty message, footer count, and filter pressed states agree.
+2. Confirm all missions render in source order, the footer total agrees, and the page initializes without references to removed search/filter controls.
 3. Open available and claimed briefings. Verify their copy, objectives, badges, and images; close using the button, Escape, and the backdrop, including keyboard focus return.
 4. Load and reload a valid deep link, try an unknown ID, copy a link successfully and through the fallback, and check Back/Forward behavior. Include unrelated query parameters and a hash when URL logic changes.
-5. Inspect desktop, tablet, and narrow mobile widths, including breakpoint boundaries. Check long titles and crew labels, search/filter wrapping, image cropping, dialog scrolling, zoom, and horizontal overflow.
+5. Inspect desktop, tablet, and narrow mobile widths, including breakpoint boundaries. Check long titles and crew labels, badge wrapping, image cropping, dialog scrolling, zoom, and horizontal overflow.
 6. Check keyboard navigation, focus visibility, reduced motion, and fallback-font rendering when the affected change warrants it. Static source inspection alone does not establish browser or accessibility compatibility.
 
 For documentation-only changes, verify the described contracts against source and confirm the site files remain unchanged; a browser smoke test is not required. Avoid adding a test framework without a demonstrated need and approval.

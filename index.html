@@ -25,35 +25,14 @@
         <span class="brand-mark" aria-hidden="true">Z<span>✳</span></span>
         <span class="brand-name"><strong>ZomBoard</strong><small>PROJECT ZOMBOID · MISSION BOARD</small></span>
       </a>
-      <div class="header-right">
-        <span class="header-coordinate">KNOX COUNTY <b>·</b> MULDRAUGH</span>
-        <span class="broadcast"><i></i> SIGNAL ACTIVE</span>
-      </div>
     </header>
 
     <main>
       <section class="mission-section wrapper" id="missions" aria-labelledby="missions-title">
-        <div class="section-heading">
-          <div>
-            <h1 id="missions-title">THE <span>JOB BOARD</span><sup>09</sup></h1>
-          </div>
-          <p>Nine excellent opportunities to get bitten.<br>All applicants welcome. Survival not guaranteed.</p>
-        </div>
-
-        <div class="toolbar" aria-label="Filter missions">
-          <div class="filter-list" id="filters" role="group" aria-label="Mission category">
-            <button class="filter active" type="button" data-filter="all" aria-pressed="true">ALL MISSIONS <span>09</span></button>
-            <button class="filter" type="button" data-filter="field" aria-pressed="false">FIELD RUNS <span>05</span></button>
-            <button class="filter" type="button" data-filter="base" aria-pressed="false">BASE JOBS <span>04</span></button>
-            <button class="filter" type="button" data-filter="claimed" aria-pressed="false">CLAIMED <span>01</span></button>
-          </div>
-          <label class="search-box"><span aria-hidden="true">⌕</span><span class="sr-only">Search missions</span><input id="search" type="search" placeholder="SEARCH ASSIGNMENTS..." autocomplete="off"></label>
-        </div>
-
+        <h1 id="missions-title" class="sr-only">Missions</h1>
         <div id="mission-grid" class="mission-grid" aria-live="polite"></div>
-        <p id="no-results" class="no-results" hidden>No missions match that description. Probably for the best.</p>
 
-        <div class="board-footer"><span>✳ ALL INFORMATION SUBJECT TO UNDEAD INTERFERENCE</span><span id="display-count">SHOWING 09 / 09 ASSIGNMENTS</span></div>
+        <div class="board-footer"><span>✳ ALL INFORMATION SUBJECT TO UNDEAD INTERFERENCE</span><span id="display-count">09 ASSIGNMENTS</span></div>
       </section>
     </main>
 

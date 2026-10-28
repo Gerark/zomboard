@@ -87,11 +87,8 @@ const missions = [
 ];
 
 const grid = document.getElementById('mission-grid');
-const filters = document.getElementById('filters');
-const search = document.getElementById('search');
 const dialog = document.getElementById('mission-dialog');
 const dialogContent = document.getElementById('dialog-content');
-let activeFilter = 'all';
 let priorFocus = null;
 
 const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (ch) => ({'&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'}[ch]));
@@ -120,15 +117,8 @@ function cardHTML(m) {
 }
 
 function render() {
-  const query = search.value.trim().toLocaleLowerCase();
-  const visible = missions.filter((m) => {
-    const matchesTab = activeFilter === 'all' || m.category === activeFilter || (activeFilter === 'claimed' && m.status === 'claimed');
-    const haystack = [m.title, m.kicker, m.location, m.teaser, m.crew, m.risk].join(' ').toLocaleLowerCase();
-    return matchesTab && (!query || haystack.includes(query));
-  });
-  grid.innerHTML = visible.map(cardHTML).join('');
-  document.getElementById('no-results').hidden = visible.length > 0;
-  document.getElementById('display-count').textContent = `SHOWING ${pad(visible.length)} / ${pad(missions.length)} ASSIGNMENTS`;
+  grid.innerHTML = missions.map(cardHTML).join('');
+  document.getElementById('display-count').textContent = `${pad(missions.length)} ASSIGNMENTS`;
 }
 
 function showMission(id, updateUrl = true) {
@@ -175,18 +165,6 @@ function closeMission() {
   if (priorFocus && priorFocus.isConnected) priorFocus.focus();
 }
 
-filters.addEventListener('click', (event) => {
-  const button = event.target.closest('button[data-filter]');
-  if (!button) return;
-  activeFilter = button.dataset.filter;
-  for (const node of filters.querySelectorAll('button[data-filter]')) {
-    const active = node === button;
-    node.classList.toggle('active', active);
-    node.setAttribute('aria-pressed', String(active));
-  }
-  render();
-});
-search.addEventListener('input', render);
 grid.addEventListener('click', (event) => {
   const button = event.target.closest('button[data-open]');
   if (button) showMission(button.dataset.open);

@@ -46,9 +46,8 @@ See [GitHub's publishing-source documentation](https://docs.github.com/en/pages/
 ## Features
 
 - Nine missions, with the palisade mission marked claimed
-- Desktop, tablet, and mobile responsive layout
-- Filters for all missions, field runs, base jobs, and claimed missions
-- Text search
+- Compact cards in a responsive layout for desktop, tablet, and mobile
+- All missions displayed together, without search or filters
 - Detailed mission briefings with objective checklists
 - Links directly to any mission using `?mission=bunker` etc.
 - Read-only: visitors cannot claim or complete missions
