@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>McCoy Survival Board — Knox County</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#111712">
+  <meta name="description" content="The McCoy Logging Co. survivor mission board. Nine jobs, questionable odds, one safehouse.">
+  <meta property="og:title" content="McCoy Survival Board | Knox County">
+  <meta property="og:description" content="Nine jobs. One safehouse. Pick a mission, don't get bitten.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="assets/hero-mccoy.svg">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800;900&family=DM+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="missions.js" defer></script>
+</head>
+<body>
+  <div class="site-frame">
+    <div class="top-strip" aria-hidden="true"><span>EMERGENCY BROADCAST SYSTEM</span><span>THIS IS NOT A DRILL</span><span>EMERGENCY BROADCAST SYSTEM</span><span>THIS IS NOT A DRILL</span></div>
+    <header class="site-header wrapper">
+      <a class="brand" href="./" aria-label="McCoy Survival Board home">
+        <span class="brand-mark" aria-hidden="true">M<span>✳</span></span>
+        <span class="brand-name"><strong>McCOY</strong><small>LOGGING CO. · SURVIVOR NETWORK</small></span>
+      </a>
+      <div class="header-right">
+        <span class="header-coordinate">KNOX COUNTY <b>·</b> MULDRAUGH</span>
+        <span class="broadcast"><i></i> SIGNAL ACTIVE</span>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero wrapper" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <div class="eyebrow"><span class="eyebrow-line"></span> OFFICIAL SURVIVOR BULLETIN <span class="eyebrow-number">/ NO. 009</span></div>
+          <h1 id="hero-title">DEAD WORLD.<br><em>BUSY PEOPLE.</em></h1>
+          <p>The world ended. The to-do list didn't. Welcome to the McCoy safehouse job board — find a mission, grab your crew, and try to make it back before dinner.</p>
+          <a href="#missions" class="primary-action">BROWSE ASSIGNMENTS <span aria-hidden="true">↗</span></a>
+          <div class="hero-footnote">CURATED BY <strong>THE SURVIVORS OF MCCOY</strong><span class="bullet">✳</span> MULDRAUGH OUTSKIRTS</div>
+        </div>
+        <div class="hero-art" aria-label="Illustration of the McCoy Logging Company safehouse with a watchtower and barricades">
+          <img src="assets/hero-mccoy.svg" alt="Illustrated lumber yard safehouse at dusk, surrounded by a wooden palisade">
+          <div class="hero-art-label"><span>FIG. 01</span> THE SAFEHOUSE <span class="crosshair">⊕</span></div>
+          <div class="hero-stamp" aria-hidden="true">STILL<br>ALIVE<span>✳</span></div>
+        </div>
+      </section>
+
+      <section class="mission-section wrapper" id="missions" aria-labelledby="missions-title">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow section-eyebrow"><span class="eyebrow-line"></span> SURVIVAL IS A TEAM EFFORT</div>
+            <h2 id="missions-title">THE <span>JOB BOARD</span><sup>09</sup></h2>
+          </div>
+          <p>Nine excellent opportunities to get bitten.<br>All applicants welcome. Survival not guaranteed.</p>
+        </div>
+
+        <div class="toolbar" aria-label="Filter missions">
+          <div class="filter-list" id="filters" role="group" aria-label="Mission category">
+            <button class="filter active" type="button" data-filter="all" aria-pressed="true">ALL MISSIONS <span>09</span></button>
+            <button class="filter" type="button" data-filter="field" aria-pressed="false">FIELD RUNS <span>05</span></button>
+            <button class="filter" type="button" data-filter="base" aria-pressed="false">BASE JOBS <span>04</span></button>
+            <button class="filter" type="button" data-filter="claimed" aria-pressed="false">CLAIMED <span>01</span></button>
+          </div>
+          <label class="search-box"><span aria-hidden="true">⌕</span><span class="sr-only">Search missions</span><input id="search" type="search" placeholder="SEARCH ASSIGNMENTS..." autocomplete="off"></label>
+        </div>
+
+        <div id="mission-grid" class="mission-grid" aria-live="polite"></div>
+        <p id="no-results" class="no-results" hidden>No missions match that description. Probably for the best.</p>
+
+        <div class="board-footer"><span>✳ ALL INFORMATION SUBJECT TO UNDEAD INTERFERENCE</span><span id="display-count">SHOWING 09 / 09 ASSIGNMENTS</span></div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrapper footer-inner"><span class="footer-icon">M✳</span><div><strong>McCOY LOGGING CO.</strong><span>IF YOU CAN READ THIS, YOU'RE STILL ALIVE.</span></div><div class="footer-right">THIS IS HOW YOU DIED. <small>A SURVIVOR-MADE PROJECT ZOMBOID MISSION BOARD.</small></div></div>
+    </footer>
+  </div>
+
+  <dialog id="mission-dialog" aria-labelledby="dialog-title">
+    <div class="dialog-inner">
+      <button id="dialog-close" class="dialog-close" type="button" aria-label="Close mission briefing">✕ <span>CLOSE</span></button>
+      <div id="dialog-content"></div>
+    </div>
+  </dialog>
+</body>
+</html>
