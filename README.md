@@ -21,3 +21,13 @@ images: [
 The first image is the card thumbnail. The briefing shows every image in order, without cropping, with a full-image link for each. Supply descriptive `alt` text for informative images.
 
 A list with one image uses that image in both places. A nonempty `images` list takes precedence over `image` and `imageAlt`; existing quests using those single-image fields continue to work. If `images` is absent or empty, the single-image fields are used.
+
+## Updating a ruled-out lead
+
+Keep the existing mission `id` and `number` so shared links and narrative references remain valid. Update its description, location, teaser and objectives to reflect the current plan. If an old lead should remain visible, add an optional plain-text `outdatedLead` field:
+
+```js
+outdatedLead: 'Search Greene’s for gardening supplies, tools and seeds.',
+```
+
+The briefing labels this text **RULED-OUT LEAD** and crosses it out. This records an incorrect lead; it does not mark objectives or the mission complete. Keep mission copy as plain text, without HTML tags.

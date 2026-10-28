@@ -107,6 +107,7 @@ function showMission(id, updateUrl = true, opener = document.activeElement) {
         <div><dt>Crew:</dt><dd>${escapeHtml(m.crew)}</dd></div>
       </dl>
       <p class="dossier-description">${escapeHtml(m.description)}</p>
+      ${m.outdatedLead ? `<p class="dossier-outdated-lead"><strong>RULED-OUT LEAD:</strong> <s>${escapeHtml(m.outdatedLead)}</s></p>` : ''}
       <h3>MISSION OBJECTIVES</h3><ol class="objective-list">${m.objectives.map((o, i) => `<li><span>${pad(i + 1)}</span>${escapeHtml(o)}</li>`).join('')}</ol>
       <div class="dossier-note"><strong>FIELD NOTES /</strong> ${escapeHtml(m.note)}</div>
       ${images.map((image, i) => `<div class="dossier-image"><img src="${escapeHtml(image.src)}" alt="${escapeHtml(image.alt || '')}"><span>DOSSIER ${escapeHtml(m.number)} / ${pad(missions.length)}${images.length > 1 ? ` · IMAGE ${i + 1} / ${images.length}` : ''}</span></div>`).join('')}

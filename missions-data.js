@@ -86,11 +86,12 @@ const missions = [
     id: 'greenes', number: '08', title: 'GREEN THUMBS, RED STREETS',
     kicker: 'FARMING SUPPLIES', category: 'field', risk: 'MEDIUM',
     image: 'assets/greenes.png', imageAlt: 'A survivor outside Greene’s store, with a station wagon parked in front.',
-    location: "Greene's · Muldraugh", crew: '1 survivor minimum',
-    teaser: 'We cannot live on canned beans forever. Probably.',
-    description: 'The rooftop garden needs a proper start. Head into Muldraugh and search Greene’s for useful gardening supplies, tools, seeds and anything else that might convince a potato to grow above a lumber yard.',
-    objectives: ['Search the store for seeds and gardening tools', 'Collect useful farming supplies', 'Bring everything back for the rooftop project'],
-    note: 'No one is allowed to eat the seeds on the way home.'
+    location: 'Muldraugh / surrounding farms and storage areas', crew: '1 survivor minimum',
+    teaser: 'Greene’s was a dead end. Find sacks and supplies to get the rooftop growing.',
+    description: 'Greene’s has been checked: no gardening materials, and especially no sacks. The rooftop garden still needs supplies, so widen the search. Scout farms, sheds and storage areas as possible leads, with sacks at the top of the shopping list so we can haul soil up to the roof. Bring back any useful seeds and gardening tools along the way.',
+    outdatedLead: 'Search Greene’s for gardening supplies, tools and seeds.',
+    objectives: ['Scout alternative sources of gardening supplies beyond Greene’s', 'Find and recover sacks for carrying soil to the rooftop garden', 'Collect any useful seeds and gardening tools still needed', 'Bring the supplies home for the rooftop project'],
+    note: 'Greene’s has already been checked. Sacks first. The rooftop will not grow vegetables on optimism alone.'
   },
   {
     id: 'garden', number: '09', title: 'SALAD WITH A VIEW',
@@ -99,8 +100,8 @@ const missions = [
     location: 'Safehouse rooftop', crew: '1 green-thumbed survivor minimum',
     teaser: 'A little greenery. A little hope. A beautiful view of the undead below.',
     description: 'Once the supplies arrive, turn the McCoy rooftop into our first proper garden. Fresh vegetables, a sustainable food source and one more excuse to stay home instead of visiting zombie-infested supermarkets.',
-    objectives: ['Prepare the rooftop growing area', 'Set up planters and an accessible water supply', 'Plant crops and organize ongoing maintenance'],
-    note: 'Depends on farming supplies from mission 08. Zombies may not harvest without permission.'
+    objectives: ['Use the sacks from mission 08 to bring soil to the rooftop growing area', 'Set up the growing beds and an accessible water supply', 'Plant crops and organize ongoing maintenance'],
+    note: 'Depends on sacks and farming supplies from mission 08; the search continues beyond Greene’s. Zombies may not harvest without permission.'
   },
   {
     id: 'vhs', number: '10', title: 'I MISS OLD MOVIES',
@@ -131,5 +132,25 @@ const missions = [
     description: 'One fast car has already made it back to the safehouse. Unfortunately, a drag race requires a second terrible idea on wheels. Search for another fast car, check its condition, and bring it home so we can get both rides ready for a highway showdown. No specific model or location to go on. Just find something worth lining up beside the car we already have.',
     objectives: ['Find another fast car to race against the one already at the safehouse', 'Inspect the engine, tires and brakes, then recover the car to the safehouse', 'Get both cars running and fueled for the race', 'Scout a clear stretch of highway with room to race and stop'],
     note: 'Someone promised NOS. Someone else requested suture needles and med packs. Please settle the second request first.'
+  },
+  {
+    id: 'seb', number: '13', title: 'A PROPER GOODBYE',
+    kicker: 'RECOVERY & REMEMBRANCE', category: 'field', risk: 'HIGH',
+    image: 'assets/cemetery.png', imageAlt: 'Illustration of a simple grave marker and shovel in a small fenced cemetery beside a lumber-yard safehouse at sunset.',
+    location: 'Search area unconfirmed / Safehouse grounds', crew: '2 survivors recommended',
+    teaser: 'Find Seb’s fallen survivor. Bring our friend home and give him a place to rest.',
+    description: 'Seb’s survivor did not make it. Find out where he fell and track him down. If he is still walking, put him down so we can bring him home for a proper burial. Set aside a quiet corner of the safehouse grounds for a cemetery, somewhere we can remember the people who helped us get this far.',
+    objectives: ['Establish Seb’s last known location and search the area', 'Identify his fallen survivor and put him down if he has reanimated', 'Secure the area and recover his remains for burial', 'Prepare a small cemetery within the safehouse perimeter', 'Lay him to rest and mark his grave'],
+    note: 'Bring a shovel. Bring backup. Bring our friend home.'
+  },
+  {
+    id: 'winter', number: '14', title: 'WINTER IS COMING',
+    kicker: 'WINTER PREPARATION', category: 'base', risk: 'MEDIUM',
+    image: 'assets/winter-stove.png', imageAlt: 'Illustration of a wood stove and stacked firewood in a small timber-partitioned safehouse room, with snow outside the window.',
+    location: 'Knox County / Safehouse', crew: '2 haulers + 1 builder recommended',
+    teaser: 'Retrieve a stove, build smaller rooms and give winter a reason to stay outside.',
+    description: 'The safehouse has plenty of space. Unfortunately, most of it will be cold. Find a wood stove, work out how to move it and bring it home before winter arrives. Partition the open interior into smaller enclosed rooms so we have manageable spaces to heat, then set up a warm refuge and a fuel reserve. Test the arrangement before the first freeze makes the decisions for us.',
+    objectives: ['Locate a recoverable wood stove and prepare the tools and transport needed', 'Retrieve the stove and bring it back to the safehouse', 'Partition smaller enclosed rooms with doors to create spaces we can heat', 'Install the stove in the chosen room and stockpile suitable fuel', 'Test the heating setup and prepare the warm rooms for winter'],
+    note: 'A giant warehouse is an ambitious thing to heat. Start with a room. Preferably before our water bottles become furniture.'
   }
 ];
