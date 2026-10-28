@@ -15,7 +15,7 @@ ZomBoard is a public, read-only Project Zomboid mission board themed around the 
 - There is no framework, package manifest, build process, backend, database, authentication, game integration, saved mission progress, or browser-storage layer.
 - Mission availability is curated in source. Visitors can browse all missions, open briefings, and copy links; they cannot claim or complete missions.
 - Objective lists are informational numbered lists, not interactive checkboxes or completion tracking.
-- All mission images are local: eight supplied PNG screenshots and SVG illustrations for the chicken-coop, Greene's, Operation Dumbbell and drag-race missions. Google Fonts is the only external resource service referenced by the site; CSS supplies fallback fonts.
+- All mission images are local: nine supplied PNG screenshots and SVG illustrations for the chicken-coop, Greene's and Operation Dumbbell missions. Google Fonts is the only external resource service referenced by the site; CSS supplies fallback fonts.
 - Mission content requires JavaScript: the initial HTML contains an empty mission grid and no non-JavaScript mission fallback.
 
 ## File responsibilities
@@ -26,7 +26,7 @@ ZomBoard is a public, read-only Project Zomboid mission board themed around the 
 | `missions-data.js` | The `missions` array: mission content and display order. Loaded before `missions.js`. |
 | `missions.js` | HTML escaping, card/list/briefing templates, sidebar highlighting and scrolling, modal lifecycle, URL state, and clipboard handling. |
 | `styles.css` | Design tokens, component styles, illustration cropping, responsive layouts, focus styling, and reduced-motion overrides. |
-| `assets/` | Eight PNG screenshots, four SVG mission illustrations, the social-preview image `hero-mccoy.svg`, and `favicon.svg`. |
+| `assets/` | Nine PNG screenshots, three SVG mission illustrations, the social-preview image `hero-mccoy.svg`, and `favicon.svg`. |
 | `.nojekyll` | Disables Jekyll processing for direct static publication on GitHub Pages. Keep this file in the publishing root. |
 | `README.md` | End-user customization, local preview, GitHub Pages setup, and publishing instructions. |
 
@@ -50,7 +50,7 @@ The `missions` array in `missions-data.js` is the source of truth for mission co
 | `description`, `note` | Plain-text briefing copy and field notes. |
 | `objectives` | Nonempty array of plain-text strings, rendered in order. |
 
-The baseline is twelve missions: eight field runs, four base jobs, and one claimed mission (`palisade`). Existing IDs, in order, are `bunker`, `groceries`, `palisade`, `coop`, `chickens`, `mechanics`, `police`, `greenes`, `garden`, `vhs`, `dumbbell`, and `drag-race`. The VHS quest collects tapes from the movie store in Muldraugh and uses `assets/vhs.png`. Operation Dumbbell recovers gym equipment and snacks before setting up a safehouse workout area, and uses `assets/dumbbell.svg`. The drag-race quest recovers one more fast car to race against the car already brought home, then prepares both cars and scouts a highway stretch; it uses `assets/drag-race.svg`. Its NOS reference is narrative banter, not a confirmed game mechanic or required item.
+The baseline is twelve missions: eight field runs, four base jobs, and one claimed mission (`palisade`). Existing IDs, in order, are `bunker`, `groceries`, `palisade`, `coop`, `chickens`, `mechanics`, `police`, `greenes`, `garden`, `vhs`, `dumbbell`, and `drag-race`. The VHS quest collects tapes from the movie store in Muldraugh and uses `assets/vhs.png`. Operation Dumbbell recovers gym equipment and snacks before setting up a safehouse workout area, and uses `assets/dumbbell.svg`. The drag-race quest recovers one more fast car to race against the car already brought home, then prepares both cars and scouts a highway stretch; it uses `assets/drag-race.png`. Its NOS reference is narrative banter, not a confirmed game mechanic or required item.
 
 Narrative dependencies are not executable rules. For example, the garden's note refers to supplies from mission 08; changing mission ordering or numbering can invalidate this copy.
 

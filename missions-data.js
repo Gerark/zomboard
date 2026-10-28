@@ -114,7 +114,7 @@ const missions = [
   {
     id: 'drag-race', number: '12', title: 'FAMILY, FUEL & FIRST AID',
     kicker: 'VEHICLE RECOVERY', category: 'field', status: 'available', risk: 'HIGH',
-    image: 'assets/drag-race.svg', imageAlt: 'Illustration of two cars lined up on a deserted highway bordered by trees.',
+    image: 'assets/drag-race.png', imageAlt: 'A survivor beside a damaged white sports car in a workshop.',
     location: 'Knox County / highway', crew: '2 drivers + mechanic recommended',
     teaser: 'One fast car is already home. Find it a rival. The highway is calling.',
     description: 'One fast car has already made it back to the safehouse. Unfortunately, a drag race requires a second terrible idea on wheels. Search for another fast car, check its condition, and bring it home so we can get both rides ready for a highway showdown. No specific model or location to go on. Just find something worth lining up beside the car we already have.',
