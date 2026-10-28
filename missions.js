@@ -96,6 +96,7 @@ function showMission(id, updateUrl = true, opener = document.activeElement) {
   const m = missions.find((item) => item.id === id);
   if (!m) return;
   const images = getMissionImages(m);
+  const relatedMission = missions.find((item) => item.id === m.relatedMission);
   if (!dialog.open) priorFocus = opener;
   clearSidebarInteraction();
   dialogContent.innerHTML = `<div class="dossier-body">
@@ -108,6 +109,7 @@ function showMission(id, updateUrl = true, opener = document.activeElement) {
       </dl>
       <p class="dossier-description">${escapeHtml(m.description)}</p>
       ${m.outdatedLead ? `<p class="dossier-outdated-lead"><strong>RULED-OUT LEAD:</strong> <s>${escapeHtml(m.outdatedLead)}</s></p>` : ''}
+      ${relatedMission ? `<div class="dossier-related"><span>RELATED MISSION /</span><button type="button" class="copy-button" data-open="${escapeHtml(relatedMission.id)}">${escapeHtml(relatedMission.number)} · ${escapeHtml(relatedMission.title)} ↗</button></div>` : ''}
       <h3>MISSION OBJECTIVES</h3><ol class="objective-list">${m.objectives.map((o, i) => `<li><span>${pad(i + 1)}</span>${escapeHtml(o)}</li>`).join('')}</ol>
       <div class="dossier-note"><strong>FIELD NOTES /</strong> ${escapeHtml(m.note)}</div>
       ${images.map((image, i) => `<div class="dossier-image"><img src="${escapeHtml(image.src)}" alt="${escapeHtml(image.alt || '')}"><span>DOSSIER ${escapeHtml(m.number)} / ${pad(missions.length)}${images.length > 1 ? ` · IMAGE ${i + 1} / ${images.length}` : ''}</span></div>`).join('')}
@@ -158,6 +160,13 @@ grid.addEventListener('click', (event) => {
 missionList.addEventListener('click', (event) => {
   const button = event.target.closest('button[data-open]');
   if (button && !compactLayout.matches) showMission(button.dataset.open, true, button);
+});
+dialogContent.addEventListener('click', (event) => {
+  const button = event.target.closest('button[data-open]');
+  if (!button) return;
+  showMission(button.dataset.open);
+  dialog.scrollTop = 0;
+  document.getElementById('dialog-close').focus({ preventScroll: true });
 });
 missionList.addEventListener('pointermove', (event) => {
   if (compactLayout.matches || dialog.open || event.pointerType === 'touch') return;

@@ -84,6 +84,8 @@ dialog::backdrop { background: #020604df; backdrop-filter: blur(5px); }
 .dossier-description { color: #d0d5c9; font: 400 14px/1.65 var(--font-body); margin: 16px 0; }
 .dossier-outdated-lead { margin: 16px 0; color: var(--muted); font: 400 13px/1.65 var(--font-body); }
 .dossier-outdated-lead strong { color: var(--accent-light); }
+.dossier-related { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin: 16px 0; }
+.dossier-related > span { color: var(--muted); font: 600 10px var(--font-mono); }
 .dossier-body h3 { font: 800 22px var(--font-display); letter-spacing: .3px; margin: 16px 0 8px; }
 .objective-list { list-style: none; margin: 0; padding: 0; }
 .objective-list li { display: flex; gap: 14px; padding: 8px 0; border-top: 1px solid #384739; font-size: 13px; line-height: 1.55; color: #d0d7c7; }

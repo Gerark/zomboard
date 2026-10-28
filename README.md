@@ -31,3 +31,7 @@ outdatedLead: 'Search Greene’s for gardening supplies, tools and seeds.',
 ```
 
 The briefing labels this text **RULED-OUT LEAD** and crosses it out. This records an incorrect lead; it does not mark objectives or the mission complete. Keep mission copy as plain text, without HTML tags.
+
+## Linking related missions
+
+Add an optional `relatedMission` field containing another mission's exact `id`, for example `relatedMission: 'seb'`. The briefing displays a button with that mission's current number and title. It opens the related briefing and updates its shareable URL. Add the reverse reference to the other mission when both briefings should link to each other. These links express narrative connections; they do not lock missions or track progress.

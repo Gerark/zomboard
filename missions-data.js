@@ -87,11 +87,12 @@ const missions = [
     kicker: 'FARMING SUPPLIES', category: 'field', risk: 'MEDIUM',
     image: 'assets/greenes.png', imageAlt: 'A survivor outside Greene’s store, with a station wagon parked in front.',
     location: 'Muldraugh / surrounding farms and storage areas', crew: '1 survivor minimum',
-    teaser: 'Greene’s was a dead end. Find sacks and supplies to get the rooftop growing.',
-    description: 'Greene’s has been checked: no gardening materials, and especially no sacks. The rooftop garden still needs supplies, so widen the search. Scout farms, sheds and storage areas as possible leads, with sacks at the top of the shopping list so we can haul soil up to the roof. Bring back any useful seeds and gardening tools along the way.',
+    teaser: 'Greene’s was a dead end. Seb knew a farm, but never got the chance to show us.',
+    description: 'Greene’s has been checked: no gardening materials, and especially no sacks. Seb knew about a farm he wanted to show us, but he died tragically before he could take us there. That farm is our next lead, if we can work out which one he meant. Its location and supplies still need confirming. Pick up the trail and keep sacks at the top of the shopping list so we can haul soil up to the rooftop garden. Bring back any useful seeds and gardening tools along the way.',
     outdatedLead: 'Search Greene’s for gardening supplies, tools and seeds.',
-    objectives: ['Scout alternative sources of gardening supplies beyond Greene’s', 'Find and recover sacks for carrying soil to the rooftop garden', 'Collect any useful seeds and gardening tools still needed', 'Bring the supplies home for the rooftop project'],
-    note: 'Greene’s has already been checked. Sacks first. The rooftop will not grow vegetables on optimism alone.'
+    relatedMission: 'seb',
+    objectives: ['Try to identify the farm Seb wanted to show us and scout it for gardening supplies', 'Find and recover sacks for carrying soil to the rooftop garden', 'Collect any useful seeds and gardening tools still needed', 'Bring the supplies home for the rooftop project'],
+    note: 'Seb’s farm is an unconfirmed lead. If it does not pan out, keep searching other farms, sheds and storage areas. Sacks first.'
   },
   {
     id: 'garden', number: '09', title: 'SALAD WITH A VIEW',
@@ -139,7 +140,8 @@ const missions = [
     image: 'assets/cemetery.svg', imageAlt: 'A simple SVG illustration of Seb’s wooden grave marker, fresh earth and a shovel inside the safehouse fence.',
     location: 'Search area unconfirmed / Safehouse grounds', crew: '2 survivors recommended',
     teaser: 'Find Seb’s fallen survivor. Bring our friend home and give him a place to rest.',
-    description: 'Seb’s survivor did not make it. Find out where he fell and track him down. If he is still walking, put him down so we can bring him home for a proper burial. Set aside a quiet corner of the safehouse grounds for a cemetery, somewhere we can remember the people who helped us get this far.',
+    description: 'Seb’s survivor did not make it. He knew about a farm he wanted to show us for the gardening supply hunt, but died tragically before he got the chance. Find out where he fell and track him down. If he is still walking, put him down so we can bring him home for a proper burial. Set aside a quiet corner of the safehouse grounds for a cemetery, somewhere we can remember the people who helped us get this far.',
+    relatedMission: 'greenes',
     objectives: ['Establish Seb’s last known location and search the area', 'Identify his fallen survivor and put him down if he has reanimated', 'Secure the area and recover his remains for burial', 'Prepare a small cemetery within the safehouse perimeter', 'Lay him to rest and mark his grave'],
     note: 'Bring a shovel. Bring backup. Bring our friend home.'
   },
