@@ -5,5 +5,4 @@
 3. Set a unique `id`, the next two-digit `number`, and replace the mission text and objectives.
 4. Set `category` to `'field'` or `'base'`, `status` to `'available'` or `'claimed'`, and `risk` to `'LOW'`, `'MEDIUM'`, `'HIGH'`, or `'SEVERE'`.
 5. Set `image` to the asset path, such as `'assets/medical-run.png'`, matching filename casing. Add `imageAlt` for screenshots or maps.
-6. Update the mission total in both description meta tags in `index.html`.
-7. Open `index.html` in a browser and check the new mission's briefing, objectives, and image.
+6. Open `index.html` in a browser and check the new mission's briefing, objectives, and image.

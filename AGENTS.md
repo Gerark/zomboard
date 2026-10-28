@@ -15,7 +15,7 @@ ZomBoard is a public, read-only Project Zomboid mission board themed around the 
 - There is no framework, package manifest, build process, backend, database, authentication, game integration, saved mission progress, or browser-storage layer.
 - Mission availability is curated in source. Visitors can browse all missions, open briefings, and copy links; they cannot claim or complete missions.
 - Objective lists are informational numbered lists, not interactive checkboxes or completion tracking.
-- All mission images are local: eight supplied PNG screenshots and SVG illustrations for the chicken-coop, Greene's and Operation Dumbbell missions. Google Fonts is the only external resource service referenced by the site; CSS supplies fallback fonts.
+- All mission images are local: eight supplied PNG screenshots and SVG illustrations for the chicken-coop, Greene's, Operation Dumbbell and drag-race missions. Google Fonts is the only external resource service referenced by the site; CSS supplies fallback fonts.
 - Mission content requires JavaScript: the initial HTML contains an empty mission grid and no non-JavaScript mission fallback.
 
 ## File responsibilities
@@ -26,7 +26,7 @@ ZomBoard is a public, read-only Project Zomboid mission board themed around the 
 | `missions-data.js` | The `missions` array: mission content and display order. Loaded before `missions.js`. |
 | `missions.js` | HTML escaping, card/list/briefing templates, sidebar highlighting and scrolling, modal lifecycle, URL state, and clipboard handling. |
 | `styles.css` | Design tokens, component styles, illustration cropping, responsive layouts, focus styling, and reduced-motion overrides. |
-| `assets/` | Eight PNG screenshots, three SVG mission illustrations, the social-preview image `hero-mccoy.svg`, and `favicon.svg`. |
+| `assets/` | Eight PNG screenshots, four SVG mission illustrations, the social-preview image `hero-mccoy.svg`, and `favicon.svg`. |
 | `.nojekyll` | Disables Jekyll processing for direct static publication on GitHub Pages. Keep this file in the publishing root. |
 | `README.md` | End-user customization, local preview, GitHub Pages setup, and publishing instructions. |
 
@@ -50,16 +50,13 @@ The `missions` array in `missions-data.js` is the source of truth for mission co
 | `description`, `note` | Plain-text briefing copy and field notes. |
 | `objectives` | Nonempty array of plain-text strings, rendered in order. |
 
-The baseline is eleven missions: seven field runs, four base jobs, and one claimed mission (`palisade`). Existing IDs, in order, are `bunker`, `groceries`, `palisade`, `coop`, `chickens`, `mechanics`, `police`, `greenes`, `garden`, `vhs`, and `dumbbell`. The VHS quest collects tapes from the movie store in Muldraugh and uses `assets/vhs.png`. Operation Dumbbell recovers gym equipment and snacks before setting up a safehouse workout area, and uses `assets/dumbbell.svg`.
+The baseline is twelve missions: eight field runs, four base jobs, and one claimed mission (`palisade`). Existing IDs, in order, are `bunker`, `groceries`, `palisade`, `coop`, `chickens`, `mechanics`, `police`, `greenes`, `garden`, `vhs`, `dumbbell`, and `drag-race`. The VHS quest collects tapes from the movie store in Muldraugh and uses `assets/vhs.png`. Operation Dumbbell recovers gym equipment and snacks before setting up a safehouse workout area, and uses `assets/dumbbell.svg`. The drag-race quest recovers one more fast car to race against the car already brought home, then prepares both cars and scouts a highway stretch; it uses `assets/drag-race.svg`. Its NOS reference is narrative banter, not a confirmed game mechanic or required item.
 
 Narrative dependencies are not executable rules. For example, the garden's note refers to supplies from mission 08; changing mission ordering or numbering can invalidate this copy.
 
-### Counts are maintained in multiple places
+### Mission counts
 
-Adding, removing, or recategorizing missions requires checking all affected representations:
-
-- `index.html`: metadata descriptions that say "Eleven".
-- `missions.js`: the briefing denominator derives the total from the array.
+Keep both metadata descriptions in `index.html` generic, without a mission count. The briefing denominator in `missions.js` derives the total from the array. When adding, removing, or recategorizing missions, update the documented baseline above.
 
 ## Runtime behavior and DOM contracts
 
@@ -113,7 +110,7 @@ If Node.js is available, run `node --check missions-data.js` and `node --check m
 
 For approved behavior, content, or styling changes, select the relevant checks below and report what was actually verified:
 
-1. Confirm expected mission totals, unique IDs, valid field values, matching metadata and briefing totals, existing image paths, and successful asset loading. Check the browser console for errors.
+1. Confirm expected mission totals, unique IDs, valid field values, correct briefing totals, generic metadata descriptions, existing image paths, and successful asset loading. Check the browser console for errors.
 2. Confirm all missions render in source order and the page initializes without references to removed footer/search/filter elements.
 3. Open each briefing. Verify the inline facts, copy, objectives, and images, with no visible availability/assignment badges or company overline. Only the palisade has its contractor note. Close using the button, Escape, and the backdrop, including keyboard focus return.
 4. Load and reload a valid deep link, try an unknown ID, copy a link successfully and through the fallback, and check Back/Forward behavior. Include unrelated query parameters and a hash when URL logic changes.

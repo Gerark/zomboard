@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 650" width="1000" height="650" role="img">
+  <defs>
+    <linearGradient id="sky" x2="0" y2="1">
+      <stop stop-color="#69715b"/>
+      <stop offset="1" stop-color="#273e34"/>
+    </linearGradient>
+    <linearGradient id="road" x2="0" y2="1">
+      <stop stop-color="#4f574b"/>
+      <stop offset="1" stop-color="#202c27"/>
+    </linearGradient>
+    <linearGradient id="rust" x2="0" y2="1">
+      <stop stop-color="#bd7951"/>
+      <stop offset="1" stop-color="#774433"/>
+    </linearGradient>
+    <linearGradient id="green" x2="0" y2="1">
+      <stop stop-color="#8d9d78"/>
+      <stop offset="1" stop-color="#435b48"/>
+    </linearGradient>
+    <linearGradient id="glass" x2="0" y2="1">
+      <stop stop-color="#243c38"/>
+      <stop offset="1" stop-color="#64776a"/>
+    </linearGradient>
+    <radialGradient id="vignette">
+      <stop offset=".5" stop-color="#081310" stop-opacity="0"/>
+      <stop offset="1" stop-color="#081310" stop-opacity=".72"/>
+    </radialGradient>
+    <filter id="grit">
+      <feTurbulence type="fractalNoise" baseFrequency=".48" numOctaves="3" seed="12" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer><feFuncA type="linear" slope=".16"/></feComponentTransfer>
+    </filter>
+    <g id="pine">
+      <path d="M-5 0H5V100H-5Z" fill="#1c2c23"/>
+      <path d="M0-100L-32-25H-20L-48 24H-27L-60 72H60L27 24H48L20-25H32Z" fill="#233c30"/>
+      <path d="M0-77L-18-29M0-34L26 16M0 10L-29 53" fill="none" stroke="#718268" stroke-width="4" opacity=".18"/>
+    </g>
+    <g id="car" stroke="#172820" stroke-width="7" stroke-linejoin="round">
+      <ellipse cx="150" cy="178" rx="165" ry="24" fill="#101c16" stroke="none" opacity=".7"/>
+      <rect x="13" y="120" width="43" height="70" rx="9" fill="#15221d"/>
+      <rect x="244" y="120" width="43" height="70" rx="9" fill="#15221d"/>
+      <path d="M33 83L72 19Q150 2 228 19L267 83L291 105V162Q150 179 9 162V105Z"/>
+      <path d="M62 77L87 31Q150 20 213 31L238 77Z" fill="url(#glass)"/>
+      <path d="M82 66L105 39M98 69L122 39" fill="none" stroke="#a9b7a1" stroke-width="4" opacity=".35"/>
+      <path d="M33 83Q150 94 267 83M18 112Q150 125 282 112" fill="none" stroke="#d5bd90" stroke-width="4" opacity=".5"/>
+      <path d="M26 126H91V147H26ZM209 126H274V147H209Z" fill="#cd684b"/>
+      <path d="M41 127V145M58 127V145M226 127V145M243 127V145" stroke="#e79b6a" stroke-width="4"/>
+      <rect x="123" y="132" width="54" height="23" rx="2" fill="#c7bd96"/>
+      <path d="M11 162Q150 179 289 162" fill="none" stroke="#89917c" stroke-width="12"/>
+      <path d="M58 177H82M218 177H242" stroke="#111c17" stroke-width="10"/>
+      <path d="M102 104L115 107M190 113L200 109M52 95L66 99" stroke="#493d2e" stroke-width="4"/>
+    </g>
+  </defs>
+  <rect width="1000" height="650" fill="url(#sky)"/>
+  <circle cx="511" cy="170" r="65" fill="#d0b77f" opacity=".42"/>
+  <path d="M0 237Q140 188 284 234T566 227T1000 217V650H0Z" fill="#344b37"/>
+  <g opacity=".8">
+    <use href="#pine" transform="translate(32 230) scale(1.3)"/>
+    <use href="#pine" transform="translate(141 251) scale(.9)"/>
+    <use href="#pine" transform="translate(244 258) scale(1.1)"/>
+    <use href="#pine" transform="translate(332 254) scale(.7)"/>
+    <use href="#pine" transform="translate(660 251) scale(.75)"/>
+    <use href="#pine" transform="translate(750 242) scale(1.1)"/>
+    <use href="#pine" transform="translate(865 247) scale(1.3)"/>
+    <use href="#pine" transform="translate(975 224) scale(1.5)"/>
+  </g>
+  <path d="M407 254H593L1000 650H0Z" fill="url(#road)"/>
+  <path d="M410 259L28 650M590 259L972 650" stroke="#c3b78f" stroke-width="6" opacity=".65"/>
+  <path d="M498 266V285M497 305V338M495 369V422M493 467V548M491 601V650M505 266V285M506 305V338M508 369V422M510 467V548M512 601V650" stroke="#bfaa70" stroke-width="4"/>
+  <path d="M94 558L906 558" stroke="#c4c6a5" stroke-width="11" opacity=".48"/>
+  <path d="M301 549L282 650M352 554L345 650M649 551L656 650M700 552L719 650" stroke="#13211a" stroke-width="15" opacity=".55"/>
+  <use href="#car" transform="translate(137 342)" fill="url(#rust)"/>
+  <use href="#car" transform="translate(563 342)" fill="url(#green)"/>
+  <path d="M57 600L161 587M827 607L942 595M102 627L187 618" stroke="#85917b" stroke-width="4" opacity=".2"/>
+  <rect width="1000" height="650" fill="url(#vignette)"/>
+  <rect width="1000" height="650" filter="url(#grit)" opacity=".55"/>
+  <path d="M22 20H87M22 20V72M978 20H913M978 20V72M22 630H87M22 630V578M978 630H913M978 630V578" fill="none" stroke="#d9c4a4" stroke-width="2" stroke-opacity=".37"/>
+</svg>
