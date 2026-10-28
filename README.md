@@ -32,20 +32,20 @@ See [GitHub's publishing-source documentation](https://docs.github.com/en/pages/
 
 ## Customize missions and artwork
 
-**Text:** Edit the nine mission objects at the top of `missions.js`. Each includes title, description, crew, risk, location, status, objectives, and image path. Use `status: 'claimed'` or `status: 'available'`.
+**Text:** Edit the ten mission objects at the top of `missions.js`. Each includes title, description, crew, risk, location, status, objectives, and image path. Use `status: 'claimed'` or `status: 'available'`.
 
-**Images:** Replace the corresponding SVG files in `assets/` with your own, or put `.jpg`, `.png`, or `.webp` files there and update that mission's `image` property in `missions.js`.
+**Images:** Mission artwork lives in `assets/` and is selected by each mission's `image` property in `missions.js`. Eight missions use supplied PNG screenshots: bunker, groceries, palisade, chickens, mechanics, police, rooftop garden, and VHS collection. The chicken-coop and Greene's missions keep their SVG placeholders. Original SVG files are retained.
 
-- Example: put `assets/bunker.jpg` in the folder and change `image: 'assets/bunker.svg'` to `image: 'assets/bunker.jpg'`.
-- Images are automatically cropped for their cards; use landscape images around 3:2 or 16:10 for best results.
+- To replace an image, put a `.jpg`, `.png`, `.webp`, or `.svg` file in `assets/` and update that mission's `image` path. Add an `imageAlt` description when the image contains useful visual information.
+- Card thumbnails are cropped; briefing images retain their full aspect ratio so map annotations remain visible. **View full image** opens the original asset in a new tab for closer inspection.
 - The social-preview illustration is `assets/hero-mccoy.svg`; update `og:image` in `index.html` to change it.
-- The illustrations supplied are original placeholders and are safe to replace.
+- The retained SVG illustrations are placeholders and may be replaced.
 
 **Design:** Modify `styles.css` to change the layout, typography, colors, and card style.
 
 ## Features
 
-- Nine missions, with the palisade mission marked claimed
+- Ten missions, including VHS collection from the movie store in Muldraugh, with the palisade mission marked claimed
 - Compact cards in a responsive layout for desktop, tablet, and mobile
 - All missions displayed together, without search or filters
 - Detailed mission briefings with objective checklists
@@ -56,4 +56,4 @@ See [GitHub's publishing-source documentation](https://docs.github.com/en/pages/
 
 You can double-click `index.html`, or run `python -m http.server 8000` in this folder and open `http://localhost:8000`.
 
-Google Fonts are loaded from Google when online; the site has local font fallbacks and all mission illustrations are stored within this folder.
+Google Fonts are loaded from Google when online; the site has local font fallbacks and all mission images are stored within this folder.
