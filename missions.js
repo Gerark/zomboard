@@ -111,7 +111,7 @@ function cardHTML(m) {
       </div>
       <div class="card-body">
         <div class="card-kicker"><span>${escapeHtml(m.kicker)}</span><span class="card-risk risk-${m.risk.toLowerCase()}"><i></i>${escapeHtml(m.risk)} RISK</span></div>
-        <h3>${escapeHtml(m.title)}</h3>
+        <h2>${escapeHtml(m.title)}</h2>
         <p>${escapeHtml(m.teaser)}</p>
         <div class="card-bottom"><span class="crew-icon" aria-hidden="true">♟</span><span>${escapeHtml(m.crew)}</span><span class="open-arrow" aria-hidden="true">↗</span></div>
       </div>

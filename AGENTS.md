@@ -9,7 +9,7 @@
 
 ## Product and architecture
 
-McCoy Survival Board is a public, read-only Project Zomboid mission board themed around the McCoy Logging Co. safehouse near Muldraugh, Knox County.
+ZomBoard is a public, read-only Project Zomboid mission board themed around the McCoy Logging Co. safehouse near Muldraugh, Knox County. The page opens directly onto the job board below the ZomBoard brand header; there is no hero section or emergency-broadcast strip.
 
 - It is a single-page static website using plain HTML, CSS, and a deferred classic JavaScript script.
 - There is no framework, package manifest, build process, backend, database, authentication, game integration, saved mission progress, or browser-storage layer.
@@ -22,10 +22,10 @@ McCoy Survival Board is a public, read-only Project Zomboid mission board themed
 
 | Path | Responsibility |
 | --- | --- |
-| `index.html` | Page structure, metadata, font loading, hero, filter controls, search input, mission grid container, footer, and dialog shell. |
+| `index.html` | Page structure, metadata, font loading, brand header, filter controls, search input, mission grid container, footer, and dialog shell. |
 | `missions.js` | The `missions` array, HTML escaping, card and briefing templates, filtering, search, modal lifecycle, URL state, and clipboard handling. |
 | `styles.css` | Design tokens, component styles, illustration cropping, responsive layouts, focus styling, and reduced-motion overrides. |
-| `assets/` | Nine mission illustrations, `hero-mccoy.svg`, and `favicon.svg`. |
+| `assets/` | Nine mission illustrations, the social-preview image `hero-mccoy.svg`, and `favicon.svg`. |
 | `.nojekyll` | Disables Jekyll processing for direct static publication on GitHub Pages. Keep this file in the publishing root. |
 | `README.md` | End-user customization, local preview, GitHub Pages setup, and publishing instructions. |
 
@@ -56,7 +56,7 @@ Narrative dependencies are not executable rules. For example, the garden's note 
 
 Adding, removing, or recategorizing missions requires checking all affected representations:
 
-- `index.html`: filter button counts, job-board heading count, initial display count, metadata descriptions, and copy that says "Nine". The hero's `NO. 009` bulletin label is also literal text; decide whether it should change rather than assuming it is computed.
+- `index.html`: filter button counts, job-board heading count, initial display count, metadata descriptions, and copy that says "Nine".
 - `missions.js`: the briefing's literal `/ 09` denominator. Only the footer count in `render()` derives both its visible count and total from the array.
 - `README.md`: mission totals, customization instructions, and claimed-mission description.
 
@@ -89,10 +89,10 @@ Filter button counts represent the complete dataset, not the current search resu
 
 - Preserve the established survivor-bulletin style: dark green surfaces, cream text, orange accents, condensed display headings, monospaced labels, grain, stamps, and illustrated cards. Use the existing `:root` tokens before adding competing values.
 - Typography uses Barlow Condensed for display text, IBM Plex Mono for labels, and DM Sans for body copy. Verify fallback-font layout if fonts are unavailable.
-- Default mission layout is three columns; at widths up to 820px it becomes two, and at widths up to 550px it becomes one. The 1100px breakpoint adjusts spacing and typography. The hero also stacks at 820px.
+- Default mission layout is three columns; at widths up to 820px it becomes two, and at widths up to 550px it becomes one. The 1100px breakpoint adjusts spacing and typography.
 - Artwork is cropped with `object-fit: cover`; the supplied non-favicon SVGs have a `1000 650` viewBox. Keep important content away from crop edges when replacing images.
 - Preserve real buttons, the search label, filter `aria-pressed` state, `aria-live` on the grid, dialog labeling, keyboard access, visible focus, and reduced-motion overrides.
-- Card and briefing images currently use empty alternative text; the hero image has descriptive alternative text. Reconsider alternatives if replacement artwork conveys information absent from the accompanying copy.
+- Card and briefing images currently use empty alternative text. Reconsider alternatives if replacement artwork conveys information absent from the accompanying copy. The job-board title is the page's main `h1`.
 - Use the existing English setting and darkly humorous game-fiction voice. Keep functional controls clear.
 
 ## Local workflow and verification

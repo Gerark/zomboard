@@ -1,4 +1,4 @@
-# McCoy Survival Board
+# ZomBoard
 
 A standalone, read-only Project Zomboid mission board. No accounts, backend, database, frameworks, or build steps are required.
 
@@ -38,7 +38,7 @@ See [GitHub's publishing-source documentation](https://docs.github.com/en/pages/
 
 - Example: put `assets/bunker.jpg` in the folder and change `image: 'assets/bunker.svg'` to `image: 'assets/bunker.jpg'`.
 - Images are automatically cropped for their cards; use landscape images around 3:2 or 16:10 for best results.
-- The large safehouse illustration is `assets/hero-mccoy.svg`; replace its path in `index.html` to change the header.
+- The social-preview illustration is `assets/hero-mccoy.svg`; update `og:image` in `index.html` to change it.
 - The illustrations supplied are original placeholders and are safe to replace.
 
 **Design:** Modify `styles.css` to change the layout, typography, colors, and card style.
