@@ -37,7 +37,7 @@ See [GitHub's publishing-source documentation](https://docs.github.com/en/pages/
 **Images:** Mission artwork lives in `assets/` and is selected by each mission's `image` property in `missions.js`. Eight missions use supplied PNG screenshots: bunker, groceries, palisade, chickens, mechanics, police, rooftop garden, and VHS collection. The chicken-coop and Greene's missions keep their SVG placeholders. Original SVG files are retained.
 
 - To replace an image, put a `.jpg`, `.png`, `.webp`, or `.svg` file in `assets/` and update that mission's `image` path. Add an `imageAlt` description when the image contains useful visual information.
-- Card thumbnails are cropped; briefing images retain their full aspect ratio so map annotations remain visible. **View full image** opens the original asset in a new tab for closer inspection.
+- Card thumbnails are cropped; briefing images appear below the field notes and retain their full aspect ratio so map annotations remain visible. **View full image** opens the original asset in a new tab for closer inspection.
 - The social-preview illustration is `assets/hero-mccoy.svg`; update `og:image` in `index.html` to change it.
 - The retained SVG illustrations are placeholders and may be replaced.
 

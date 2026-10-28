@@ -141,8 +141,7 @@ function showMission(id, updateUrl = true) {
   const m = missions.find((item) => item.id === id);
   if (!m) return;
   priorFocus = document.activeElement;
-  dialogContent.innerHTML = `<div class="dossier-image"><img src="${escapeHtml(m.image)}" alt="${escapeHtml(m.imageAlt || '')}"><span>DOSSIER ${m.number} / ${pad(missions.length)}</span><span class="dossier-classification">${m.status === 'claimed' ? 'ALREADY ASSIGNED' : 'AVAILABLE FOR DUTY'}</span></div>
-    <div class="dossier-body">
+  dialogContent.innerHTML = `<div class="dossier-body">
       <div class="dossier-overline">MCCOY LOGGING CO. / MISSION BRIEFING / ${m.number}</div>
       <h2 id="dialog-title">${escapeHtml(m.title)}</h2>
       <div class="dossier-badges"><span>${escapeHtml(m.kicker)}</span><span class="risk-${m.risk.toLowerCase()}">${escapeHtml(m.risk)} RISK</span><span>${m.status === 'claimed' ? '● CLAIMED' : '○ AVAILABLE'}</span></div>
@@ -150,6 +149,7 @@ function showMission(id, updateUrl = true) {
       <div class="dossier-details"><div><small>LOCATION</small><strong>${escapeHtml(m.location)}</strong></div><div><small>CREW REQUIREMENT</small><strong>${escapeHtml(m.crew)}</strong></div></div>
       <h3>MISSION OBJECTIVES</h3><ol class="objective-list">${m.objectives.map((o, i) => `<li><span>${pad(i + 1)}</span>${escapeHtml(o)}</li>`).join('')}</ol>
       <div class="dossier-note"><strong>FIELD NOTES /</strong> ${escapeHtml(m.note)}</div>
+      <div class="dossier-image"><img src="${escapeHtml(m.image)}" alt="${escapeHtml(m.imageAlt || '')}"><span>DOSSIER ${m.number} / ${pad(missions.length)}</span><span class="dossier-classification">${m.status === 'claimed' ? 'ALREADY ASSIGNED' : 'AVAILABLE FOR DUTY'}</span></div>
       <div class="dossier-actions"><button type="button" id="copy-mission" class="copy-button">⧉ COPY MISSION LINK</button><a class="copy-button" href="${escapeHtml(m.image)}" target="_blank" rel="noopener">VIEW FULL IMAGE ↗</a><span>RETURN ALIVE. REPORT BACK.</span></div>
     </div>`;
 
