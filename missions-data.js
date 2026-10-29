@@ -154,5 +154,15 @@ const missions = [
     description: 'The safehouse has plenty of space. Unfortunately, most of it will be cold. Find a wood stove, work out how to move it and bring it home before winter arrives. Partition the open interior into smaller enclosed rooms so we have manageable spaces to heat, then set up a warm refuge and a fuel reserve. Test the arrangement before the first freeze makes the decisions for us.',
     objectives: ['Locate a recoverable wood stove and prepare the tools and transport needed', 'Retrieve the stove and bring it back to the safehouse', 'Partition smaller enclosed rooms with doors to create spaces we can heat', 'Install the stove in the chosen room and stockpile suitable fuel', 'Test the heating setup and prepare the warm rooms for winter'],
     note: 'A giant warehouse is an ambitious thing to heat. Start with a room. Preferably before our water bottles become furniture.'
+  },
+  {
+    id: 'survivor-rooms', number: '15', title: 'WALLS BETWEEN FRIENDS',
+    kicker: 'BASE CONSTRUCTION', category: 'base', risk: 'LOW',
+    image: 'assets/survivor-rooms.png', imageAlt: 'In-game screenshot of survivor rooms inside the safehouse, with unfinished timber wall frames around beds, desks and lockers.',
+    location: 'Safehouse', crew: '1 contractor',
+    teaser: 'Finish the survivor-room walls. A bed deserves more than an imaginary bedroom.',
+    description: 'The beds, desks and lockers are already in place. The walls are still mostly a promise. Our contractor needs to finish the existing frames around the survivor rooms, leave proper doorways and make sure everyone can reach their bed without climbing over someone else’s desk. Privacy survived the apocalypse. It is just waiting for planks.',
+    objectives: ['Gather the planks, nails and carpentry tools needed to finish the existing room frames', 'Build the remaining walls around each survivor room', 'Fit doors and keep the shared corridor and room entrances clear', 'Check every room is enclosed and its bed, desk and locker remain accessible'],
+    note: 'Please keep the doorways. We asked for bedrooms, not decorative coffins.'
   }
 ];
