@@ -164,5 +164,15 @@ const missions = [
     description: 'The beds, desks and lockers are already in place. The walls are still mostly a promise. Our contractor needs to finish the existing frames around the survivor rooms, leave proper doorways and make sure everyone can reach their bed without climbing over someone else’s desk. Privacy survived the apocalypse. It is just waiting for planks.',
     objectives: ['Gather the planks, nails and carpentry tools needed to finish the existing room frames', 'Build the remaining walls around each survivor room', 'Fit doors and keep the shared corridor and room entrances clear', 'Check every room is enclosed and its bed, desk and locker remain accessible'],
     note: 'Please keep the doorways. We asked for bedrooms, not decorative coffins.'
+  },
+  {
+    id: 'battery-charger', number: '16', title: 'DEAD BATTERIES, LIVING PROBLEMS',
+    kicker: 'BATTERY CHARGER RECOVERY', category: 'field', risk: 'MEDIUM',
+    image: 'assets/battery-charger.png', imageAlt: 'A car battery charger with a front-panel gauge, coiled cables and red and blue clamps.',
+    location: 'Knox County / Safehouse vehicle yard', crew: '2 survivors recommended',
+    teaser: 'The cars need a charge. Pushing them home is getting old.',
+    description: 'Find a car battery charger and bring it back to the safehouse. Search garages, workshops and storage areas for a lead; we do not have a confirmed location yet. Our cars are supposed to carry us away from trouble, not wait for a committee to push them. Recover a charger so we can recharge the fleet’s batteries and keep the next supply run from ending in a very slow getaway.',
+    objectives: ['Search garages, workshops and storage areas for a car battery charger', 'Recover the charger and bring it back to the safehouse vehicle yard', 'Hand it over for recharging the cars’ batteries before future supply runs'],
+    note: 'A motivational speech will not charge a battery. We have tried.'
   }
 ];

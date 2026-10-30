@@ -15,7 +15,7 @@ ZomBoard is a public, read-only Project Zomboid mission board themed around the 
 - There is no framework, backend, database, authentication, game integration, saved mission progress, or browser-storage layer. A Node.js build prepares GitHub Pages deployment output and per-mission sharing metadata; the runtime remains plain HTML, CSS and classic scripts.
 - Mission content is curated in source. Visitors can browse all missions, open briefings, and copy links; they cannot claim or complete missions.
 - Objective lists are informational numbered lists, not interactive checkboxes or completion tracking.
-- All mission images are local files: fifteen PNG screenshots, a PNG bunker tour flyer, and two SVG illustrations. Google Fonts is the only external resource service referenced by the site; CSS supplies fallback fonts.
+- All mission images are local files: fifteen PNG screenshots, a PNG bunker tour flyer, a PNG battery-charger item image, and two SVG illustrations. Google Fonts is the only external resource service referenced by the site; CSS supplies fallback fonts.
 - The main board and full briefings require JavaScript: the source HTML contains an empty mission grid. Generated share pages provide a title, teaser, image and briefing link without JavaScript.
 
 ## File responsibilities
@@ -27,7 +27,7 @@ ZomBoard is a public, read-only Project Zomboid mission board themed around the 
 | `missions.js` | HTML escaping, card/list/briefing templates, sidebar highlighting and scrolling, modal lifecycle, URL state, and clipboard handling. |
 | `share.js` | Continues visitors from generated share pages to the existing mission briefing, preserving additional query parameters and the hash. Loaded only on share pages. |
 | `styles.css` | Design tokens, component styles, image cropping, responsive layouts, focus styling, and reduced-motion overrides. |
-| `assets/` | Sixteen PNG mission images, two SVG mission illustrations, the social-preview image `hero-mccoy.svg`, and `favicon.svg`. |
+| `assets/` | Seventeen PNG mission images, two SVG mission illustrations, the social-preview image `hero-mccoy.svg`, and `favicon.svg`. |
 | `.nojekyll` | Disables Jekyll processing for direct static publication on GitHub Pages. Keep this file in the publishing root. |
 | `README.md` | End-user customization, local preview, GitHub Pages setup, and publishing instructions. |
 | `scripts/build-pages.mjs` | Validates curated mission data and local assets, copies the public website into `_site/`, generates per-mission metadata pages and copy-link configuration, and converts SVG preview images to PNG. |
@@ -58,11 +58,13 @@ The `missions` array in `missions-data.js` is the source of truth for mission co
 | `relatedMission` | Optional exact ID of a different mission. Its current number and title label a button that opens that briefing. Keep references valid; an unknown ID produces no button. Narrative connection only, without progress tracking or mission locking. |
 | `objectives` | Nonempty array of plain-text strings, rendered in order. |
 
-The baseline is fifteen missions: nine field runs and six base jobs. Existing IDs, in order, are `bunker`, `groceries`, `palisade`, `coop`, `chickens`, `mechanics`, `police`, `greenes`, `garden`, `vhs`, `dumbbell`, `drag-race`, `seb`, `winter`, and `survivor-rooms`. The VHS quest collects tapes from the movie store in Muldraugh and uses `assets/vhs.png`. Operation Dumbbell recovers gym equipment and snacks before setting up a safehouse workout area, and uses `assets/dumbbell.png`. The drag-race quest recovers one more fast car to race against the car already brought home, then prepares both cars and scouts a highway stretch; it uses `assets/drag-race.png`. Its NOS reference is narrative banter, not a confirmed game mechanic or required item.
+The baseline is sixteen missions: ten field runs and six base jobs. Existing IDs, in order, are `bunker`, `groceries`, `palisade`, `coop`, `chickens`, `mechanics`, `police`, `greenes`, `garden`, `vhs`, `dumbbell`, `drag-race`, `seb`, `winter`, `survivor-rooms`, and `battery-charger`. The VHS quest collects tapes from the movie store in Muldraugh and uses `assets/vhs.png`. Operation Dumbbell recovers gym equipment and snacks before setting up a safehouse workout area, and uses `assets/dumbbell.png`. The drag-race quest recovers one more fast car to race against the car already brought home, then prepares both cars and scouts a highway stretch; it uses `assets/drag-race.png`. Its NOS reference is narrative banter, not a confirmed game mechanic or required item.
 
 Mission 08 keeps its Greene’s ID and screenshot, but rules out the store as a gardening source and prioritizes finding sacks elsewhere for the rooftop garden. Its old lead uses `outdatedLead`. Seb knew a farm he wanted to show the group, but died tragically before he could; its location and supplies remain unconfirmed. Missions 08 and 13 use reciprocal `relatedMission` references to connect the farm lead with his recovery and burial. Mission 09 explicitly depends on those sacks and farming supplies. Mission 13, `seb`, searches for Seb’s fallen survivor, puts him down if reanimated, and prepares a safehouse cemetery for burial. Mission 14, `winter`, retrieves a wood stove, partitions smaller enclosed rooms, stocks fuel, and tests the heating setup. Their images, `assets/cemetery.svg` and `assets/winter-stove.svg`, are editable SVG illustrations in the original mission-art style; their alternative text identifies them as illustrations rather than gameplay screenshots or confirmed locations.
 
 Mission 15, `survivor-rooms`, asks one contractor to finish the existing survivor-room wall frames, fit doors and preserve access to the corridor, beds, desks and lockers. It uses the owner-supplied gameplay screenshot `assets/survivor-rooms.png`.
+
+Mission 16, `battery-charger`, asks survivors to find a car battery charger and bring it to the safehouse vehicle yard for recharging the cars’ batteries. Garages, workshops and storage areas are search leads, not confirmed item locations. It uses the owner-supplied item image `assets/battery-charger.png`.
 
 Narrative dependencies are not executable rules. For example, the garden's note refers to supplies from mission 08; changing mission ordering or numbering can invalidate this copy.
 
