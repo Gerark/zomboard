@@ -11,7 +11,7 @@ function runtimeFixture({ href, config, clipboard } = {}) {
   const handlers = {};
   const elements = new Map();
   const make = id => ({ id, innerHTML: '', open: false, addEventListener() {}, querySelectorAll: () => [], querySelector: () => ({ addEventListener: (name, handler) => { handlers[name] = handler; } }), contains: () => false, showModal() { this.open = true; } });
-  for (const id of ['mission-grid', 'mission-list', 'mission-dialog', 'dialog-content', 'dialog-close']) elements.set(id, make(id));
+  for (const id of ['mission-grid', 'completed-mission-grid', 'mission-list', 'completed-mission-list', 'completed-missions-section', 'completed-quest-list-section', 'mission-dialog', 'dialog-content', 'dialog-close']) elements.set(id, make(id));
   if (config) elements.set('mission-share-config', { textContent: JSON.stringify(config) });
   let prompt;
   const scope = vm.createContext({

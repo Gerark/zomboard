@@ -12,8 +12,8 @@
 ZomBoard is a public, read-only Project Zomboid mission board themed around the McCoy Logging Co. safehouse near Muldraugh, Knox County. The page opens directly onto compact mission cards below the ZomBoard brand header. There is no visible board heading, tagline, location/signal block, search, filtering, hero section, or emergency-broadcast strip.
 
 - It is a single-page static website using plain HTML, CSS, and two deferred classic JavaScript scripts: mission data first, then rendering and interactions.
-- There is no framework, backend, database, authentication, game integration, saved mission progress, or browser-storage layer. A Node.js build prepares GitHub Pages deployment output and per-mission sharing metadata; the runtime remains plain HTML, CSS and classic scripts.
-- Mission content is curated in source. Visitors can browse all missions, open briefings, and copy links; they cannot claim or complete missions.
+- There is no framework, backend, database, authentication, game integration, visitor progress tracking, or browser-storage layer. A Node.js build prepares GitHub Pages deployment output and per-mission sharing metadata; the runtime remains plain HTML, CSS and classic scripts.
+- Mission content and the shared completion flags are curated in source. Visitors can browse active and completed missions, open briefings, and copy links; they cannot claim missions or change completion status.
 - Objective lists are informational numbered lists, not interactive checkboxes or completion tracking.
 - All mission images are local files: fifteen PNG screenshots, a PNG bunker tour flyer, a PNG battery-charger item image, and two SVG illustrations. Google Fonts is the only external resource service referenced by the site; CSS supplies fallback fonts.
 - The main board and full briefings require JavaScript: the source HTML contains an empty mission grid. Generated share pages provide a title, teaser, image and briefing link without JavaScript.
@@ -22,7 +22,7 @@ ZomBoard is a public, read-only Project Zomboid mission board themed around the 
 
 | Path | Responsibility |
 | --- | --- |
-| `index.html` | Page structure, metadata, font loading, brand header, accessible mission-section heading, quest sidebar, mission grid container, and dialog shell. |
+| `index.html` | Page structure, metadata, font loading, brand header, accessible mission-section heading, active/completed quest sidebar lists and card grids, and dialog shell. |
 | `missions-data.js` | The `missions` array: mission content and display order. Loaded before `missions.js`. |
 | `missions.js` | HTML escaping, card/list/briefing templates, sidebar highlighting and scrolling, modal lifecycle, URL state, and clipboard handling. |
 | `share.js` | Continues visitors from generated share pages to the existing mission briefing, preserving additional query parameters and the hash. Loaded only on share pages. |
@@ -40,7 +40,7 @@ Keep the site usable as directly served source files. The owner approved the Git
 
 ## Mission data contract
 
-The `missions` array in `missions-data.js` is the source of truth for mission content and display order. All fields below are expected except optional `images`, `imageAlt`, `outdatedLead`, and `relatedMission`. Supply either a nonempty `images` array or the single-image `image` field; there is no runtime schema validation.
+The `missions` array in `missions-data.js` is the source of truth for mission content, completion status and display order within each completion group. All fields below are expected except optional `images`, `imageAlt`, `outdatedLead`, and `relatedMission`. Supply either a nonempty `images` array or the single-image `image` field; there is no runtime schema validation.
 
 | Field | Expected value and coupling |
 | --- | --- |
@@ -48,6 +48,7 @@ The `missions` array in `missions-data.js` is the source of truth for mission co
 | `number` | Two-digit display string such as `'01'`; independent of the array index and used in cards and briefings. Keep numbering consistent with ordering and narrative references. |
 | `title`, `kicker`, `teaser` | Plain text used in cards; title and kicker also appear in briefings. |
 | `category` | Exactly `'field'` or `'base'`; controls card classification. |
+| `completed` | Required boolean, `false` for active quests or `true` for completed quests. Controls sidebar/card grouping, without changing IDs, numbers, source order or briefing access. Owner-curated shared status, not visitor progress. |
 | `risk` | Uppercase `'LOW'`, `'MEDIUM'`, `'HIGH'`, or `'SEVERE'`; lowercased to form CSS classes. |
 | `images` | Optional ordered array of `{ src, alt }` objects. Each `src` is an existing, case-correct local asset path; `alt` is optional plain text, required by convention for informative images. The first image is the card thumbnail; all images appear in the briefing in order. A nonempty array takes precedence over `image` and `imageAlt`. |
 | `image` | Single-image asset path such as `'assets/bunker.png'`, used when `images` is absent or empty. Must exist and match filename casing. |
@@ -66,6 +67,8 @@ Mission 15, `survivor-rooms`, asks one contractor to finish the existing survivo
 
 Mission 16, `battery-charger`, asks survivors to find a car battery charger and bring it to the safehouse vehicle yard for recharging the cars’ batteries. Garages, workshops and storage areas are search leads, not confirmed item locations. It uses the owner-supplied item image `assets/battery-charger.png`.
 
+The VHS retrieval quest, `vhs` (mission 10), is completed. The other fifteen missions are active. Keep an explicit `completed` boolean on every mission.
+
 Narrative dependencies are not executable rules. For example, the garden's note refers to supplies from mission 08; changing mission ordering or numbering can invalidate this copy.
 
 The bunker uses an ordered `images` list: `assets/bunker-flyer.png` first and the retained annotated map `assets/bunker.png` second. The groceries quest likewise uses `assets/grocery-store.png` first and its retained annotated map `assets/grocery.png` second. The police raid uses `assets/police-station.png` first and its retained annotated map `assets/police.png` second. Other missions retain their single-image fields.
@@ -76,10 +79,10 @@ Keep both metadata descriptions in `index.html` generic, without a mission count
 
 ## Runtime behavior and DOM contracts
 
-- Both scripts are loaded with `defer`, with `missions-data.js` before `missions.js`. Keep them as classic scripts in this order so the shared `missions` binding and direct-file preview work. The runtime assumes the required HTML elements exist when it runs: `mission-grid`, `mission-list`, `mission-dialog`, `dialog-content`, and `dialog-close`.
+- Both scripts are loaded with `defer`, with `missions-data.js` before `missions.js`. Keep them as classic scripts in this order so the shared `missions` binding and direct-file preview work. The runtime assumes the required HTML elements exist when it runs: `mission-grid`, `completed-mission-grid`, `mission-list`, `completed-mission-list`, `completed-missions-section`, `completed-quest-list-section`, `mission-dialog`, `dialog-content`, and `dialog-close`.
 - Briefing markup supplies `dialog-title`, matching the dialog's `aria-labelledby`, and `copy-mission`, whose listener is attached after each briefing render.
-- `render()` displays the complete mission array in source order. There is no footer, assignment counter, search, filter state, or no-results UI.
-- `render()` replaces the grid and quest list contents from the same mission array and refreshes their ID maps. Both sets of buttons use delegated `data-open` clicks; cards expose `data-mission-id` for sidebar highlighting. Avoid per-card or per-entry listeners that would disappear on re-render.
+- `render()` partitions the complete mission array into active and completed groups, preserving source order within each. Active cards appear first; completed cards have a separate bottom grid headed COMPLETED QUESTS. The sidebar has the same grouping. Empty completed sections and an empty active grid are hidden. There is no footer, assignment counter, search, filter state, or no-results UI.
+- `render()` replaces both grids and both quest lists from the same mission array and refreshes their combined ID maps. All grids/lists use delegated `data-open` clicks; cards expose `data-mission-id` for sidebar highlighting. Avoid per-card or per-entry listeners that would disappear on re-render. Hover, keyboard focus, delayed scrolling and hidden-sidebar focus return work across both lists.
 - Desktop quest-list hover and keyboard focus highlight the matching card and entry. After 150ms, an offscreen card scrolls into view with 24px clearance where possible; oversized cards align at the top. Reduced motion uses instant scrolling. Hover/focus do not change the URL or move focus to the card.
 - Only actual pointer movement selects a hovered entry, preventing scrolling from repeatedly selecting rows under a stationary pointer. Pending scrolling and highlights clear when the dialog opens or the sidebar breakpoint changes; leaving an entry cancels its pending scroll.
 - `showMission()` looks up an exact ID, renders a briefing, opens the native `<dialog>` if necessary, and normally sets the `mission` query parameter.
@@ -130,12 +133,12 @@ Open `http://127.0.0.1:8000/`. The README also supports opening `index.html` dir
 
 If Node.js is available, run `node --check missions-data.js` and `node --check missions.js` to check syntax without installing anything. These checks do not validate DOM behavior or mission data consistency.
 
-For sharing or build changes, use `npm ci --ignore-scripts`, `npm test`, and `npm run build -- --base-url https://gerark.github.io/zomboard/`. GitHub Actions uses Node.js 24. Tests use Node's built-in runner and temporary fixtures under ignored `.cache/`. The build validates unique slug IDs, nonempty fields/objectives, valid categories/risks/numbers, related-mission targets and case-correct local PNG/SVG paths. It regenerates only its fixed `_site/` directory and refuses an existing output directory without its ownership marker. The artifact contains an explicit public-file list plus `assets/`, rather than the whole repository. Confirm all share pages have raw static metadata and valid first images. Live Discord behavior requires a deployed site; offline tests do not establish actual embed rendering or cache behavior.
+For sharing or build changes, use `npm ci --ignore-scripts`, `npm test`, and `npm run build -- --base-url https://gerark.github.io/zomboard/`. GitHub Actions uses Node.js 24. Tests use Node's built-in runner and temporary fixtures under ignored `.cache/`. The build validates unique slug IDs, nonempty fields/objectives, boolean completion flags, valid categories/risks/numbers, related-mission targets and case-correct local PNG/SVG paths. It regenerates only its fixed `_site/` directory and refuses an existing output directory without its ownership marker. The artifact contains an explicit public-file list plus `assets/`, rather than the whole repository. Confirm all share pages have raw static metadata and valid first images. Live Discord behavior requires a deployed site; offline tests do not establish actual embed rendering or cache behavior.
 
 For approved behavior, content, or styling changes, select the relevant checks below and report what was actually verified:
 
 1. Confirm expected mission totals, unique IDs, valid field values, correct briefing totals, generic metadata descriptions, existing image paths, and successful asset loading. Check the browser console for errors.
-2. Confirm all missions render in source order and the page initializes without references to removed footer/search/filter elements.
+2. Confirm all missions render once in the correct active/completed groups, in source order within each group, and the page initializes without references to removed footer/search/filter elements. Check empty completed sections, all-completed data, and both lists' hover, scrolling and keyboard focus return.
 3. Open each briefing. Verify the inline facts, copy, objectives, and images, with no visible availability/assignment badges or company overline. Only the palisade has its contractor note. Close using the button, Escape, and the backdrop, including keyboard focus return.
 4. Load and reload a valid deep link, try an unknown ID, copy a link successfully and through the fallback, and check Back/Forward behavior. Include unrelated query parameters and a hash when URL logic changes.
 5. Inspect desktop, tablet, and narrow mobile widths, including breakpoint boundaries. Check long titles, wrapping facts (especially bunker crew and Operation Dumbbell location/crew), image cropping, dialog scrolling, close-button clearance, zoom, and horizontal overflow.

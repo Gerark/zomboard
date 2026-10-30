@@ -51,6 +51,7 @@ async function readMissions(root) {
       if (typeof mission[field] !== 'string' || !mission[field].trim()) throw new Error(`Missing ${field} in ${mission.id}.`);
     }
     if (!/^\d{2}$/.test(mission.number) || !['field', 'base'].includes(mission.category) || !['LOW', 'MEDIUM', 'HIGH', 'SEVERE'].includes(mission.risk)) throw new Error(`Invalid mission classification or number: ${mission.id}`);
+    if (typeof mission.completed !== 'boolean') throw new Error(`Invalid completed flag: ${mission.id}`);
     if (!Array.isArray(mission.objectives) || !mission.objectives.length || mission.objectives.some(item => typeof item !== 'string' || !item.trim())) throw new Error(`Invalid objectives: ${mission.id}`);
     for (const image of imagesFor(mission)) await assetPath(root, image.src);
   }

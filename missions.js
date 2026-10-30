@@ -1,7 +1,13 @@
 'use strict';
 
 const grid = document.getElementById('mission-grid');
+const completedGrid = document.getElementById('completed-mission-grid');
 const missionList = document.getElementById('mission-list');
+const completedMissionList = document.getElementById('completed-mission-list');
+const completedMissionsSection = document.getElementById('completed-missions-section');
+const completedQuestListSection = document.getElementById('completed-quest-list-section');
+const missionGrids = [grid, completedGrid];
+const missionLists = [missionList, completedMissionList];
 const dialog = document.getElementById('mission-dialog');
 const dialogContent = document.getElementById('dialog-content');
 const compactLayout = window.matchMedia('(max-width: 1100px)');
@@ -59,12 +65,23 @@ function cardHTML(m) {
   </article>`;
 }
 
+function listHTML(m) {
+  return `<li><button class="mission-list-button" type="button" data-open="${escapeHtml(m.id)}" aria-label="Read mission ${escapeHtml(m.title)}"><span class="mission-list-number">${escapeHtml(m.number)}</span><span class="mission-list-title">${escapeHtml(m.title)}</span></button></li>`;
+}
+
 function render() {
   clearSidebarInteraction();
-  grid.innerHTML = missions.map(cardHTML).join('');
-  missionList.innerHTML = missions.map((m) => `<li><button class="mission-list-button" type="button" data-open="${escapeHtml(m.id)}" aria-label="Read mission ${escapeHtml(m.title)}"><span class="mission-list-number">${escapeHtml(m.number)}</span><span class="mission-list-title">${escapeHtml(m.title)}</span></button></li>`).join('');
-  missionCards = new Map(Array.from(grid.querySelectorAll('[data-mission-id]'), (card) => [card.dataset.missionId, card]));
-  missionEntries = new Map(Array.from(missionList.querySelectorAll('button[data-open]'), (button) => [button.dataset.open, button]));
+  const activeMissions = missions.filter((m) => m.completed !== true);
+  const completedMissions = missions.filter((m) => m.completed === true);
+  grid.innerHTML = activeMissions.map(cardHTML).join('');
+  completedGrid.innerHTML = completedMissions.map(cardHTML).join('');
+  missionList.innerHTML = activeMissions.map(listHTML).join('');
+  completedMissionList.innerHTML = completedMissions.map(listHTML).join('');
+  grid.hidden = activeMissions.length === 0;
+  completedMissionsSection.hidden = completedMissions.length === 0;
+  completedQuestListSection.hidden = completedMissions.length === 0;
+  missionCards = new Map(missionGrids.flatMap((container) => Array.from(container.querySelectorAll('[data-mission-id]'), (card) => [card.dataset.missionId, card])));
+  missionEntries = new Map(missionLists.flatMap((container) => Array.from(container.querySelectorAll('button[data-open]'), (button) => [button.dataset.open, button])));
 }
 
 function updateSidebarHighlight() {
@@ -158,7 +175,7 @@ function closeMission(updateUrl = true) {
     window.history.replaceState(null, '', url);
   }
   let focusTarget = priorFocus;
-  const hiddenListOpener = missionList.contains(priorFocus) && compactLayout.matches;
+  const hiddenListOpener = missionLists.some((list) => list.contains(priorFocus)) && compactLayout.matches;
   if (hiddenListOpener) {
     focusTarget = missionCards.get(priorFocus.dataset.open)?.querySelector('button');
   }
@@ -166,13 +183,11 @@ function closeMission(updateUrl = true) {
   restoringFocus = false;
 }
 
-grid.addEventListener('click', (event) => {
-  const button = event.target.closest('button[data-open]');
-  if (button) showMission(button.dataset.open, true, button);
-});
-missionList.addEventListener('click', (event) => {
-  const button = event.target.closest('button[data-open]');
-  if (button && !compactLayout.matches) showMission(button.dataset.open, true, button);
+missionGrids.forEach((container) => {
+  container.addEventListener('click', (event) => {
+    const button = event.target.closest('button[data-open]');
+    if (button) showMission(button.dataset.open, true, button);
+  });
 });
 dialogContent.addEventListener('click', (event) => {
   const button = event.target.closest('button[data-open]');
@@ -181,34 +196,40 @@ dialogContent.addEventListener('click', (event) => {
   dialog.scrollTop = 0;
   document.getElementById('dialog-close').focus({ preventScroll: true });
 });
-missionList.addEventListener('pointermove', (event) => {
-  if (compactLayout.matches || dialog.open || event.pointerType === 'touch') return;
-  // Scroll can move rows under a stationary pointer. Only physical movement selects a new row.
-  if (lastPointer && lastPointer.x === event.clientX && lastPointer.y === event.clientY) return;
-  lastPointer = { x: event.clientX, y: event.clientY };
-  const id = event.target.closest('button[data-open]')?.dataset.open || null;
-  if (id === hoveredMission) return;
-  hoveredMission = id;
-  updateSidebarHighlight();
-  cancelSidebarScroll();
-  if (id) scheduleSidebarScroll(id);
-});
-missionList.addEventListener('pointerleave', () => {
-  hoveredMission = null;
-  cancelSidebarScroll();
-  updateSidebarHighlight();
-});
-missionList.addEventListener('focusin', (event) => {
-  focusedMission = event.target.closest('button[data-open]')?.dataset.open || null;
-  hoveredMission = null;
-  cancelSidebarScroll();
-  updateSidebarHighlight();
-  if (focusedMission && !compactLayout.matches && !dialog.open && !restoringFocus) scheduleSidebarScroll(focusedMission);
-});
-missionList.addEventListener('focusout', () => {
-  focusedMission = null;
-  cancelSidebarScroll();
-  updateSidebarHighlight();
+missionLists.forEach((list) => {
+  list.addEventListener('click', (event) => {
+    const button = event.target.closest('button[data-open]');
+    if (button && !compactLayout.matches) showMission(button.dataset.open, true, button);
+  });
+  list.addEventListener('pointermove', (event) => {
+    if (compactLayout.matches || dialog.open || event.pointerType === 'touch') return;
+    // Scroll can move rows under a stationary pointer. Only physical movement selects a new row.
+    if (lastPointer && lastPointer.x === event.clientX && lastPointer.y === event.clientY) return;
+    lastPointer = { x: event.clientX, y: event.clientY };
+    const id = event.target.closest('button[data-open]')?.dataset.open || null;
+    if (id === hoveredMission) return;
+    hoveredMission = id;
+    updateSidebarHighlight();
+    cancelSidebarScroll();
+    if (id) scheduleSidebarScroll(id);
+  });
+  list.addEventListener('pointerleave', () => {
+    hoveredMission = null;
+    cancelSidebarScroll();
+    updateSidebarHighlight();
+  });
+  list.addEventListener('focusin', (event) => {
+    focusedMission = event.target.closest('button[data-open]')?.dataset.open || null;
+    hoveredMission = null;
+    cancelSidebarScroll();
+    updateSidebarHighlight();
+    if (focusedMission && !compactLayout.matches && !dialog.open && !restoringFocus) scheduleSidebarScroll(focusedMission);
+  });
+  list.addEventListener('focusout', () => {
+    focusedMission = null;
+    cancelSidebarScroll();
+    updateSidebarHighlight();
+  });
 });
 compactLayout.addEventListener('change', clearSidebarInteraction);
 document.getElementById('dialog-close').addEventListener('click', () => closeMission());

@@ -5,6 +5,7 @@
 const missions = [
   {
     id: 'bunker', number: '01', title: 'THE BUNKER MYSTERY',
+    completed: false,
     kicker: 'RECONNAISSANCE', category: 'field', risk: 'HIGH',
     images: [
       { src: 'assets/bunker-flyer.png', alt: 'In-game tour flyer for a decommissioned nuclear bunker in March Ridge, with directions and a labeled floor plan.' },
@@ -18,6 +19,7 @@ const missions = [
   },
   {
     id: 'groceries', number: '02', title: 'THE PRICE OF GROCERIES',
+    completed: false,
     kicker: 'SUPPLY RUN', category: 'field', risk: 'SEVERE',
     images: [
       { src: 'assets/grocery-store.png', alt: 'Food Market grocery store exterior and parking lot.' },
@@ -31,6 +33,7 @@ const missions = [
   },
   {
     id: 'palisade', number: '03', title: 'FORTIFY McCOY',
+    completed: false,
     kicker: 'BASE CONSTRUCTION', category: 'base', risk: 'LOW',
     image: 'assets/palisade.png', imageAlt: 'The McCoy safehouse yard with a partially built wooden palisade.',
     location: 'Safehouse', crew: '1 contractor',
@@ -41,6 +44,7 @@ const missions = [
   },
   {
     id: 'coop', number: '04', title: 'OPERATION CLUCK FORTRESS',
+    completed: false,
     kicker: 'BASE CONSTRUCTION', category: 'base', risk: 'LOW',
     image: 'assets/chicken-coop.png', imageAlt: 'Chickens on grass beside a small coop and a metal barrel.',
     location: 'Safehouse', crew: '1 survivor minimum',
@@ -51,6 +55,7 @@ const missions = [
   },
   {
     id: 'chickens', number: '05', title: 'THE GREAT CHICKEN HEIST',
+    completed: false,
     kicker: 'LIVESTOCK RECOVERY', category: 'field', risk: 'MEDIUM',
     image: 'assets/chickens.png', imageAlt: 'Annotated map marking a possible chicken location near Muldraugh.',
     location: 'Farms around Knox County', crew: '2 survivors minimum',
@@ -61,6 +66,7 @@ const missions = [
   },
   {
     id: 'mechanics', number: '06', title: 'PIMP MY APOCALYPSE RIDE',
+    completed: false,
     kicker: 'VEHICLE MAINTENANCE', category: 'base', risk: 'LOW',
     image: 'assets/mechanics.png', imageAlt: 'An overturned van beside a survivor in a parking lot.',
     location: 'Safehouse vehicle yard', crew: '1 mechanic minimum',
@@ -71,6 +77,7 @@ const missions = [
   },
   {
     id: 'police', number: '07', title: 'THE SOUND OF FREEDOM',
+    completed: false,
     kicker: 'AMMUNITION & DRILLS', category: 'field', risk: 'SEVERE',
     images: [
       { src: 'assets/police-station.png', alt: 'Police station entrance with metal barriers and radio dishes on the roof.' },
@@ -84,6 +91,7 @@ const missions = [
   },
   {
     id: 'greenes', number: '08', title: 'GREEN THUMBS, RED STREETS',
+    completed: false,
     kicker: 'FARMING SUPPLIES', category: 'field', risk: 'MEDIUM',
     image: 'assets/greenes.png', imageAlt: 'A survivor outside Greene’s store, with a station wagon parked in front.',
     location: 'Muldraugh / surrounding farms and storage areas', crew: '1 survivor minimum',
@@ -96,6 +104,7 @@ const missions = [
   },
   {
     id: 'garden', number: '09', title: 'SALAD WITH A VIEW',
+    completed: false,
     kicker: 'FOOD PRODUCTION', category: 'base', risk: 'LOW',
     image: 'assets/rooftop-garden.png', imageAlt: 'The McCoy Logging Company rooftop and surrounding yard.',
     location: 'Safehouse rooftop', crew: '1 green-thumbed survivor minimum',
@@ -106,6 +115,7 @@ const missions = [
   },
   {
     id: 'vhs', number: '10', title: 'I MISS OLD MOVIES',
+    completed: true,
     kicker: 'VHS COLLECTION', category: 'field', risk: 'MEDIUM',
     image: 'assets/vhs.png', imageAlt: 'A survivor beside a television displaying color bars.',
     location: 'Movie Store · Muldraugh', crew: '2 survivors recommended',
@@ -116,6 +126,7 @@ const missions = [
   },
   {
     id: 'dumbbell', number: '11', title: 'OPERATION DUMBBELL',
+    completed: false,
     kicker: 'GYM SUPPLY RUN', category: 'field', risk: 'MEDIUM',
     image: 'assets/dumbbell.png', imageAlt: 'A survivor beside a treadmill and a weight bench with a barbell indoors.',
     location: 'Gyms · Muldraugh / surrounding towns', crew: '2 survivors + cargo vehicle recommended',
@@ -126,6 +137,7 @@ const missions = [
   },
   {
     id: 'drag-race', number: '12', title: 'FAMILY, FUEL & FIRST AID',
+    completed: false,
     kicker: 'VEHICLE RECOVERY', category: 'field', risk: 'HIGH',
     image: 'assets/drag-race.png', imageAlt: 'A survivor beside a damaged white sports car in a workshop.',
     location: 'Knox County / highway', crew: '2 drivers + mechanic recommended',
@@ -136,6 +148,7 @@ const missions = [
   },
   {
     id: 'seb', number: '13', title: 'A PROPER GOODBYE',
+    completed: false,
     kicker: 'RECOVERY & REMEMBRANCE', category: 'field', risk: 'HIGH',
     image: 'assets/cemetery.svg', imageAlt: 'A simple SVG illustration of Seb’s wooden grave marker, fresh earth and a shovel inside the safehouse fence.',
     location: 'Search area unconfirmed / Safehouse grounds', crew: '2 survivors recommended',
@@ -147,6 +160,7 @@ const missions = [
   },
   {
     id: 'winter', number: '14', title: 'WINTER IS COMING',
+    completed: false,
     kicker: 'WINTER PREPARATION', category: 'base', risk: 'MEDIUM',
     image: 'assets/winter-stove.svg', imageAlt: 'A simple SVG illustration of a wood stove, stacked logs and a bed in a small timber room, with snow outside the window.',
     location: 'Knox County / Safehouse', crew: '2 haulers + 1 builder recommended',
@@ -157,6 +171,7 @@ const missions = [
   },
   {
     id: 'survivor-rooms', number: '15', title: 'WALLS BETWEEN FRIENDS',
+    completed: false,
     kicker: 'BASE CONSTRUCTION', category: 'base', risk: 'LOW',
     image: 'assets/survivor-rooms.png', imageAlt: 'In-game screenshot of survivor rooms inside the safehouse, with unfinished timber wall frames around beds, desks and lockers.',
     location: 'Safehouse', crew: '1 contractor',
@@ -167,6 +182,7 @@ const missions = [
   },
   {
     id: 'battery-charger', number: '16', title: 'DEAD BATTERIES, LIVING PROBLEMS',
+    completed: false,
     kicker: 'BATTERY CHARGER RECOVERY', category: 'field', risk: 'MEDIUM',
     image: 'assets/battery-charger.png', imageAlt: 'A car battery charger with a front-panel gauge, coiled cables and red and blue clamps.',
     location: 'Knox County / Safehouse vehicle yard', crew: '2 survivors recommended',

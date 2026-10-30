@@ -36,8 +36,18 @@
           <aside class="mission-sidebar" aria-labelledby="quest-list-title">
             <h2 id="quest-list-title">QUEST LIST</h2>
             <ol id="mission-list" class="mission-list"></ol>
+            <section id="completed-quest-list-section" class="completed-quest-list-section" aria-labelledby="completed-quest-list-title" hidden>
+              <h3 id="completed-quest-list-title">COMPLETED QUESTS</h3>
+              <ol id="completed-mission-list" class="mission-list"></ol>
+            </section>
           </aside>
-          <div id="mission-grid" class="mission-grid" aria-live="polite"></div>
+          <div class="mission-boards">
+            <div id="mission-grid" class="mission-grid" aria-live="polite"></div>
+            <section id="completed-missions-section" class="completed-missions-section" aria-labelledby="completed-missions-title" hidden>
+              <h2 id="completed-missions-title" class="mission-group-title">COMPLETED QUESTS</h2>
+              <div id="completed-mission-grid" class="mission-grid" aria-live="polite"></div>
+            </section>
+          </div>
         </div>
       </section>
     </main>

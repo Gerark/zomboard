@@ -4,8 +4,15 @@
 2. Open `missions-data.js` and duplicate a complete object inside the `missions` array, before the closing `];`. Separate objects with commas.
 3. Set a unique `id`, the next two-digit `number`, and replace the mission text and objectives.
 4. Set `category` to `'field'` or `'base'` and `risk` to `'LOW'`, `'MEDIUM'`, `'HIGH'`, or `'SEVERE'`.
-5. For one image, set `image` to the asset path, such as `'assets/medical-run.png'`, matching filename casing. Local PNG screenshots and SVG illustrations are supported. Match the original SVG style for new illustrated art, as in `assets/cemetery.svg` and `assets/winter-stove.svg`. Add descriptive `imageAlt` text. For multiple images, use the ordered `images` list below.
-6. Open `index.html` in a browser and check the new mission's card, briefing, objectives, images, and full-image links.
+5. Set `completed` to `false` for a new active quest, or `true` for a completed quest. Use a boolean, without quotes.
+6. For one image, set `image` to the asset path, such as `'assets/medical-run.png'`, matching filename casing. Local PNG screenshots and SVG illustrations are supported. Match the original SVG style for new illustrated art, as in `assets/cemetery.svg` and `assets/winter-stove.svg`. Add descriptive `imageAlt` text. For multiple images, use the ordered `images` list below.
+7. Open `index.html` in a browser and check the new mission's card, briefing, objectives, images, and full-image links.
+
+## Completed quests
+
+Every mission in `missions-data.js` has a required `completed` boolean. Set it to `true` when the group finishes a quest. Completed quests appear under **COMPLETED QUESTS** in the sidebar and in a separate card grid below the active quests. Both groups preserve source order, original mission numbers, links and access to full briefings. The completed sections are hidden when there are no completed quests.
+
+The VHS retrieval quest, `vhs` (mission 10), is the first completed quest. All other quests currently use `completed: false`. Completion is curated in source for everyone viewing the board; visitors cannot change it, and the site does not store personal progress.
 
 ## Multiple images
 

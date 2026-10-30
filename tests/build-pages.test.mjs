@@ -25,7 +25,7 @@ async function fixture(t) {
   await sharp({ create: { width: 80, height: 60, channels: 3, background: '#ef6846' } }).png().toFile(path.join(dir, 'assets', 'photo.png'));
   for (const file of ['styles.css', 'missions.js', 'share.js', '.nojekyll']) await writeFile(path.join(dir, file), '');
   await writeFile(path.join(dir, 'index.html'), '<meta property="og:image" content="assets/hero-mccoy.svg">\n<!-- MISSION_SHARE_CONFIG -->');
-  const mission = { id: 'photo', number: '01', title: 'Food & "friends" <script>bad()</script>', teaser: 'Supplies > nothing. </script>', kicker: 'SUPPLY RUN', category: 'field', risk: 'HIGH', location: 'Knox County', crew: '2 survivors', description: 'A supply run.', note: 'Bring bags.', objectives: ['Return home'], images: [{ src: 'assets/photo.png', alt: 'A "photo" & supplies' }, { src: 'assets/drawing.svg', alt: 'A drawing' }], image: 'assets/unused-missing.png' };
+  const mission = { id: 'photo', number: '01', title: 'Food & "friends" <script>bad()</script>', teaser: 'Supplies > nothing. </script>', kicker: 'SUPPLY RUN', category: 'field', risk: 'HIGH', completed: false, location: 'Knox County', crew: '2 survivors', description: 'A supply run.', note: 'Bring bags.', objectives: ['Return home'], images: [{ src: 'assets/photo.png', alt: 'A "photo" & supplies' }, { src: 'assets/drawing.svg', alt: 'A drawing' }], image: 'assets/unused-missing.png' };
   const missions = [mission, { ...mission, id: 'drawing', number: '02', images: [], image: 'assets/drawing.svg', imageAlt: 'An illustrated stove', relatedMission: 'photo' }];
   const save = () => writeFile(path.join(dir, 'missions-data.js'), `const missions = ${JSON.stringify(missions)};`);
   await save();
@@ -104,6 +104,21 @@ test('rejects invalid IDs, relationships, asset casing and paths before replacin
   await f.save();
   await assert.rejects(buildPages({ root: f.dir, baseUrl }), /local PNG or SVG/);
   await assert.rejects(buildPages({ root: f.dir, baseUrl: 'https://example.test/?token=secret' }), /without credentials, a query or a hash/);
+});
+
+test('requires a boolean completed flag and preserves the previous output when invalid', async t => {
+  const f = await fixture(t);
+  f.missions[1].completed = true;
+  await f.save();
+  const result = await buildPages({ root: f.dir, baseUrl });
+  assert.ok((await readdir(path.join(result.output, 'share'))).includes('drawing.html'));
+  const original = await readFile(path.join(result.output, 'missions-data.js'), 'utf8');
+  for (const invalid of [undefined, null, 'false', 'true', 0, 1]) {
+    f.missions[0].completed = invalid;
+    await f.save();
+    await assert.rejects(buildPages({ root: f.dir, baseUrl }), /Invalid completed flag: photo/);
+    assert.equal(await readFile(path.join(result.output, 'missions-data.js'), 'utf8'), original);
+  }
 });
 
 test('refuses to remove an existing output folder it does not own', async t => {
