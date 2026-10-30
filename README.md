@@ -10,7 +10,7 @@
 
 ## Completed quests
 
-Every mission in `missions-data.js` has a required `completed` boolean. Set it to `true` when the group finishes a quest. Completed quests appear under **COMPLETED QUESTS** in the sidebar and in a separate card grid below the active quests. Both groups preserve source order, original mission numbers, links and access to full briefings. The completed sections are hidden when there are no completed quests.
+Every mission in `missions-data.js` has a required `completed` boolean. Set it to `true` when the group finishes a quest. Completed quests appear under **COMPLETED QUESTS** in the sidebar and in a separate card grid below the active quests. Their card images display a large **COMPLETED** overlay, and the cards remain clickable to open their briefings. Both groups preserve source order, original mission numbers, links and access to full briefings. The completed sections are hidden when there are no completed quests.
 
 The VHS retrieval quest, `vhs` (mission 10), is the first completed quest. All other quests currently use `completed: false`. Completion is curated in source for everyone viewing the board; visitors cannot change it, and the site does not store personal progress.
 

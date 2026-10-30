@@ -46,14 +46,16 @@ function getMissionImages(m) {
 
 function cardHTML(m) {
   const field = m.category === 'field';
+  const completed = m.completed === true;
   const image = getMissionImages(m)[0];
   return `<article class="mission-card" data-mission-id="${escapeHtml(m.id)}">
-    <button class="card-button" type="button" data-open="${escapeHtml(m.id)}" aria-label="Read mission ${escapeHtml(m.title)}">
+    <button class="card-button" type="button" data-open="${escapeHtml(m.id)}" aria-label="Read ${completed ? 'completed ' : ''}mission ${escapeHtml(m.title)}">
       <div class="card-image">
         <img src="${escapeHtml(image.src)}" alt="" loading="lazy">
         <div class="card-image-grain"></div>
         <span class="card-num">NO. ${escapeHtml(m.number)}</span>
         <span class="card-type">${field ? '↗ FIELD OPERATION' : '⌂ HOMEFRONT'}</span>
+        ${completed ? '<span class="card-completed" aria-hidden="true">COMPLETED</span>' : ''}
       </div>
       <div class="card-body">
         <div class="card-kicker"><span>${escapeHtml(m.kicker)}</span><span class="card-risk risk-${m.risk.toLowerCase()}"><i></i>${escapeHtml(m.risk)} RISK</span></div>
