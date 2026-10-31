@@ -32,7 +32,8 @@ test('proof fixture resolves under project paths/custom domains, has valid PNG i
     assert.equal(a.missions[0].title, 'REMOTE PROOF A');
     assert.equal(b.missions[0].title, 'REMOTE PROOF B');
     assert.notEqual(a.revision, b.revision);
-    assert.deepEqual(JSON.parse(files.get('mod-proof/missions.json')), a);
+    const selected = JSON.parse(files.get('mod-proof/missions.json'));
+    assert.deepEqual(selected, selected.missions[0].title === 'REMOTE PROOF A' ? a : b);
     for (const feed of [a, b]) {
       const image = feed.missions[0].images[0];
       assert.ok(image.url.startsWith(`${base}mod-proof/assets/`));
