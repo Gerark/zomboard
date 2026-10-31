@@ -4,7 +4,7 @@
     {
       "id": "https-proof",
       "number": "P01",
-      "title": "REMOTE PROOF A",
+      "title": "REMOTE PROOF B",
       "kicker": "Synthetic test fixture",
       "teaser": "A remote download/display experiment.",
       "category": "field",
@@ -12,7 +12,7 @@
       "risk": "LOW",
       "location": "Synthetic fixture",
       "crew": "Test only",
-      "description": "This text came from remote fixture A. The PNG should be orange with one cream bar.",
+      "description": "This text came from remote fixture B. The PNG should be blue with two cream bars.",
       "note": "Synthetic content; no game progress or real mission data.",
       "objectives": [
         "Display remote text",
@@ -20,15 +20,15 @@
       ],
       "images": [
         {
-          "url": "https://gerark.github.io/zomboard/mod-proof/assets/proof-d3793ab449166a128d3b0912e0fb485cee8cff2dd36351c8a26d93368d35a790.png",
-          "alt": "Orange panel with one bar",
-          "sha256": "d3793ab449166a128d3b0912e0fb485cee8cff2dd36351c8a26d93368d35a790",
-          "bytes": 419,
+          "url": "https://gerark.github.io/zomboard/mod-proof/assets/proof-bac0a3f5698402ff5ae63671b9f4c16bd95bdb5f1c62fcd80dc098f5f4d680c8.png",
+          "alt": "Blue panel with two bars",
+          "sha256": "bac0a3f5698402ff5ae63671b9f4c16bd95bdb5f1c62fcd80dc098f5f4d680c8",
+          "bytes": 506,
           "width": 256,
           "height": 128
         }
       ]
     }
   ],
-  "revision": "1b5ce402e32cb59b4d71af22c279bca15c1436adfe5bce8d1abefeaff7adc627"
+  "revision": "9ea8e5cf949ce5b77d912a57ec75614c535776dade511048b9b0cbdd69a88750"
 }
