@@ -5,41 +5,43 @@
 const missions = [
   {
     id: 'bunker', number: '01', title: 'THE BUNKER MYSTERY',
-    completed: false,
+    completed: true,
     kicker: 'RECONNAISSANCE', category: 'field', risk: 'HIGH',
     images: [
       { src: 'assets/bunker-flyer.png', alt: 'In-game tour flyer for a decommissioned nuclear bunker in March Ridge, with directions and a labeled floor plan.' },
       { src: 'assets/bunker.png', alt: 'Annotated in-game map marking a possible bunker location in Knox County.' }
     ],
-    location: 'Unknown bunker · Knox County', crew: '3 recommended / 1 stealth specialist',
-    teaser: 'Could be full of supplies. Could be absolutely nothing. Only one way to find out.',
-    description: 'Rumors of a bunker nearby. Maybe military supplies, maybe forgotten treasures, maybe three cans of beans and a dead rat. Get eyes on the entrance and find out whether it is worth the trip. Go in loud with a squad, or send one sneaky bastard to scout it out.',
-    objectives: ['Locate the bunker entrance', 'Scout the surroundings and assess the risk', 'Bring back any valuable supplies — and preferably everyone who went in'],
-    note: 'A solo run is for someone who can move quietly, not someone who thinks they can.'
+    location: 'Bunker / supermarket · Knox County', crew: '3 recommended / 1 stealth specialist',
+    teaser: 'The bunker had a few masks. The supermarket we spotted saved the supply run.',
+    description: 'Mystery solved. The bunker held little more than a few masks for a nuclear crisis. Luckily, the team spotted a supermarket on the trip and came home with plenty of food and other useful supplies. The underground treasure hunt became a very successful shopping trip, taking the pressure off the separate grocery run.',
+    relatedMission: 'groceries',
+    objectives: ['Located and searched the bunker', 'Found a few masks for a nuclear crisis, with little else to recover', 'Spotted a supermarket and returned with a large haul of food and other supplies'],
+    note: 'The bunker disappointed. The supermarket delivered. Mission 02 is now a reserve run if supplies start running low.'
   },
   {
     id: 'groceries', number: '02', title: 'THE PRICE OF GROCERIES',
     completed: false,
-    kicker: 'SUPPLY RUN', category: 'field', risk: 'SEVERE',
+    kicker: 'RESERVE SUPPLY RUN', category: 'field', risk: 'SEVERE',
     images: [
       { src: 'assets/grocery-store.png', alt: 'Food Market grocery store exterior and parking lot.' },
       { src: 'assets/grocery.png', alt: 'Annotated map marking a canned-food location in Muldraugh and the McCoy safehouse.' }
     ],
     location: 'Grocery Store · Muldraugh', crew: '3 recommended / 2 if we are smart',
-    teaser: 'The shelves might have food. The previous customers definitely never left.',
-    description: 'The grocery store is crawling with zombies. Unfortunately, it is also crawling with the possibility of actual food. Assemble a squad, sweep the perimeter, clear the aisles and take everything useful before the local population notices the sale.',
-    objectives: ['Clear a safe approach to the storefront', 'Sweep the store without getting surrounded', 'Bring home non-perishables and useful supplies'],
-    note: 'No coupons accepted. No refunds. Do not split up in aisle three.'
+    teaser: 'The bunker crew filled the pantry. Keep this store in reserve for another day.',
+    description: 'The supermarket haul during The Bunker Mystery brought home plenty of food and other supplies, so this separate grocery raid is no longer urgent and may not be needed for now. Keep the Muldraugh store as a reserve option. If stocks run low or something specific is missing, reassess what we need before risking a trip through its zombie-filled aisles.',
+    relatedMission: 'bunker',
+    objectives: ['Check safehouse stocks and decide whether another grocery run is needed', 'If needed, scout and clear a safe approach to the storefront', 'Recover missing food and useful supplies without getting surrounded'],
+    note: 'Optional reserve run, not a confirmed clearance of this store. No need to die for groceries we already have.'
   },
   {
     id: 'palisade', number: '03', title: 'FORTIFY McCOY',
-    completed: false,
+    completed: true,
     kicker: 'BASE CONSTRUCTION', category: 'base', risk: 'LOW',
     image: 'assets/palisade.png', imageAlt: 'The McCoy safehouse yard with a partially built wooden palisade.',
     location: 'Safehouse', crew: '1 contractor',
-    teaser: 'Finish the palisade. Barricade the entrances. Keep the dead outside.',
-    description: 'A fortress is only as strong as its weakest entrance. Complete the palisade, reinforce the external doors and barricade the vulnerable approaches. The only zombies allowed inside should be the ones we accidentally brought home.',
-    objectives: ['Finish the perimeter palisade', 'Barricade every external entrance', 'Inspect the walls for gaps and weak points'],
+    teaser: 'Fortifications finished. McCoy has a perimeter worth respecting.',
+    description: 'The fortification job is complete. The palisade and entrance defenses are in place, giving McCoy a proper perimeter between the living and the extremely persistent neighbors. The only zombies allowed inside should still be the ones we accidentally brought home.',
+    objectives: ['Finished the perimeter palisade', 'Barricaded the external entrances', 'Checked the walls for gaps and weak points'],
     note: 'Our contractor has taken this job. Respect the craftsmanship.'
   },
   {
@@ -66,41 +68,41 @@ const missions = [
   },
   {
     id: 'mechanics', number: '06', title: 'PIMP MY APOCALYPSE RIDE',
-    completed: false,
+    completed: true,
     kicker: 'VEHICLE MAINTENANCE', category: 'base', risk: 'LOW',
     image: 'assets/mechanics.png', imageAlt: 'An overturned van beside a survivor in a parking lot.',
     location: 'Safehouse vehicle yard', crew: '1 mechanic minimum',
-    teaser: 'Our vans are held together by hope, rust, and incredibly bad decisions.',
-    description: 'We need someone with grease on their hands and a vague understanding of how engines work. Inspect our fleet, replace the worst parts, repair what can be repaired and make sure the vans start when the screaming begins.',
-    objectives: ['Inspect vehicle condition and identify failing parts', 'Salvage or acquire replacement components', 'Repair and refuel the vans for future supply runs'],
-    note: 'Kicking the tires is not a full mechanical inspection.'
+    teaser: 'Found a truck. Then more cars. The fleet has become a parking problem.',
+    description: 'This job ended with the team finding a truck, then picking up even more cars further down the road. Pimping the apocalypse ride turned into expanding the entire fleet. The vehicle job is complete; the growing collection still gives us plenty to keep an eye on before future runs.',
+    objectives: ['Found a truck for the team', 'Added more cars to the fleet on later travels'],
+    note: 'We asked for better transport. Apparently the answer was a growing parking problem.'
   },
   {
     id: 'police', number: '07', title: 'THE SOUND OF FREEDOM',
-    completed: false,
-    kicker: 'AMMUNITION & DRILLS', category: 'field', risk: 'SEVERE',
+    completed: true,
+    kicker: 'WEAPONS RECOVERED', category: 'field', risk: 'SEVERE',
     images: [
       { src: 'assets/police-station.png', alt: 'Police station entrance with metal barriers and radio dishes on the roof.' },
       { src: 'assets/police.png', alt: 'Annotated map marking Muldraugh Police Station near Wilson Street.' }
     ],
     location: 'Muldraugh Police Station / Safehouse', crew: '3 survivors minimum',
-    teaser: 'First we find bullets. Then we find out whether our walls actually work.',
-    description: 'Our ammunition stash is looking sad. Raid the Muldraugh police station for supplies, then arrange a controlled test of our defenses back at McCoy. Lure a small group of zombies toward the base and practise holding the line. Emphasis on small.',
-    objectives: ['Recover ammunition and useful police equipment', 'Prepare the safehouse firing positions', 'Conduct a controlled defense drill with a manageable horde'],
-    note: 'This is a test of the defenses, not an invitation to attract half of Kentucky.'
+    teaser: 'A serious haul of guns, already put to use by the team on later runs.',
+    description: 'The weapons run is complete. The team recovered a large haul of guns, and those firearms have already seen use on later outings. The Sound of Freedom turned out to have a very practical sequel: making sure the survivors had something to shoot with.',
+    objectives: ['Recovered a large haul of firearms', 'Equipped the team with guns used on subsequent runs'],
+    note: 'The guns did not stay on display. The team has already put the haul to work.'
   },
   {
     id: 'greenes', number: '08', title: 'GREEN THUMBS, RED STREETS',
-    completed: false,
+    completed: true,
     kicker: 'FARMING SUPPLIES', category: 'field', risk: 'MEDIUM',
     image: 'assets/greenes.png', imageAlt: 'A survivor outside Greene’s store, with a station wagon parked in front.',
     location: 'Muldraugh / surrounding farms and storage areas', crew: '1 survivor minimum',
-    teaser: 'Greene’s was a dead end. Seb knew a farm, but never got the chance to show us.',
-    description: 'Greene’s has been checked: no gardening materials, and especially no sacks. Seb knew about a farm he wanted to show us, but he died tragically before he could take us there. That farm is our next lead, if we can work out which one he meant. Its location and supplies still need confirming. Pick up the trail and keep sacks at the top of the shopping list so we can haul soil up to the rooftop garden. Bring back any useful seeds and gardening tools along the way.',
+    teaser: 'Enough tools and seeds are home. Time to grow something that does not bite.',
+    description: 'The farming supply hunt is complete. Greene’s came up empty, and Seb’s farm remains an unconfirmed lead. The team has since gathered enough agricultural tools and seeds to start growing food. The next job is putting the supplies to use. For once, dinner might grow closer to home than the nearest zombie-filled shop.',
     outdatedLead: 'Search Greene’s for gardening supplies, tools and seeds.',
     relatedMission: 'seb',
-    objectives: ['Try to identify the farm Seb wanted to show us and scout it for gardening supplies', 'Find and recover sacks for carrying soil to the rooftop garden', 'Collect any useful seeds and gardening tools still needed', 'Bring the supplies home for the rooftop project'],
-    note: 'Seb’s farm is an unconfirmed lead. If it does not pan out, keep searching other farms, sheds and storage areas. Sacks first.'
+    objectives: ['Collected enough agricultural tools to start farming', 'Brought home enough seeds to begin planting'],
+    note: 'Tools and seeds are ready for mission 09. Sacks for hauling rooftop soil are not confirmed; check the stockpile before planning the lift.'
   },
   {
     id: 'garden', number: '09', title: 'SALAD WITH A VIEW',
@@ -109,9 +111,9 @@ const missions = [
     image: 'assets/rooftop-garden.png', imageAlt: 'The McCoy Logging Company rooftop and surrounding yard.',
     location: 'Safehouse rooftop', crew: '1 green-thumbed survivor minimum',
     teaser: 'A little greenery. A little hope. A beautiful view of the undead below.',
-    description: 'Once the supplies arrive, turn the McCoy rooftop into our first proper garden. Fresh vegetables, a sustainable food source and one more excuse to stay home instead of visiting zombie-infested supermarkets.',
-    objectives: ['Use the sacks from mission 08 to bring soil to the rooftop growing area', 'Set up the growing beds and an accessible water supply', 'Plant crops and organize ongoing maintenance'],
-    note: 'Depends on sacks and farming supplies from mission 08; the search continues beyond Greene’s. Zombies may not harvest without permission.'
+    description: 'Mission 08 brought home enough agricultural tools and seeds to start farming. Turn the McCoy rooftop into our first proper garden: check whether we have sacks for hauling soil, prepare the growing area and put those supplies to work. Fresh vegetables, a sustainable food source and one more excuse to stay home instead of visiting zombie-infested supermarkets.',
+    objectives: ['Check for sacks and source any still needed to bring soil to the rooftop growing area', 'Set up the growing beds and an accessible water supply', 'Plant the recovered seeds and organize ongoing maintenance'],
+    note: 'The tools and seeds from mission 08 are ready. Confirm the sacks and rooftop setup before planting. Zombies may not harvest without permission.'
   },
   {
     id: 'vhs', number: '10', title: 'I MISS OLD MOVIES',
@@ -148,15 +150,15 @@ const missions = [
   },
   {
     id: 'seb', number: '13', title: 'A PROPER GOODBYE',
-    completed: false,
-    kicker: 'RECOVERY & REMEMBRANCE', category: 'field', risk: 'HIGH',
-    image: 'assets/cemetery.svg', imageAlt: 'A simple SVG illustration of Seb’s wooden grave marker, fresh earth and a shovel inside the safehouse fence.',
-    location: 'Search area unconfirmed / Safehouse grounds', crew: '2 survivors recommended',
-    teaser: 'Find Seb’s fallen survivor. Bring our friend home and give him a place to rest.',
-    description: 'Seb’s survivor did not make it. He knew about a farm he wanted to show us for the gardening supply hunt, but died tragically before he got the chance. Find out where he fell and track him down. If he is still walking, put him down so we can bring him home for a proper burial. Set aside a quiet corner of the safehouse grounds for a cemetery, somewhere we can remember the people who helped us get this far.',
+    completed: true,
+    kicker: 'REMEMBRANCE', category: 'field', risk: 'HIGH',
+    image: 'assets/cemetery.svg', imageAlt: 'Memorial illustration of a wooden marker bearing Seb’s name, earth and a shovel inside a fence; not a record of a safehouse burial.',
+    location: 'Away from the safehouse', crew: '2 survivors recommended',
+    teaser: 'Seb’s own player put his fallen survivor to rest. The body stayed out there.',
+    description: 'Seb’s story has its ending. The same player who played Seb put his fallen survivor down and brought the ordeal to a close. His body was not brought back to the safehouse, but his final goodbye is complete. We will remember the friend who wanted to show us a farm and never got the chance.',
     relatedMission: 'greenes',
-    objectives: ['Establish Seb’s last known location and search the area', 'Identify his fallen survivor and put him down if he has reanimated', 'Secure the area and recover his remains for burial', 'Prepare a small cemetery within the safehouse perimeter', 'Lay him to rest and mark his grave'],
-    note: 'Bring a shovel. Bring backup. Bring our friend home.'
+    objectives: ['Put Seb’s fallen survivor down, with Seb’s own player handling the final goodbye'],
+    note: 'The cemetery illustration is a memorial. Seb’s body was not brought home for burial.'
   },
   {
     id: 'winter', number: '14', title: 'WINTER IS COMING',
@@ -175,10 +177,10 @@ const missions = [
     kicker: 'BASE CONSTRUCTION', category: 'base', risk: 'LOW',
     image: 'assets/survivor-rooms.png', imageAlt: 'In-game screenshot of survivor rooms inside the safehouse, with unfinished timber wall frames around beds, desks and lockers.',
     location: 'Safehouse', crew: '1 contractor',
-    teaser: 'Finish the survivor-room walls. A bed deserves more than an imaginary bedroom.',
-    description: 'The beds, desks and lockers are already in place. The walls are still mostly a promise. Our contractor needs to finish the existing frames around the survivor rooms, leave proper doorways and make sure everyone can reach their bed without climbing over someone else’s desk. Privacy survived the apocalypse. It is just waiting for planks.',
-    objectives: ['Gather the planks, nails and carpentry tools needed to finish the existing room frames', 'Build the remaining walls around each survivor room', 'Fit doors and keep the shared corridor and room entrances clear', 'Check every room is enclosed and its bed, desk and locker remain accessible'],
-    note: 'Please keep the doorways. We asked for bedrooms, not decorative coffins.'
+    teaser: 'Walls done. Doors still missing. Privacy is almost a real feature.',
+    description: 'The survivor-room walls are finished, so this job is partially complete. The remaining task is to fit doors if possible. Check the existing openings and available materials, preserve access to the shared corridor, beds, desks and lockers, and give everyone a way to close their room without moving a wardrobe into the doorway.',
+    objectives: ['Check the existing doorways and what is needed to fit doors', 'Gather any missing materials and fit doors where possible', 'Keep the shared corridor clear and every bed, desk and locker accessible'],
+    note: 'Partially complete; this quest stays active for the doors. Please finish the bedrooms without turning them into decorative coffins.'
   },
   {
     id: 'battery-charger', number: '16', title: 'DEAD BATTERIES, LIVING PROBLEMS',
