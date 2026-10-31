@@ -12,7 +12,7 @@
 ZomBoard is a public, read-only Project Zomboid mission board themed around the McCoy Logging Co. safehouse near Muldraugh, Knox County. The page opens directly onto compact mission cards below the ZomBoard brand header. There is no visible board heading, tagline, location/signal block, search, filtering, hero section, or emergency-broadcast strip.
 
 - It is a single-page static website using plain HTML, CSS, and two deferred classic JavaScript scripts: mission data first, then rendering and interactions.
-- There is no framework, backend, database, authentication, game integration, visitor progress tracking, or browser-storage layer. A Node.js build prepares GitHub Pages deployment output and per-mission sharing metadata; the runtime remains plain HTML, CSS and classic scripts.
+- There is no framework, backend, database, authentication, game-state integration, visitor progress tracking, or browser-storage layer. A Node.js build prepares GitHub Pages deployment output, per-mission sharing metadata and a read-only mod feed; the browser runtime remains plain HTML, CSS and classic scripts.
 - Mission content and the shared completion flags are curated in source. Visitors can browse active and completed missions, open briefings, and copy links; they cannot claim missions or change completion status.
 - Objective lists are informational numbered lists, not interactive checkboxes or completion tracking.
 - All mission images are local files: fifteen PNG screenshots, a PNG bunker tour flyer, a PNG battery-charger item image, and two SVG illustrations. Google Fonts is the only external resource service referenced by the site; CSS supplies fallback fonts.
@@ -30,11 +30,12 @@ ZomBoard is a public, read-only Project Zomboid mission board themed around the 
 | `assets/` | Seventeen PNG mission images, two SVG mission illustrations, the social-preview image `hero-mccoy.svg`, and `favicon.svg`. |
 | `.nojekyll` | Disables Jekyll processing for direct static publication on GitHub Pages. Keep this file in the publishing root. |
 | `README.md` | End-user customization, local preview, GitHub Pages setup, and publishing instructions. |
-| `scripts/build-pages.mjs` | Validates curated mission data and local assets, copies the public website into `_site/`, generates per-mission metadata pages and copy-link configuration, and converts SVG preview images to PNG. |
+| `scripts/build-pages.mjs` | Validates curated mission data and local assets, prepares the mod export, copies the public website into `_site/`, generates per-mission metadata pages and copy-link configuration, and converts SVG preview images to PNG. |
+| `scripts/build-mod-feed.mjs`, `docs/mod-feed-v1.md` | Prepares the generated v1 JSON feed, all ordered PNG images and thumbnails from the curated mission array; documents the producer/consumer contract. |
 | `package.json`, `package-lock.json` | Build/test commands and locked development-only `sharp` dependency. No browser runtime dependency. |
 | `tests/` | Node built-in tests for generated metadata, image selection/conversion, output safety, content versions, share links, clipboard fallback and visitor navigation. |
 | `.github/workflows/pages.yml` | Tests/builds pushes and pull requests; deploys the generated artifact only for `main` pushes or manual runs on `main`. |
-| `_site/` | Ignored generated deployment output, including `share/`, PNG exports, and a build ownership marker. Never hand-edit or commit this directory. |
+| `_site/` | Ignored generated deployment output, including `share/`, `api/v1/`, PNG exports, and a build ownership marker. Never hand-edit or commit this directory. |
 
 Keep the site usable as directly served source files. The owner approved the GitHub Actions build for mission link previews; this does not require a build for local source preview. Do not introduce browser modules, a fetch-based data file, runtime dependencies, a router, or additional tooling without approval for that architectural change. Such changes must also account for the README's direct-file preview workflow.
 
@@ -153,7 +154,7 @@ For documentation-only changes, verify the described contracts against source an
 
 The hosting target is GitHub Pages for `Gerark/zomboard`, at `https://gerark.github.io/zomboard/`. The prepared deployment uses `.github/workflows/pages.yml`; the owner must select **GitHub Actions** as the source in repository Settings > Pages, replacing the previous **Deploy from a branch** setting. The workflow tests and builds on pushes to `main` and pull requests targeting `main`, then deploys only `main` pushes or manual runs on `main`. It uses official actions pinned to verified commit IDs, locked npm dependencies, read-only build permissions and Pages/OIDC write permissions confined to the deployment job.
 
-The deployed site contains `index.html`, `styles.css`, `missions-data.js`, `missions.js`, `share.js`, `assets/`, and generated `share/` pages, with `.nojekyll` and `index.html` at the deployment root. Only `_site/` is uploaded and deployed. Documentation, tests, build scripts, lockfiles and dependencies are excluded from the artifact. The repository itself is still public; do not commit private material. Preserve relative browser URLs so the board and query-string mission links work under `/zomboard/`. The build obtains the public base URL from Pages configuration for absolute preview metadata, including a configured custom domain.
+The deployment artifact contains `index.html`, `styles.css`, `missions-data.js`, `missions.js`, `share.js`, `assets/`, generated `share/` pages, the separate synthetic `mod-proof/` fixture and the generated `api/v1/` mod feed/assets, with `.nojekyll` and `index.html` at the deployment root. Only `_site/` is uploaded and deployed. Documentation, tests, build scripts, lockfiles and dependencies are excluded from the artifact. The repository itself is still public; do not commit private material. Preserve relative browser URLs so the board and query-string mission links work under `/zomboard/`. The build obtains the public base URL from Pages configuration for absolute preview and feed URLs, including a configured custom domain. Local API generation does not imply the feed is deployed.
 
 Pushes to `main` publish automatically after Pages is configured for GitHub Actions. Before an authorized push, review the intended files and check **Build and deploy GitHub Pages** afterward in the repository's Actions tab. Generated files stay in the deployment artifact and are never committed back. Feature branches and pull requests do not publish to the live site. No custom secret is required; standard Pages environment/branch protections still apply.
 
@@ -166,3 +167,28 @@ Publishing requires the owner's instruction; do not infer permission to publish 
 - `mod-proof/` holds A/B fake-quest feeds, an initially-A `missions.json`, and two digest-named PNG assets. `scripts/build-mod-proof.mjs` validates the images and prepares only explicit public files, resolving URLs against the configured Pages base and recalculating full SHA-256 revisions. The main build invokes it before replacing output.
 - This is not the production mission export described in the sibling mod repository. `missions-data.js` remains the real-content source of truth and is not duplicated by these fixtures.
 - For the already-authorized A/B refresh experiment, switching the synthetic `missions.json` between its A/B versions and publishing is within scope. Do not modify real missions as part of this test. Record actual live and in-game observations separately.
+
+
+## Authorized full mod exporter (2026-10-31)
+
+- The owner explicitly requested implementing the full NeatUI/settings/theme/feed
+  plan, including a local additive export of all real missions. This authorizes
+  the focused exporter and tests, not Git staging/committing/pushing or deployment.
+- `scripts/build-mod-feed.mjs` validates and prepares `api/v1/missions.json`, all
+  ordered PNG briefing images and thumbnails before output replacement. The main
+  build invokes it alongside the separate synthetic fixture exporter.
+- `tests/mod-feed.test.mjs` verifies all source fields/order/images, metadata and
+  content identities, deterministic revisions, hosting paths and failure cases.
+  All 23 website tests and the production build pass (reviewed on local Node.js
+  20.19.0; the existing CI workflow targets Node.js 24). The full export is local;
+  no production feed deployment has occurred.
+- Keep the contract in `docs/mod-feed-v1.md` aligned with the sibling mod's
+  `docs/feed-v1.md`: 1 MiB JSON, 128 quests, eight images/quest, 8 MiB PNGs,
+  4096 per dimension, 8,000,000 decoded pixels, optional thumbnail metadata.
+  Build-time prepared asset buffers have a separate 256 MiB bound.
+- Curated data and browser HTML/CSS/JavaScript remain unchanged. A future main
+  push can publish this exporter; do not push without the owner's instruction.
+- Follow-up review covered full-build empty-board support, consumer-compatible
+  ISO control-character rejection, the 2,048-character asset URL limit, exact
+  PNG/SVG image content, uncropped/non-enlarged thumbnails, canonical revisions,
+  consumer bounds and preservation of prior output on validation failure.

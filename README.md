@@ -63,7 +63,7 @@ Share links include a content version derived from the title, teaser and first i
 
 No custom secret or manual local generation step is required. If Actions are disabled or restricted for the repository, enable the workflow and the official `actions/*` actions. Deployment uses the standard `github-pages` environment; any environment approval or branch-protection rules still apply.
 
-Every push to `main` now runs the tests, generates the website and share pages, uploads `_site/`, and deploys that artifact. Pull requests targeting `main` run validation and a build without deployment. The build reads the public base URL from GitHub Pages configuration, including the `/zomboard/` path or a configured custom domain. The workflow does not write generated files or commits back to the repository. Only the website files and `assets/` enter the deployment artifact; repository documentation, tests, dependencies and build scripts are excluded.
+Every push to `main` now runs the tests, generates the website, share pages and mod feed, uploads `_site/`, and deploys that artifact. Pull requests targeting `main` run validation and a build without deployment. The build reads the public base URL from GitHub Pages configuration, including the `/zomboard/` path or a configured custom domain. The workflow does not write generated files or commits back to the repository. The artifact contains the website, public assets, generated `share/` and `api/v1/` files, and the separate `mod-proof/` fixture; repository documentation, tests, dependencies and build scripts are excluded.
 
 This uses GitHub's [custom Pages workflow](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages). Keep `.nojekyll` in the source and deployment root.
 
@@ -94,3 +94,30 @@ The build script replaces only its own `_site/` output. It refuses to overwrite 
 ## Experimental mod download fixture
 
 The owner-authorized `mod-proof/` folder contains one synthetic quest and two PNGs for the separate ZomBoard mod experiment. It does not export or change the real missions. The public test URL is `https://gerark.github.io/zomboard/mod-proof/missions.json`. Variant A is orange with one cream bar; variant B is blue with two. Copy the contents of `mod-proof/a.json` or `mod-proof/b.json` to `mod-proof/missions.json` and publish to change the same test endpoint. Keep both content-addressed PNG assets. The build validates PNG hashes/metadata, resolves image URLs using the configured Pages base URL, and recomputes full content revisions. Only the three known JSON files and their referenced PNGs enter `_site/mod-proof/`. Normal direct-file and HTTP website previews continue using the original classic scripts and mission data. This is a public test fixture, not a production mission API.
+
+
+## Full ZomBoard mod feed (local candidate, not yet deployed)
+
+The owner-authorized full exporter prepares `_site/api/v1/missions.json` and
+content-addressed PNG assets during the existing Pages build. It exports the real
+`missions-data.js` content, all ordered images, SVG-to-PNG conversions and small
+thumbnails. Browser rendering still uses the original classic scripts and data.
+The feed is additive and is not a browser runtime dependency.
+
+Edit quests only in `missions-data.js` and edit their original files in `assets/`.
+The normal build automatically exports every active/completed quest and briefing
+image, with separate thumbnails fitting within 512×320. Served PNGs use full
+SHA-256 filenames under `api/v1/assets/`; content changes update the feed revision.
+Do not maintain a separate JSON list or edit `_site/` by hand.
+
+The existing Pages workflow uploads the entire generated `_site/`, including
+`api/v1/`, alongside the board and share pages. After an authorized normal website
+deployment, the mod can obtain changed content using its in-game Refresh without
+rebuilding the mod. There is no separate feed deployment command.
+
+See [the v1 contract](docs/mod-feed-v1.md). Build with the normal Pages base URL:
+`npm run build -- --base-url https://gerark.github.io/zomboard/`. The future public
+URL is `https://gerark.github.io/zomboard/api/v1/missions.json`; preparing the
+artifact does not publish it. Production deployment requires the owner's
+separate publishing instruction. The earlier `mod-proof/` synthetic feed remains
+available independently.
