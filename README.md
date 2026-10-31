@@ -29,6 +29,38 @@ The first image is the card thumbnail. The briefing shows every image in order, 
 
 A list with one image uses that image in both places. A nonempty `images` list takes precedence over `image` and `imageAlt`; existing quests using those single-image fields continue to work. If `images` is absent or empty, the single-image fields are used.
 
+## Objectives and optional map targets
+
+Each objective is an object with required plain-text `text`. Strings are no
+longer accepted as objective entries. Add optional `mapTarget` metadata to a
+quest, any individual objective, or both. For example (illustrative coordinates,
+not a confirmed quest location):
+
+```js
+mapTarget: { x: 10620, y: 9750, zoom: 18 },
+objectives: [
+  { text: 'Reach the search area', mapTarget: { x: 10620, y: 9750 } },
+  { text: 'Return to the safehouse' }
+],
+```
+
+Omit `mapTarget` entirely when unspecified. If present, it must be an object
+with both `x` and `y` as safe integers (between -9,007,199,254,740,991 and
+9,007,199,254,740,991). Zero and negative coordinates are allowed; the build does
+not impose vanilla-map boundaries. Optional `zoom` must be a finite positive
+number, including fractions. Omit it to leave zoom unspecified; no default is
+inserted. Nulls and quoted numbers are invalid.
+
+Quest and objective targets are independent: an objective without a target does
+not inherit the quest's target. The website displays only the objective text,
+with the existing numbering and appearance. Coordinates are exported in the v2
+JSON feed but have no website map control. They are public in the source and
+generated JSON even though they are not displayed. All objectives use object
+entries. Owner-supplied targets are populated on quest 02 (`groceries`) for the
+Food Market, and on quest 01 (`bunker`) objectives 1 and 3 for the bunker and
+supermarket respectively. These three targets omit zoom; other targets remain
+unspecified. Mission wording and completion statuses are preserved.
+
 ## Updating a ruled-out lead
 
 Keep the existing mission `id` and `number` so shared links and narrative references remain valid. Update its description, location, teaser and objectives to reflect the current plan. If an old lead should remain visible, add an optional plain-text `outdatedLead` field:
@@ -63,7 +95,7 @@ Share links include a content version derived from the title, teaser and first i
 
 No custom secret or manual local generation step is required. If Actions are disabled or restricted for the repository, enable the workflow and the official `actions/*` actions. Deployment uses the standard `github-pages` environment; any environment approval or branch-protection rules still apply.
 
-Every push to `main` now runs the tests, generates the website, share pages and mod feed, uploads `_site/`, and deploys that artifact. Pull requests targeting `main` run validation and a build without deployment. The build reads the public base URL from GitHub Pages configuration, including the `/zomboard/` path or a configured custom domain. The workflow does not write generated files or commits back to the repository. The artifact contains the website, public assets, generated `share/` and `api/v1/` files, and the separate `mod-proof/` fixture; repository documentation, tests, dependencies and build scripts are excluded.
+Every push to `main` now runs the tests, generates the website, share pages and mod feed, uploads `_site/`, and deploys that artifact. Pull requests targeting `main` run validation and a build without deployment. The build reads the public base URL from GitHub Pages configuration, including the `/zomboard/` path or a configured custom domain. The workflow does not write generated files or commits back to the repository. The artifact contains the website, public assets, generated `share/` and `api/v2/` files, and the separate `mod-proof/` fixture; repository documentation, tests, dependencies and build scripts are excluded.
 
 This uses GitHub's [custom Pages workflow](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages). Keep `.nojekyll` in the source and deployment root.
 
@@ -96,28 +128,34 @@ The build script replaces only its own `_site/` output. It refuses to overwrite 
 The owner-authorized `mod-proof/` folder contains one synthetic quest and two PNGs for the separate ZomBoard mod experiment. It does not export or change the real missions. The public test URL is `https://gerark.github.io/zomboard/mod-proof/missions.json`. Variant A is orange with one cream bar; variant B is blue with two. Copy the contents of `mod-proof/a.json` or `mod-proof/b.json` to `mod-proof/missions.json` and publish to change the same test endpoint. Keep both content-addressed PNG assets. The build validates PNG hashes/metadata, resolves image URLs using the configured Pages base URL, and recomputes full content revisions. Only the three known JSON files and their referenced PNGs enter `_site/mod-proof/`. Normal direct-file and HTTP website previews continue using the original classic scripts and mission data. This is a public test fixture, not a production mission API.
 
 
-## Full ZomBoard mod feed (local candidate, not yet deployed)
+## Full ZomBoard mod feed v2 (local candidate, not yet deployed)
 
-The owner-authorized full exporter prepares `_site/api/v1/missions.json` and
+The owner-authorized full exporter prepares `_site/api/v2/missions.json` and
 content-addressed PNG assets during the existing Pages build. It exports the real
 `missions-data.js` content, all ordered images, SVG-to-PNG conversions and small
-thumbnails. Browser rendering still uses the original classic scripts and data.
+thumbnails. Browser rendering still uses classic scripts and source data.
 The feed is additive and is not a browser runtime dependency.
 
 Edit quests only in `missions-data.js` and edit their original files in `assets/`.
 The normal build automatically exports every active/completed quest and briefing
 image, with separate thumbnails fitting within 512×320. Served PNGs use full
-SHA-256 filenames under `api/v1/assets/`; content changes update the feed revision.
+SHA-256 filenames under `api/v2/assets/`; content changes, including quest and
+objective map targets, update the feed revision.
 Do not maintain a separate JSON list or edit `_site/` by hand.
 
 The existing Pages workflow uploads the entire generated `_site/`, including
-`api/v1/`, alongside the board and share pages. After an authorized normal website
-deployment, the mod can obtain changed content using its in-game Refresh without
-rebuilding the mod. There is no separate feed deployment command.
+`api/v2/`, alongside the board and share pages. There is no separate feed
+deployment command. V2 uses `schemaVersion: 2` and object objectives; production
+`api/v1/` output is no longer generated and is removed on rebuild. The current
+v1-only mod cannot consume v2. Updating the mod and its configured feed URL is a
+separate follow-up before using this feed in-game. After that compatibility
+update and an authorized deployment, ordinary content changes can be refreshed
+without rebuilding the mod.
 
-See [the v1 contract](docs/mod-feed-v1.md). Build with the normal Pages base URL:
+See [the v2 contract](docs/mod-feed-v2.md), or the superseded
+[historical v1 contract](docs/mod-feed-v1.md). Build with the normal Pages base URL:
 `npm run build -- --base-url https://gerark.github.io/zomboard/`. The future public
-URL is `https://gerark.github.io/zomboard/api/v1/missions.json`; preparing the
+URL is `https://gerark.github.io/zomboard/api/v2/missions.json`; preparing the
 artifact does not publish it. Production deployment requires the owner's
 separate publishing instruction. The earlier `mod-proof/` synthetic feed remains
 available independently.

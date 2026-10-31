@@ -1,5 +1,11 @@
 # ZomBoard feed v1
 
+**Historical, superseded by [feed v2](mod-feed-v2.md).** This document describes
+the former production format and the current v1-only mod. The website build now
+generates only `api/v2/`; it no longer generates `api/v1/`. The separate synthetic
+`mod-proof/` fixtures retain their existing v1 format. Mod v2 support and its feed
+URL migration are a separate follow-up; this document does not establish either.
+
 The full 0.2 consumer accepts public HTTPS JSON and PNG data only. An ordinary
 HTML website URL is not a feed. Never evaluate downloaded JavaScript, Lua, HTML
 or JARs. The website adds this feed at `api/v1/missions.json` during its build;

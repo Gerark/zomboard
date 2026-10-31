@@ -15,11 +15,11 @@ test('real mod export preserves all curated fields, ordering, images and PNG ide
   const source = JSON.parse(JSON.stringify(vm.runInNewContext(`${await readFile(path.join(root,'missions-data.js'),'utf8')}\nmissions`)));
   for (const base of ['https://example.test/zomboard/','https://board.example/']) {
     const files = new Map(await prepareModFeed(root,new URL(base),source));
-    const feed = JSON.parse(files.get('api/v1/missions.json'));
+    const feed = JSON.parse(files.get('api/v2/missions.json'));
     assert.equal(feed.missions.length,source.length);
     for (let n=0;n<source.length;n++) {
       const a=source[n], b=feed.missions[n];
-      for (const key of ['id','number','title','kicker','teaser','category','completed','risk','location','crew','description','note','objectives','outdatedLead','relatedMission']) assert.deepEqual(b[key],a[key]);
+      for (const key of ['id','number','title','kicker','teaser','category','completed','risk','location','crew','description','note','objectives','outdatedLead','relatedMission','mapTarget']) assert.deepEqual(b[key],a[key]);
       const images=a.images?.length ? a.images : [{src:a.image,alt:a.imageAlt||''}];
       assert.equal(b.images.length,images.length);
       for(let i=0;i<images.length;i++) {
@@ -29,7 +29,7 @@ test('real mod export preserves all curated fields, ordering, images and PNG ide
         assert.equal(b.images[i].width, sourceMetadata.width);
         assert.equal(b.images[i].height, sourceMetadata.height);
         for(const image of [b.images[i],b.images[i].thumbnail]) {
-          assert.ok(image.url.startsWith(`${base}api/v1/assets/`));
+          assert.ok(image.url.startsWith(`${base}api/v2/assets/`));
           assert.equal(new URL(image.url).origin, new URL(base).origin);
           assert.equal(new URL(image.url).pathname.split('/').at(-1), `${image.sha256}.png`);
           const png=files.get(new URL(image.url).pathname.slice(new URL(base).pathname.length));
@@ -43,7 +43,7 @@ test('real mod export preserves all curated fields, ordering, images and PNG ide
         assert.ok(Math.abs(b.images[i].thumbnail.width - b.images[i].width * b.images[i].thumbnail.height / b.images[i].height)<=1);
       }
     }
-    assert.ok([...files.keys()].every(name=>name==='api/v1/missions.json'||/^api\/v1\/assets\/[a-f0-9]{64}\.png$/.test(name)));
+    assert.ok([...files.keys()].every(name=>name==='api/v2/missions.json'||/^api\/v2\/assets\/[a-f0-9]{64}\.png$/.test(name)));
   }
 });
 
@@ -60,7 +60,7 @@ async function fixture(t) {
   await sharp({ create: { width: 16, height: 8, channels: 3, background: '#ef6846' } }).png().toFile(path.join(directory, 'assets', 'photo.png'));
   await writeFile(path.join(directory, 'assets', 'hero-mccoy.svg'), '<svg xmlns="http://www.w3.org/2000/svg" width="100" height="65"><rect width="100" height="65" fill="#42544c"/></svg>');
   for (const file of ['index.html', 'styles.css', 'missions.js', 'share.js', '.nojekyll']) await cp(path.join(root, file), path.join(directory, file));
-  const mission = { id: 'one', number: '01', title: 'One', kicker: 'Test', teaser: 'Test', category: 'field', completed: false, risk: 'LOW', location: 'Test', crew: 'Test', description: 'Test', note: 'Note', objectives: ['Read'], image: 'assets/photo.png', imageAlt: 'Small image' };
+  const mission = { id: 'one', number: '01', title: 'One', kicker: 'Test', teaser: 'Test', category: 'field', completed: false, risk: 'LOW', location: 'Test', crew: 'Test', description: 'Test', note: 'Note', objectives: [{ text: 'Read' }], image: 'assets/photo.png', imageAlt: 'Small image' };
   const source = [mission];
   const save = () => writeFile(path.join(directory, 'missions-data.js'), `const missions = ${JSON.stringify(source)};`);
   await save();
@@ -70,7 +70,7 @@ async function fixture(t) {
 test('normal website builds include the API, preserve runtime files, and accept an empty board', async t => {
   const f = await fixture(t);
   const result = await buildPages({ root: f.directory, baseUrl: f.base.href });
-  const feed = JSON.parse(await readFile(path.join(result.output, 'api/v1/missions.json'), 'utf8'));
+  const feed = JSON.parse(await readFile(path.join(result.output, 'api/v2/missions.json'), 'utf8'));
   assert.equal(feed.missions[0].title, f.mission.title);
   for (const image of [feed.missions[0].images[0], feed.missions[0].images[0].thumbnail]) {
     const relative = new URL(image.url).pathname.slice(f.base.pathname.length);
@@ -86,14 +86,117 @@ test('normal website builds include the API, preserve runtime files, and accept 
   assert.ok(html.includes('<script src="missions-data.js" defer></script>'));
   assert.ok(html.includes('<script src="missions.js" defer></script>'));
   assert.ok(html.indexOf('src="missions-data.js"') < html.indexOf('src="missions.js"'));
-  assert.ok(!html.includes('api/v1/missions.json'));
+  assert.ok(!html.includes('api/v2/missions.json'));
+  assert.deepEqual(await readdir(path.join(result.output, 'api')), ['v2']);
+
+  // A rebuild must remove stale production v1 output from earlier builds.
+  await mkdir(path.join(result.output, 'api/v1'));
+  await writeFile(path.join(result.output, 'api/v1/missions.json'), '{}');
+  await buildPages({ root: f.directory, baseUrl: f.base.href });
+  assert.deepEqual(await readdir(path.join(result.output, 'api')), ['v2']);
 
   f.source.length = 0;
   await f.save();
   await buildPages({ root: f.directory, baseUrl: f.base.href });
-  const empty = JSON.parse(await readFile(path.join(result.output, 'api/v1/missions.json'), 'utf8'));
-  assert.deepEqual(empty, { schemaVersion: 1, missions: [], revision: digest('{"missions":[],"schemaVersion":1}') });
+  const empty = JSON.parse(await readFile(path.join(result.output, 'api/v2/missions.json'), 'utf8'));
+  assert.deepEqual(empty, { schemaVersion: 2, missions: [], revision: digest('{"missions":[],"schemaVersion":2}') });
   assert.deepEqual(await readdir(path.join(result.output, 'share')), []);
+});
+
+test('v2 exports optional quest and objective targets independently without filling omitted values', async t => {
+  const f = await fixture(t);
+  const cases = [
+    { ...f.mission },
+    { ...f.mission, mapTarget: { x: 0, y: -9750 } },
+    { ...f.mission, objectives: [{ text: 'Read', mapTarget: { x: 10620, y: 9750, zoom: 18 } }, { text: 'Return' }] },
+    { ...f.mission, mapTarget: { x: -10620, y: 0, zoom: 0.5 }, objectives: [{ text: 'Read' }, { text: 'Return', mapTarget: { x: Number.MIN_SAFE_INTEGER, y: Number.MAX_SAFE_INTEGER } }] },
+  ];
+  for (const mission of cases) {
+    const files = new Map(await prepareModFeed(f.directory, f.base, [mission]));
+    const feed = JSON.parse(files.get('api/v2/missions.json'));
+    assert.equal(feed.schemaVersion, 2);
+    const exported = feed.missions[0];
+    assert.equal(Object.hasOwn(exported, 'mapTarget'), Object.hasOwn(mission, 'mapTarget'));
+    assert.deepEqual(exported.mapTarget, mission.mapTarget);
+    assert.deepEqual(exported.objectives, mission.objectives);
+  }
+});
+
+test('v2 rejects malformed map targets at either level, including explicit undefined and unsafe numbers', async t => {
+  const f = await fixture(t);
+  const invalid = [undefined, null, [], true, 12, 'target', {}, { x: 1 }, { y: 2 }];
+  for (const key of ['x', 'y']) {
+    for (const value of [undefined, null, '1', true, NaN, Infinity, -Infinity, 0.5, Number.MAX_SAFE_INTEGER + 1, Number.MIN_SAFE_INTEGER - 1]) {
+      invalid.push({ x: 1, y: 2, [key]: value });
+    }
+  }
+  for (const zoom of [undefined, null, '18', true, [], {}, 0, -1, NaN, Infinity, -Infinity]) invalid.push({ x: 1, y: 2, zoom });
+  for (const target of invalid) {
+    for (const mission of [
+      { ...f.mission, mapTarget: target },
+      { ...f.mission, objectives: [{ text: 'Read', mapTarget: target }] },
+    ]) {
+      await assert.rejects(prepareModFeed(f.directory, f.base, [mission]), /Invalid mod-feed mapTarget/);
+    }
+  }
+});
+
+test('v2 requires objective objects with valid plain text and preserves output on invalid objectives or targets', async t => {
+  const f = await fixture(t);
+  const invalidObjectives = [undefined, null, [], 'Read', {}, { text: null }, { text: 1 }, { text: '' }, { text: ' ' }, { text: 'a'.repeat(513) }, { text: 'Bad\u0000text' }, { text: '\ud800' }];
+  for (const objective of invalidObjectives) {
+    await assert.rejects(prepareModFeed(f.directory, f.base, [{ ...f.mission, objectives: [objective] }]), /Invalid mod-feed/);
+  }
+  await assert.rejects(prepareModFeed(f.directory, f.base, [{ ...f.mission, objectives: Array(1) }]), /Invalid mod-feed objective/);
+
+  const result = await buildPages({ root: f.directory, baseUrl: f.base.href });
+  const previousFeed = await readFile(path.join(result.output, 'api/v2/missions.json'));
+  const previousData = await readFile(path.join(result.output, 'missions-data.js'));
+  const invalidMissions = [
+    { ...f.mission, objectives: ['Read'] },
+    { ...f.mission, objectives: [{ text: '' }] },
+    { ...f.mission, objectives: [{ text: 'a'.repeat(513) }] },
+    { ...f.mission, mapTarget: null },
+    { ...f.mission, mapTarget: { x: 1 } },
+    { ...f.mission, mapTarget: { x: 1, y: 2, zoom: 0 } },
+    { ...f.mission, objectives: [{ text: 'Read', mapTarget: { y: 2 } }] },
+    { ...f.mission, objectives: [{ text: 'Read', mapTarget: { x: '1', y: 2 } }] },
+    { ...f.mission, objectives: [{ text: 'Read', mapTarget: { x: 1, y: 2, zoom: '18' } }] },
+  ];
+  for (const mission of invalidMissions) {
+    f.source[0] = mission;
+    await f.save();
+    await assert.rejects(buildPages({ root: f.directory, baseUrl: f.base.href }), /Invalid (mod-feed|objectives)/);
+    assert.deepEqual(await readFile(path.join(result.output, 'api/v2/missions.json')), previousFeed);
+    assert.deepEqual(await readFile(path.join(result.output, 'missions-data.js')), previousData);
+  }
+});
+
+test('v2 revisions cover both target levels and omitted zoom with stable canonical object keys', async t => {
+  const f = await fixture(t);
+  const mission = { ...f.mission, mapTarget: { x: 10620, y: 9750, zoom: 18 }, objectives: [{ text: 'Read', mapTarget: { x: -1, y: 0, zoom: 1.5 } }] };
+  const build = async value => new Map(await prepareModFeed(f.directory, f.base, [value])).get('api/v2/missions.json');
+  const bytes = await build(mission);
+  const original = JSON.parse(bytes);
+  assert.deepEqual(await build(mission), bytes);
+  const reordered = structuredClone(mission);
+  for (const holder of [reordered, reordered.objectives[0]]) holder.mapTarget = Object.fromEntries(Object.entries(holder.mapTarget).reverse());
+  assert.deepEqual(await build(reordered), bytes);
+  for (const level of ['quest', 'objective']) {
+    for (const key of ['x', 'y', 'zoom']) {
+      const changed = structuredClone(mission);
+      const holder = level === 'quest' ? changed : changed.objectives[0];
+      holder.mapTarget[key] += 1;
+      assert.notEqual(JSON.parse(await build(changed)).revision, original.revision, `${level}.${key}`);
+    }
+    for (const removeTarget of [false, true]) {
+      const changed = structuredClone(mission);
+      const holder = level === 'quest' ? changed : changed.objectives[0];
+      if (removeTarget) delete holder.mapTarget;
+      else delete holder.mapTarget.zoom;
+      assert.notEqual(JSON.parse(await build(changed)).revision, original.revision, `${level} omitted value`);
+    }
+  }
 });
 
 test('export rejects consumer-incompatible control characters and overlong image URLs', async t => {
@@ -102,7 +205,7 @@ test('export rejects consumer-incompatible control characters and overlong image
     await assert.rejects(prepareModFeed(f.directory, f.base, [{ ...f.mission, title: `Before${character}after` }]), /Invalid mod-feed text/);
   }
   const legal = { ...f.mission, description: 'Line one\nLine two\twith an emoji \ud83e\udddf and café.' };
-  const feed = JSON.parse(new Map(await prepareModFeed(f.directory, f.base, [legal])).get('api/v1/missions.json'));
+  const feed = JSON.parse(new Map(await prepareModFeed(f.directory, f.base, [legal])).get('api/v2/missions.json'));
   assert.equal(feed.missions[0].description, legal.description);
   await assert.rejects(prepareModFeed(f.directory, new URL(`https://example.test/${'a'.repeat(2000)}/`), f.source), /Invalid mod-feed text/);
 });
@@ -114,12 +217,12 @@ test('thumbnails preserve full framing without enlargement for wide, tall and sm
     const png = await sharp({ create: { width, height, channels: 3, background: '#f0d9b5' } }).png().toBuffer();
     await writeFile(path.join(f.directory, 'assets', 'photo.png'), png);
     const files = new Map(await prepareModFeed(f.directory, f.base, f.source));
-    const image = JSON.parse(files.get('api/v1/missions.json')).missions[0].images[0];
+    const image = JSON.parse(files.get('api/v2/missions.json')).missions[0].images[0];
     assert.equal(image.width, width);
     assert.equal(image.height, height);
     assert.equal(image.thumbnail.width, thumbnailWidth);
     assert.equal(image.thumbnail.height, thumbnailHeight);
-    assert.deepEqual(files.get(`api/v1/assets/${image.sha256}.png`), png);
+    assert.deepEqual(files.get(`api/v2/assets/${image.sha256}.png`), png);
     assert.ok(!('alt' in image.thumbnail));
   }
 });
@@ -129,7 +232,7 @@ test('canonical revisions cover every exported field and ordered objective/image
   const mission = { ...f.mission, outdatedLead: 'Old lead', relatedMission: 'two', image: 'assets/unused.png', images: [{ src: 'assets/photo.png', alt: 'Photo' }, { src: 'assets/hero-mccoy.svg', alt: 'Drawing' }] };
   const source = [mission, { ...f.mission, id: 'two', number: '02', completed: true }];
   const build = async value => {
-    const bytes = new Map(await prepareModFeed(f.directory, f.base, value)).get('api/v1/missions.json');
+    const bytes = new Map(await prepareModFeed(f.directory, f.base, value)).get('api/v2/missions.json');
     const feed = JSON.parse(bytes);
     const { revision, ...content } = feed;
     const keys = new Set();
@@ -149,7 +252,7 @@ test('canonical revisions cover every exported field and ordered objective/image
     changed[0][key] += key === 'id' ? '-changed' : ' changed';
     assert.notEqual((await build(changed)).feed.revision, original.feed.revision, key);
   }
-  for (const [key, value] of [['category', 'base'], ['risk', 'HIGH'], ['completed', true], ['objectives', ['Changed objective']]]) {
+  for (const [key, value] of [['category', 'base'], ['risk', 'HIGH'], ['completed', true], ['objectives', [{ text: 'Changed objective' }]]]) {
     const changed = structuredClone(source);
     changed[0][key] = value;
     assert.notEqual((await build(changed)).feed.revision, original.feed.revision, key);
@@ -161,17 +264,17 @@ test('canonical revisions cover every exported field and ordered objective/image
   changedOrder[0].images.reverse();
   assert.notEqual((await build(changedOrder)).feed.revision, original.feed.revision);
   const objectiveOrder = structuredClone(source);
-  objectiveOrder[0].objectives = ['First', 'Second'];
+  objectiveOrder[0].objectives = [{ text: 'First' }, { text: 'Second' }];
   const before = (await build(objectiveOrder)).feed.revision;
   objectiveOrder[0].objectives.reverse();
   assert.notEqual((await build(objectiveOrder)).feed.revision, before);
 });
 
-test('v1 limits reject oversized source data and preserve prior build output on validation failure', async t => {
+test('v2 limits reject oversized source data and preserve prior build output on validation failure', async t => {
   const f = await fixture(t);
   const prepare = source => prepareModFeed(f.directory, f.base, source);
   const result = await buildPages({ root: f.directory, baseUrl: f.base.href });
-  const before = await readFile(path.join(result.output, 'api/v1/missions.json'));
+  const before = await readFile(path.join(result.output, 'api/v2/missions.json'));
   const invalid = [
     { ...f.mission, id: 'a'.repeat(81) },
     { ...f.mission, title: 'a'.repeat(257) },
@@ -179,8 +282,8 @@ test('v1 limits reject oversized source data and preserve prior build output on 
     { ...f.mission, description: 'a'.repeat(8193) },
     { ...f.mission, outdatedLead: 'a'.repeat(8193) },
     { ...f.mission, objectives: [] },
-    { ...f.mission, objectives: Array(17).fill('One') },
-    { ...f.mission, objectives: ['a'.repeat(513)] },
+    { ...f.mission, objectives: Array(17).fill({ text: 'One' }) },
+    { ...f.mission, objectives: [{ text: 'a'.repeat(513) }] },
     { ...f.mission, imageAlt: 'a'.repeat(513) },
   ];
   for (const mission of invalid) await assert.rejects(prepare([mission]), /Invalid mod-feed/);
@@ -188,12 +291,12 @@ test('v1 limits reject oversized source data and preserve prior build output on 
   const large = Array.from({ length: 128 }, (_, n) => ({ ...f.mission, id: `quest-${n}`, description: 'a'.repeat(8192), note: 'b'.repeat(8192) }));
   await assert.rejects(prepare(large), /exceeds 1 MiB/);
   const accepted = Array.from({ length: 128 }, (_, n) => ({ ...f.mission, id: `quest-${n}` }));
-  assert.equal(JSON.parse(new Map(await prepare(accepted)).get('api/v1/missions.json')).missions.length, 128);
+  assert.equal(JSON.parse(new Map(await prepare(accepted)).get('api/v2/missions.json')).missions.length, 128);
 
   f.mission.title = 'a'.repeat(257);
   await f.save();
   await assert.rejects(buildPages({ root: f.directory, baseUrl: f.base.href }), /Invalid mod-feed text/);
-  assert.deepEqual(await readFile(path.join(result.output, 'api/v1/missions.json')), before);
+  assert.deepEqual(await readFile(path.join(result.output, 'api/v2/missions.json')), before);
   f.mission.title = 'One';
   await f.save();
   for (const [width, height] of [[4097, 1], [3000, 3000]]) {
@@ -209,9 +312,9 @@ test('mod revisions are deterministic and cover text, order, completion and imag
   t.after(async()=>{ assert.equal(path.dirname(dir),parent); await rm(dir,{recursive:true,force:true}); });
   await mkdir(path.join(dir,'assets')); const image=path.join(dir,'assets','photo.png');
   await sharp({create:{width:16,height:8,channels:3,background:'#ef6846'}}).png().toFile(image);
-  const m={id:'one',number:'01',title:'One',kicker:'Test',teaser:'Test',category:'field',completed:false,risk:'LOW',location:'Test',crew:'Test',description:'Test',note:'',objectives:['Read'],image:'assets/photo.png'};
+  const m={id:'one',number:'01',title:'One',kicker:'Test',teaser:'Test',category:'field',completed:false,risk:'LOW',location:'Test',crew:'Test',description:'Test',note:'',objectives:[{text:'Read'}],image:'assets/photo.png'};
   const source=[m,{...m,id:'two',number:'02'}], base=new URL('https://example.test/zomboard/');
-  const build=async()=>JSON.parse(new Map(await prepareModFeed(dir,base,source)).get('api/v1/missions.json'));
+  const build=async()=>JSON.parse(new Map(await prepareModFeed(dir,base,source)).get('api/v2/missions.json'));
   const original=await build(); assert.deepEqual(await build(),original);
   source[0].completed=true; assert.notEqual((await build()).revision,original.revision); source[0].completed=false;
   source.reverse(); assert.notEqual((await build()).revision,original.revision); source.reverse();
@@ -222,5 +325,5 @@ test('mod revisions are deterministic and cover text, order, completion and imag
   source[0].image='../outside.png'; await assert.rejects(build,/path/); source[0].image='assets/photo.png';
   source[0].images=Array(9).fill({src:'assets/photo.png'}); await assert.rejects(build,/Too many/); delete source[0].images;
   await writeFile(image,'broken'); await assert.rejects(build);
-  const empty=JSON.parse(new Map(await prepareModFeed(dir,base,[])).get('api/v1/missions.json')); assert.deepEqual(empty.missions,[]);
+  const empty=JSON.parse(new Map(await prepareModFeed(dir,base,[])).get('api/v2/missions.json')); assert.deepEqual(empty.missions,[]);
 });

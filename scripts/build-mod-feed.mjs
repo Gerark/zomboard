@@ -11,6 +11,19 @@ const text = (value, name, limit, empty = false) => {
     throw new Error(`Invalid mod-feed text: ${name}`);
   return value;
 };
+const mapTarget = (value, name) => {
+  if (!value || typeof value !== 'object' || Array.isArray(value) ||
+      !Object.hasOwn(value, 'x') || !Object.hasOwn(value, 'y') ||
+      !Number.isSafeInteger(value.x) || !Number.isSafeInteger(value.y))
+    throw new Error(`Invalid mod-feed mapTarget: ${name} requires safe integer x and y`);
+  const target = { x: value.x, y: value.y };
+  if (Object.hasOwn(value, 'zoom')) {
+    if (typeof value.zoom !== 'number' || !Number.isFinite(value.zoom) || value.zoom <= 0)
+      throw new Error(`Invalid mod-feed mapTarget: ${name}.zoom must be finite and positive`);
+    target.zoom = value.zoom;
+  }
+  return target;
+};
 async function assetPath(root, src) {
   if (typeof src !== 'string' || !/^assets\/[a-zA-Z0-9_./-]+\.(png|svg)$/.test(src) || src.split('/').some(p => !p || p === '.' || p === '..')) throw new Error('Invalid mod-feed asset path');
   let current = root;
@@ -34,7 +47,7 @@ export async function prepareModFeed(root, base, source) {
     const metadata = await sharp(png, { limitInputPixels: 8_000_000 }).metadata();
     if (metadata.format !== 'png' || png.length > 8 * 1024 * 1024 || !metadata.width || !metadata.height || metadata.width > 4096 || metadata.height > 4096 || metadata.width * metadata.height > 8_000_000)
       throw new Error('Mod-feed image exceeds PNG limits');
-    const sha256 = hash(png), filename = `api/v1/assets/${sha256}.png`;
+    const sha256 = hash(png), filename = `api/v2/assets/${sha256}.png`;
     const url = text(new URL(filename, base).href, 'image URL', 2048);
     if (!files.has(filename)) {
       assetBytes += png.length;
@@ -68,7 +81,14 @@ export async function prepareModFeed(root, base, source) {
     if (!['field','base'].includes(item.category) || !['LOW','MEDIUM','HIGH','SEVERE'].includes(item.risk) || typeof item.completed !== 'boolean') throw new Error('Invalid mod-feed quest classification');
     mission.completed = item.completed;
     if (!Array.isArray(item.objectives) || !item.objectives.length || item.objectives.length > 16) throw new Error('Invalid mod-feed objectives');
-    mission.objectives = item.objectives.map(value => text(value, 'objective', 512));
+    mission.objectives = Array.from(item.objectives, (value, index) => {
+      const name = `${id}.objectives[${index}]`;
+      if (!value || typeof value !== 'object' || Array.isArray(value)) throw new Error(`Invalid mod-feed objective: ${name}`);
+      const objective = { text: text(value.text, `${name}.text`, 512) };
+      if (Object.hasOwn(value, 'mapTarget')) objective.mapTarget = mapTarget(value.mapTarget, name);
+      return objective;
+    });
+    if (Object.hasOwn(item, 'mapTarget')) mission.mapTarget = mapTarget(item.mapTarget, id);
     for (const key of ['outdatedLead','relatedMission']) if (item[key] !== undefined) mission[key] = text(item[key], key, 8192, true);
     const images = Array.isArray(item.images) && item.images.length ? item.images : [{ src: item.image, alt: item.imageAlt || '' }];
     if (images.length > 8) throw new Error('Too many mod-feed images');
@@ -76,10 +96,10 @@ export async function prepareModFeed(root, base, source) {
     for (const image of images) mission.images.push({ ...await prepare(image.src), alt: text(image.alt || '', 'alt', 512, true) });
     missions.push(mission);
   }
-  const feed = { schemaVersion: 1, missions };
+  const feed = { schemaVersion: 2, missions };
   feed.revision = hash(JSON.stringify(canonical(feed)));
   const json = Buffer.from(`${JSON.stringify(feed, null, 2)}\n`);
   if (json.length > 1024 * 1024) throw new Error('Mod feed exceeds 1 MiB');
-  files.set('api/v1/missions.json', json);
+  files.set('api/v2/missions.json', json);
   return [...files];
 }

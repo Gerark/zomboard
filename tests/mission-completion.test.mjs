@@ -88,6 +88,25 @@ function board({ setup = 'missions.forEach(m => m.completed = m.id === "vhs");',
 const cardIds = node => node.cards.map(card => card.dataset.missionId);
 const listIds = node => node.buttons.map(button => button.dataset.open);
 
+test('object objectives render escaped text in order for every quest and omit map metadata from markup', () => {
+  const f = board({ setup: '' });
+  const escape = value => value.replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+  for (const mission of missions) {
+    assert.ok(mission.objectives.every(objective => typeof objective.text === 'string'));
+    f.run(`showMission(${JSON.stringify(mission.id)}, false)`);
+    const content = f.elements.get('dialog-content').innerHTML;
+    const expected = mission.objectives.map((objective, i) => `<li><span>${String(i + 1).padStart(2, '0')}</span>${escape(objective.text)}</li>`).join('');
+    assert.ok(content.includes(`<ol class="objective-list">${expected}</ol>`), mission.id);
+    assert.ok(!content.includes('[object Object]'));
+  }
+
+  f.run('missions[0].objectives = [{ text: \'Reach <script>bad()</script> & "return"\' }, { text: "Second objective" }]; showMission(missions[0].id, false);');
+  const before = f.elements.get('dialog-content').innerHTML;
+  assert.ok(before.includes('Reach &lt;script&gt;bad()&lt;/script&gt; &amp; &quot;return&quot;'));
+  f.run('missions[0].mapTarget = { x: 10620, y: 9750, zoom: 18 }; missions[0].objectives[0].mapTarget = { x: -1, y: 0 }; showMission(missions[0].id, false);');
+  assert.equal(f.elements.get('dialog-content').innerHTML, before);
+});
+
 test('a completed VHS quest has separate sidebar and bottom-grid entries, preserving source order', () => {
   assert.ok(missions.every(mission => typeof mission.completed === 'boolean'));
   const f = board();

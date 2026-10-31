@@ -143,7 +143,7 @@ function showMission(id, updateUrl = true, opener = document.activeElement) {
       <p class="dossier-description">${escapeHtml(m.description)}</p>
       ${m.outdatedLead ? `<p class="dossier-outdated-lead"><strong>RULED-OUT LEAD:</strong> <s>${escapeHtml(m.outdatedLead)}</s></p>` : ''}
       ${relatedMission ? `<div class="dossier-related"><span>RELATED MISSION /</span><button type="button" class="copy-button" data-open="${escapeHtml(relatedMission.id)}">${escapeHtml(relatedMission.number)} · ${escapeHtml(relatedMission.title)} ↗</button></div>` : ''}
-      <h3>MISSION OBJECTIVES</h3><ol class="objective-list">${m.objectives.map((o, i) => `<li><span>${pad(i + 1)}</span>${escapeHtml(o)}</li>`).join('')}</ol>
+      <h3>MISSION OBJECTIVES</h3><ol class="objective-list">${m.objectives.map((o, i) => `<li><span>${pad(i + 1)}</span>${escapeHtml(o.text)}</li>`).join('')}</ol>
       <div class="dossier-note"><strong>FIELD NOTES /</strong> ${escapeHtml(m.note)}</div>
       ${images.map((image, i) => `<div class="dossier-image"><img src="${escapeHtml(image.src)}" alt="${escapeHtml(image.alt || '')}"><span>DOSSIER ${escapeHtml(m.number)} / ${pad(missions.length)}${images.length > 1 ? ` · IMAGE ${i + 1} / ${images.length}` : ''}</span></div>`).join('')}
       <div class="dossier-actions"><button type="button" id="copy-mission" class="copy-button">⧉ COPY MISSION LINK</button>${images.map((image, i) => `<a class="copy-button" href="${escapeHtml(image.src)}" target="_blank" rel="noopener">VIEW FULL IMAGE${images.length > 1 ? ` ${i + 1} / ${images.length}` : ''} ↗</a>`).join('')}<span>RETURN ALIVE. REPORT BACK.</span></div>

@@ -31,17 +31,17 @@ ZomBoard is a public, read-only Project Zomboid mission board themed around the 
 | `.nojekyll` | Disables Jekyll processing for direct static publication on GitHub Pages. Keep this file in the publishing root. |
 | `README.md` | End-user customization, local preview, GitHub Pages setup, and publishing instructions. |
 | `scripts/build-pages.mjs` | Validates curated mission data and local assets, prepares the mod export, copies the public website into `_site/`, generates per-mission metadata pages and copy-link configuration, and converts SVG preview images to PNG. |
-| `scripts/build-mod-feed.mjs`, `docs/mod-feed-v1.md` | Prepares the generated v1 JSON feed, all ordered PNG images and thumbnails from the curated mission array; documents the producer/consumer contract. |
+| `scripts/build-mod-feed.mjs`, `docs/mod-feed-v2.md` | Prepares the generated v2 JSON feed, all ordered PNG images and thumbnails from the curated mission array; documents the producer contract. `docs/mod-feed-v1.md` is historical. |
 | `package.json`, `package-lock.json` | Build/test commands and locked development-only `sharp` dependency. No browser runtime dependency. |
 | `tests/` | Node built-in tests for generated metadata, image selection/conversion, output safety, content versions, share links, clipboard fallback and visitor navigation. |
 | `.github/workflows/pages.yml` | Tests/builds pushes and pull requests; deploys the generated artifact only for `main` pushes or manual runs on `main`. |
-| `_site/` | Ignored generated deployment output, including `share/`, `api/v1/`, PNG exports, and a build ownership marker. Never hand-edit or commit this directory. |
+| `_site/` | Ignored generated deployment output, including `share/`, `api/v2/`, PNG exports, and a build ownership marker. Never hand-edit or commit this directory. |
 
 Keep the site usable as directly served source files. The owner approved the GitHub Actions build for mission link previews; this does not require a build for local source preview. Do not introduce browser modules, a fetch-based data file, runtime dependencies, a router, or additional tooling without approval for that architectural change. Such changes must also account for the README's direct-file preview workflow.
 
 ## Mission data contract
 
-The `missions` array in `missions-data.js` is the source of truth for mission content, completion status and display order within each completion group. All fields below are expected except optional `images`, `imageAlt`, `outdatedLead`, and `relatedMission`. Supply either a nonempty `images` array or the single-image `image` field; there is no runtime schema validation.
+The `missions` array in `missions-data.js` is the source of truth for mission content, completion status and display order within each completion group. All fields below are expected except optional `images`, `imageAlt`, `outdatedLead`, `relatedMission`, and `mapTarget`. Supply either a nonempty `images` array or the single-image `image` field; there is no runtime schema validation.
 
 | Field | Expected value and coupling |
 | --- | --- |
@@ -58,7 +58,8 @@ The `missions` array in `missions-data.js` is the source of truth for mission co
 | `description`, `note` | Plain-text briefing copy and field notes. |
 | `outdatedLead` | Optional plain text shown with a RULED-OUT LEAD label and semantic strikethrough in the briefing. Records an incorrect lead, not objective or mission completion. |
 | `relatedMission` | Optional exact ID of a different mission. Its current number and title label a button that opens that briefing. Keep references valid; an unknown ID produces no button. Narrative connection only, without progress tracking or mission locking. |
-| `objectives` | Nonempty array of plain-text strings, rendered in order. |
+| `objectives` | Nonempty ordered array of `{ text, mapTarget? }` objects. `text` is required plain text (up to 512 UTF-16 code units); legacy string entries are invalid. The website renders only escaped `text` and numbering. |
+| `mapTarget` | Optional on quests and objective objects: `{ x, y, zoom? }`. Both coordinates are required safe integers, including zero/negative values; no vanilla-map bounds. Optional zoom is a finite positive number. Omit unspecified targets/zoom; nulls and quoted numbers are invalid. No inheritance between quest/objective targets. Metadata is public in source/v2 JSON, absent from rendered website markup. |
 
 The baseline is sixteen missions: ten field runs and six base jobs. Existing IDs, in order, are `bunker`, `groceries`, `palisade`, `coop`, `chickens`, `mechanics`, `police`, `greenes`, `garden`, `vhs`, `dumbbell`, `drag-race`, `seb`, `winter`, `survivor-rooms`, and `battery-charger`. The VHS quest collects tapes from the movie store in Muldraugh and uses `assets/vhs.png`. Operation Dumbbell recovers gym equipment and snacks before setting up a safehouse workout area, and uses `assets/dumbbell.png`. The drag-race quest recovers one more fast car to race against the car already brought home, then prepares both cars and scouts a highway stretch; it uses `assets/drag-race.png`. Its NOS reference is narrative banter, not a confirmed game mechanic or required item.
 
@@ -154,7 +155,7 @@ For documentation-only changes, verify the described contracts against source an
 
 The hosting target is GitHub Pages for `Gerark/zomboard`, at `https://gerark.github.io/zomboard/`. The prepared deployment uses `.github/workflows/pages.yml`; the owner must select **GitHub Actions** as the source in repository Settings > Pages, replacing the previous **Deploy from a branch** setting. The workflow tests and builds on pushes to `main` and pull requests targeting `main`, then deploys only `main` pushes or manual runs on `main`. It uses official actions pinned to verified commit IDs, locked npm dependencies, read-only build permissions and Pages/OIDC write permissions confined to the deployment job.
 
-The deployment artifact contains `index.html`, `styles.css`, `missions-data.js`, `missions.js`, `share.js`, `assets/`, generated `share/` pages, the separate synthetic `mod-proof/` fixture and the generated `api/v1/` mod feed/assets, with `.nojekyll` and `index.html` at the deployment root. Only `_site/` is uploaded and deployed. Documentation, tests, build scripts, lockfiles and dependencies are excluded from the artifact. The repository itself is still public; do not commit private material. Preserve relative browser URLs so the board and query-string mission links work under `/zomboard/`. The build obtains the public base URL from Pages configuration for absolute preview and feed URLs, including a configured custom domain. Local API generation does not imply the feed is deployed.
+The deployment artifact contains `index.html`, `styles.css`, `missions-data.js`, `missions.js`, `share.js`, `assets/`, generated `share/` pages, the separate synthetic `mod-proof/` fixture and the generated `api/v2/` mod feed/assets, with `.nojekyll` and `index.html` at the deployment root. Only `_site/` is uploaded and deployed. Documentation, tests, build scripts, lockfiles and dependencies are excluded from the artifact. The repository itself is still public; do not commit private material. Preserve relative browser URLs so the board and query-string mission links work under `/zomboard/`. The build obtains the public base URL from Pages configuration for absolute preview and feed URLs, including a configured custom domain. Local API generation does not imply the feed is deployed.
 
 Pushes to `main` publish automatically after Pages is configured for GitHub Actions. Before an authorized push, review the intended files and check **Build and deploy GitHub Pages** afterward in the repository's Actions tab. Generated files stay in the deployment artifact and are never committed back. Feature branches and pull requests do not publish to the live site. No custom secret is required; standard Pages environment/branch protections still apply.
 
@@ -169,7 +170,10 @@ Publishing requires the owner's instruction; do not infer permission to publish 
 - For the already-authorized A/B refresh experiment, switching the synthetic `missions.json` between its A/B versions and publishing is within scope. Do not modify real missions as part of this test. Record actual live and in-game observations separately.
 
 
-## Authorized full mod exporter (2026-10-31)
+## Authorized full mod exporter (2026-10-31, historical v1)
+
+This section records the earlier v1 implementation. The v2 migration below
+supersedes its feed paths, objective shape and unchanged-runtime statements.
 
 - The owner explicitly requested implementing the full NeatUI/settings/theme/feed
   plan, including a local additive export of all real missions. This authorizes
@@ -192,3 +196,30 @@ Publishing requires the owner's instruction; do not infer permission to publish 
   ISO control-character rejection, the 2,048-character asset URL limit, exact
   PNG/SVG image content, uncropped/non-enlarged thumbnails, canonical revisions,
   consumer bounds and preservation of prior output on validation failure.
+
+## Authorized optional map targets and v2 migration (2026-10-31)
+
+- The owner requested implementation of optional quest/objective `mapTarget`
+  metadata, object objectives everywhere in source, and production v2 output
+  only. No committing, pushing, deployment or sibling-mod changes are authorized
+  by this task.
+- `missions-data.js` retains every mission's wording/order/ID/completion status;
+  all objectives are `{ text, mapTarget? }` objects. The initial migration added
+  no coordinates; the owner subsequently supplied three targets: quest 02
+  (`groceries`) at (10850, 9750), quest 01 (`bunker`) objective 1 at
+  (9921, 12631), and bunker objective 3 at (10110, 12784). All omit zoom;
+  the web map's zoom parameter has no defined conversion to the mod's zoom.
+  `missions.js` reads and escapes objective `text`; map metadata is not rendered.
+- The exporter validates object objectives and optional targets before replacing
+  output. Quest and objective targets are independent. Present targets require
+  safe integer x/y; present zoom requires a finite positive number. Omitted
+  values remain omitted, without inherited targets or default zoom.
+- Production output is `api/v2/missions.json` (`schemaVersion: 2`) and
+  `api/v2/assets/<sha256>.png`. The owned `_site/` rebuild removes old production
+  v1 output. The independent synthetic `mod-proof/` stays unchanged on v1.
+- Keep `docs/mod-feed-v2.md` and the README aligned with this producer. Retain
+  `docs/mod-feed-v1.md` as historical; the sibling mod remains v1-only until its
+  separately requested update and feed URL migration. Do not claim in-game v2
+  compatibility or deployment from local export/tests.
+- Preserve existing text/image/feed/buffer limits and canonical content
+  revisions; all supplied quest/objective map values affect revisions.
