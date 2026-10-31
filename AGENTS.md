@@ -158,3 +158,11 @@ The deployed site contains `index.html`, `styles.css`, `missions-data.js`, `miss
 Pushes to `main` publish automatically after Pages is configured for GitHub Actions. Before an authorized push, review the intended files and check **Build and deploy GitHub Pages** afterward in the repository's Actions tab. Generated files stay in the deployment artifact and are never committed back. Feature branches and pull requests do not publish to the live site. No custom secret is required; standard Pages environment/branch protections still apply.
 
 Publishing requires the owner's instruction; do not infer permission to publish from an analysis-only request. Verify current hosting requirements if publishing is requested; do not assume the README's external service instructions are permanently current. Report the concrete change, verification performed, and unresolved issues. Keep this guide and the README aligned with any approved architectural or behavior changes.
+
+
+## Authorized mod experiment (2026-10-31)
+
+- The owner authorized adding and publishing a separate synthetic test folder for the ZomBoard mod download/display proof. Real mission content and browser runtime are outside this change.
+- `mod-proof/` holds A/B fake-quest feeds, an initially-A `missions.json`, and two digest-named PNG assets. `scripts/build-mod-proof.mjs` validates the images and prepares only explicit public files, resolving URLs against the configured Pages base and recalculating full SHA-256 revisions. The main build invokes it before replacing output.
+- This is not the production mission export described in the sibling mod repository. `missions-data.js` remains the real-content source of truth and is not duplicated by these fixtures.
+- For the already-authorized A/B refresh experiment, switching the synthetic `missions.json` between its A/B versions and publishing is within scope. Do not modify real missions as part of this test. Record actual live and in-game observations separately.

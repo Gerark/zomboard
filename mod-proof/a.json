@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "missions": [
+    {
+      "id": "https-proof",
+      "number": "P01",
+      "title": "REMOTE PROOF A",
+      "kicker": "Synthetic test fixture",
+      "teaser": "A remote download/display experiment.",
+      "category": "field",
+      "completed": false,
+      "risk": "LOW",
+      "location": "Synthetic fixture",
+      "crew": "Test only",
+      "description": "This text came from remote fixture A. The PNG should be orange with one cream bar.",
+      "note": "Synthetic content; no game progress or real mission data.",
+      "objectives": [
+        "Display remote text",
+        "Display the downloaded PNG"
+      ],
+      "images": [
+        {
+          "url": "https://gerark.github.io/zomboard/mod-proof/assets/proof-d3793ab449166a128d3b0912e0fb485cee8cff2dd36351c8a26d93368d35a790.png",
+          "alt": "Orange panel with one bar",
+          "sha256": "d3793ab449166a128d3b0912e0fb485cee8cff2dd36351c8a26d93368d35a790",
+          "bytes": 419,
+          "width": 256,
+          "height": 128
+        }
+      ]
+    }
+  ],
+  "revision": "1b5ce402e32cb59b4d71af22c279bca15c1436adfe5bce8d1abefeaff7adc627"
+}
