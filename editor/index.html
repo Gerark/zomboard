@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; script-src 'self'; img-src data:; base-uri 'none'; form-action 'none'">
+  <title>ZomBoard Quest Editor</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="quest-identity.js" defer></script>
+  <script src="renderer.js" defer></script>
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand-mark" aria-hidden="true">Z<span>✳</span></div>
+    <div><h1>ZomBoard</h1><p class="label">QUEST EDITOR</p></div>
+    <div class="toolbar"><span class="build-label">QUEST EDITING · 0.5.0</span><button id="open-board" type="button">Open ZomBoard Folder</button><button id="save-quest" type="button" disabled>Save quest</button></div>
+  </header>
+  <p id="status" class="status-line" role="status">Choose the source folder containing missions-data.js.</p>
+  <main>
+    <section id="welcome" class="welcome" aria-labelledby="welcome-title">
+      <p class="label accent">THE SAFEHOUSE DESK</p>
+      <h2 id="welcome-title">A place to plan<br>the next run.</h2>
+      <p class="intro">Open your ZomBoard folder to browse quest briefings, objectives and image references.</p>
+      <p class="read-only-note">Add quests or edit their text, details, completion, objectives and ordered images. Saving keeps a backup of the original file.</p>
+    </section>
+    <div id="board" class="board" hidden>
+      <aside class="sidebar" aria-labelledby="quest-list-title">
+        <div class="sidebar-heading"><h2 id="quest-list-title">QUESTS <span id="quest-count"></span></h2><button id="new-quest" class="secondary-button" type="button" disabled>+ New quest</button></div>
+        <p id="quest-totals" class="muted"></p>
+        <ol id="quest-list" class="quest-list"></ol>
+      </aside>
+      <article id="quest-detail" class="quest-detail" aria-label="Selected quest briefing"></article>
+    </div>
+  </main>
+  <dialog id="image-picker" aria-labelledby="image-picker-title"><div class="picker-heading"><h2 id="image-picker-title">Add an existing image</h2><button id="close-image-picker" type="button" class="secondary-button">Close</button></div><label for="image-search">Find an asset</label><input id="image-search" type="search" placeholder="Search filenames"><div id="image-options"></div><p id="image-picker-status" class="muted" role="status"></p></dialog>
+</body>
+</html>

@@ -1,5 +1,10 @@
 # Add a mission 
 
+For a Windows GUI, use the separate [Quest Editor](editor/README.md). It can add
+quests, edit their text/details/completion, and manage objectives and images.
+It saves local source files with backups; publishing still uses the Git workflow
+below. The website itself needs no editor installation. The manual workflow is:
+
 1. Add the mission images to `assets/`.
 2. Open `missions-data.js` and duplicate a complete object inside the `missions` array, before the closing `];`. Separate objects with commas.
 3. Set a unique `id`, the next two-digit `number`, and replace the mission text and objectives.
@@ -12,7 +17,11 @@
 
 Every mission in `missions-data.js` has a required `completed` boolean. Set it to `true` when the group finishes a quest. Completed quests appear under **COMPLETED QUESTS** in the sidebar and in a separate card grid below the active quests. Their card images display a large **COMPLETED** overlay, and the cards remain clickable to open their briefings. Both groups preserve source order, original mission numbers, links and access to full briefings. The completed sections are hidden when there are no completed quests.
 
-Seven quests are completed: The Bunker Mystery (`bunker`), Fortify McCoy (`palisade`), Pimp My Apocalypse Ride (`mechanics`), The Sound of Freedom (`police`), Green Thumbs, Red Streets (`greenes`), I Miss Old Movies (`vhs`), and A Proper Goodbye (`seb`). The other nine quests remain active. Walls Between Friends (`survivor-rooms`) is partially complete and stays active for fitting doors where possible. The Price of Groceries (`groceries`) remains an optional reserve run after the supermarket haul during the bunker trip; its briefing links back to the bunker mission, and vice versa. Completion is curated in source for everyone viewing the board; visitors cannot change it, and the site does not store personal progress.
+Eleven quests are completed: The Bunker Mystery (`bunker`), The Price of Groceries (`groceries`), Fortify McCoy (`palisade`), Operation Cluck Fortress (`coop`), The Great Chicken Heist (`chickens`), Pimp My Apocalypse Ride (`mechanics`), The Sound of Freedom (`police`), Green Thumbs, Red Streets (`greenes`), I Miss Old Movies (`vhs`), A Proper Goodbye (`seb`), and Dead Batteries, Living Problems (`battery-charger`). The board has seventeen quests in total, with six active, including the new Read It and Wrench (`sports-car-magazine`) hunt for a magazine to learn sports-car repairs. Walls Between Friends (`survivor-rooms`) is partially complete and stays active for fitting doors where possible.
+
+The grocery run brought back loot expected to last around three or four days, spices, and a Bible from the nearby motel; its briefing still links back to the bunker mission, and vice versa. Cluck Fortress houses rabbits after a mix-up. The separate chicken heist succeeded, but the team discovered too late that a turkey had been in the trailer since they took it; it died of starvation. The charger hunt ended with two found in one day after weeks of searching.
+
+Completion is curated in source for everyone viewing the board; visitors cannot change it, and the site does not store personal progress.
 
 ## Multiple images
 

@@ -22,23 +22,23 @@ const missions = [
       { text: 'Found a few masks for a nuclear crisis, with little else to recover' },
       { text: 'Spotted a supermarket and returned with a large haul of food and other supplies', mapTarget: { x: 10110, y: 12784 } }
     ],
-    note: 'The bunker disappointed. The supermarket delivered. Mission 02 is now a reserve run if supplies start running low.'
+    note: 'The bunker disappointed. The supermarket delivered. Mission 02 later added another haul, this time with spices.'
   },
   {
     id: 'groceries', number: '02', title: 'THE PRICE OF GROCERIES',
-    completed: false,
+    completed: true,
     mapTarget: { x: 10850, y: 9750 },
-    kicker: 'RESERVE SUPPLY RUN', category: 'field', risk: 'SEVERE',
+    kicker: 'SUPPLIES RECOVERED', category: 'field', risk: 'SEVERE',
     images: [
       { src: 'assets/grocery-store.png', alt: 'Food Market grocery store exterior and parking lot.' },
       { src: 'assets/grocery.png', alt: 'Annotated map marking a canned-food location in Muldraugh and the McCoy safehouse.' }
     ],
-    location: 'Grocery Store · Muldraugh', crew: '3 recommended / 2 if we are smart',
-    teaser: 'The bunker crew filled the pantry. Keep this store in reserve for another day.',
-    description: 'The supermarket haul during The Bunker Mystery brought home plenty of food and other supplies, so this separate grocery raid is no longer urgent and may not be needed for now. Keep the Muldraugh store as a reserve option. If stocks run low or something specific is missing, reassess what we need before risking a trip through its zombie-filled aisles.',
+    location: 'Grocery Store / nearby motel · Muldraugh', crew: '3 recommended / 2 if we are smart',
+    teaser: 'Three or four days of supplies, spices, and a motel Bible. Worth the trip.',
+    description: 'The grocery-store run is complete and was worth the trip. The team found good loot expected to last around three or four days, plus spices to make survival taste slightly less like punishment. A stop at the nearby motel also turned up a Bible. That came home too, in case someone has plans for it. The supermarket haul during The Bunker Mystery bought us time; this run added another welcome supply cushion.',
     relatedMission: 'bunker',
-    objectives: [{ text: 'Check safehouse stocks and decide whether another grocery run is needed' }, { text: 'If needed, scout and clear a safe approach to the storefront' }, { text: 'Recover missing food and useful supplies without getting surrounded' }],
-    note: 'Optional reserve run, not a confirmed clearance of this store. No need to die for groceries we already have.'
+    objectives: [{ text: 'Recovered good loot expected to last around three or four days, plus spices' }, { text: 'Picked up a Bible from the nearby motel' }],
+    note: 'The pantry has supplies. Dinner has seasoning. The motel Bible is available if anyone has an idea.'
   },
   {
     id: 'palisade', number: '03', title: 'FORTIFY McCOY',
@@ -53,25 +53,25 @@ const missions = [
   },
   {
     id: 'coop', number: '04', title: 'OPERATION CLUCK FORTRESS',
-    completed: false,
+    completed: true,
     kicker: 'BASE CONSTRUCTION', category: 'base', risk: 'LOW',
     image: 'assets/chicken-coop.png', imageAlt: 'Chickens on grass beside a small coop and a metal barrel.',
     location: 'Safehouse', crew: '1 survivor minimum',
-    teaser: 'The apocalypse took civilization. Not our right to fresh eggs.',
-    description: 'Establish our very own feathered fortress. Build a chicken house and a secure first fence so future residents have somewhere to sleep, eat, and silently judge us from. Make it cozy. Make it sturdy. Do not let the chickens run the place.',
-    objectives: [{ text: 'Choose a safe spot for the enclosure' }, { text: 'Build a fence and chicken house' }, { text: 'Prepare the area for incoming livestock' }],
-    note: 'Chickens are future coworkers. Please act professionally.'
+    teaser: 'Fortress finished. Current residents: rabbits. Someone misread the brief.',
+    description: 'Operation Cluck Fortress is complete. The livestock area is ready, and its current residents are rabbits instead of chickens. Someone got confused somewhere between the planning meeting and the animal delivery. The construction job is done. The naming committee may need another meeting.',
+    objectives: [{ text: 'Finished preparing the livestock enclosure' }, { text: 'Established an animal area, currently occupied by rabbits instead of chickens' }],
+    note: 'Long ears. No feathers. We may need to review the recruitment process.'
   },
   {
     id: 'chickens', number: '05', title: 'THE GREAT CHICKEN HEIST',
-    completed: false,
+    completed: true,
     kicker: 'LIVESTOCK RECOVERY', category: 'field', risk: 'MEDIUM',
     image: 'assets/chickens.png', imageAlt: 'Annotated map marking a possible chicken location near Muldraugh.',
     location: 'Farms around Knox County', crew: '2 survivors minimum',
-    teaser: 'We have a coop to fill. Time to liberate some feathered survivors.',
-    description: 'The coop is useless without tenants. Search nearby farms for chickens, secure them, and bring the little idiots back home alive. Remember: you are stealing chickens during a zombie apocalypse. Keep your priorities straight.',
-    objectives: [{ text: 'Locate a farm with living chickens' }, { text: 'Find a safe way to transport them' }, { text: 'Return to McCoy with livestock and all limbs intact' }],
-    note: 'The chickens must survive. You should make an effort as well.'
+    teaser: 'The chicken heist worked. The trailer had a turkey. We found out too late.',
+    description: 'The chicken heist is complete: the recovery run worked. It also revealed a grim surprise. A turkey had already been in the trailer ever since we first took it, and nobody discovered it in time. It died of starvation. A successful chicken run, with one very sad lesson about checking what is already on board.',
+    objectives: [{ text: 'Completed the chicken-recovery run' }],
+    note: 'Check trailers for living passengers and make sure they have food. The turkey deserved a better inventory check.'
   },
   {
     id: 'mechanics', number: '06', title: 'PIMP MY APOCALYPSE RIDE',
@@ -191,13 +191,24 @@ const missions = [
   },
   {
     id: 'battery-charger', number: '16', title: 'DEAD BATTERIES, LIVING PROBLEMS',
-    completed: false,
+    completed: true,
     kicker: 'BATTERY CHARGER RECOVERY', category: 'field', risk: 'MEDIUM',
     image: 'assets/battery-charger.png', imageAlt: 'A car battery charger with a front-panel gauge, coiled cables and red and blue clamps.',
     location: 'Knox County / Safehouse vehicle yard', crew: '2 survivors recommended',
-    teaser: 'The cars need a charge. Pushing them home is getting old.',
-    description: 'Find a car battery charger and bring it back to the safehouse. Search garages, workshops and storage areas for a lead; we do not have a confirmed location yet. Our cars are supposed to carry us away from trouble, not wait for a committee to push them. Recover a charger so we can recharge the fleet’s batteries and keep the next supply run from ending in a very slow getaway.',
-    objectives: [{ text: 'Search garages, workshops and storage areas for a car battery charger' }, { text: 'Recover the charger and bring it back to the safehouse vehicle yard' }, { text: 'Hand it over for recharging the cars’ batteries before future supply runs' }],
-    note: 'A motivational speech will not charge a battery. We have tried.'
+    teaser: 'Weeks of searching. Then two battery chargers in one day. Of course.',
+    description: 'The battery-charger hunt is complete. After weeks of looking for one, the team found two in a single day. Apparently the apocalypse has a sense of humor and absolutely no respect for our schedule. The search is finally over; the cars can stop being the only things around here with less energy than the survivors.',
+    objectives: [{ text: 'Found two car battery chargers in a single day after weeks of searching' }],
+    note: 'We needed one. We found two. Naturally, they waited until we had spent weeks complaining.'
+  },
+  {
+    id: 'sports-car-magazine', number: '17', title: 'READ IT AND WRENCH',
+    completed: false,
+    kicker: 'MECHANICS MAGAZINE HUNT', category: 'field', risk: 'MEDIUM',
+    image: 'assets/sports-car-magazine.svg', imageAlt: 'Illustration of a sports-car mechanics magazine and a wrench on a workshop bench, not an in-game item image.',
+    location: 'Knox County / Safehouse vehicle yard', crew: '1 survivor minimum',
+    teaser: 'We have sports cars. Now we need the magazine that explains how to fix them.',
+    description: 'Find a mechanics magazine that teaches us how to work on and repair sports cars. Having something fast in the yard is excellent. Knowing what to do when it stops being fast would be even better. Check reading material during supply runs, confirm it covers sports cars, and bring it home for our mechanic to read. No confirmed magazine location yet.',
+    objectives: [{ text: 'Find a mechanics magazine covering work on and repairs to sports cars' }, { text: 'Bring the magazine back to the safehouse' }, { text: 'Have our mechanic read it to learn how to work on the sports cars' }],
+    note: 'Check that it covers sports cars. Racing stripes do not count as a qualification.'
   }
 ];

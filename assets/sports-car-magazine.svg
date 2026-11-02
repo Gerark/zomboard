@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 650" width="1000" height="650" role="img" aria-labelledby="title desc">
+  <title id="title">Read it and wrench</title>
+  <desc id="desc">An illustrated sports-car mechanics magazine and a steel wrench on a worn workshop bench. Fictional cover art, not an in-game item.</desc>
+  <defs>
+    <linearGradient id="wall" x2="0" y2="1">
+      <stop stop-color="#58604c"/><stop offset="1" stop-color="#263b31"/>
+    </linearGradient>
+    <linearGradient id="wood" x2="0" y2="1">
+      <stop stop-color="#755e4a"/><stop offset="1" stop-color="#393b2d"/>
+    </linearGradient>
+    <linearGradient id="paper" x2="1" y2="1">
+      <stop stop-color="#d9c4a4"/><stop offset="1" stop-color="#a28a65"/>
+    </linearGradient>
+    <linearGradient id="metal" x2="1" y2=".3">
+      <stop stop-color="#687269"/><stop offset=".5" stop-color="#bdbea4"/><stop offset="1" stop-color="#536459"/>
+    </linearGradient>
+    <radialGradient id="vignette">
+      <stop offset=".55" stop-color="#081310" stop-opacity="0"/><stop offset="1" stop-color="#081310" stop-opacity=".76"/>
+    </radialGradient>
+    <filter id="grit">
+      <feTurbulence type="fractalNoise" baseFrequency=".48" numOctaves="3" seed="17" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer><feFuncA type="linear" slope=".19"/></feComponentTransfer>
+    </filter>
+  </defs>
+  <rect width="1000" height="650" fill="url(#wall)"/>
+  <path d="M0 70H1000M0 142H1000M0 214H1000" stroke="#1c2b22" stroke-width="6" opacity=".55"/>
+  <path d="M0 290H1000V650H0Z" fill="url(#wood)" stroke="#1c2b22" stroke-width="12"/>
+  <path d="M0 378H1000M0 478H1000M0 579H1000" stroke="#272e24" stroke-width="7"/>
+  <path d="M20 342L167 335M39 437L165 431M748 531L929 520M785 609L969 597" stroke="#a28a65" stroke-width="4" opacity=".3"/>
+  <g fill="#24392f" stroke="#1c2b22" stroke-width="8" stroke-linejoin="round">
+    <path d="M84 173H235L252 280H68Z"/>
+    <path d="M107 170V145H211V170" fill="none" stroke="#8c7755" stroke-width="11"/>
+    <path d="M76 218H243" stroke="#8c7755" stroke-width="5"/>
+    <rect x="144" y="208" width="29" height="27" fill="#b1a17a"/>
+  </g>
+  <ellipse cx="485" cy="528" rx="296" ry="47" fill="#14261e" opacity=".65"/>
+  <g transform="rotate(-8 470 330)" stroke="#223027" stroke-linejoin="round">
+    <path d="M275 125H657V537H275Z" fill="#8b7858" stroke-width="9"/>
+    <path d="M265 112H647V524H265Z" fill="url(#paper)" stroke-width="8"/>
+    <path d="M280 116V520" fill="none" stroke="#927d5e" stroke-width="5"/>
+    <path d="M298 146H613V214H298Z" fill="#2c4337" stroke-width="4"/>
+    <text x="455" y="192" fill="#d9c4a4" stroke="none" font-family="monospace" font-size="35" font-weight="bold" text-anchor="middle">SPORTS CARS</text>
+    <text x="455" y="246" fill="#303e31" stroke="none" font-family="monospace" font-size="19" font-weight="bold" letter-spacing="2" text-anchor="middle">WORKSHOP READING</text>
+    <path d="M300 267H610V410H300Z" fill="#58604c" stroke-width="4"/>
+    <path d="M316 373L326 337L384 325L421 289H502L550 326L593 340L601 373Z" fill="#c77850" stroke-width="7"/>
+    <path d="M398 324L429 299H491L525 326Z" fill="#263b31" stroke-width="5"/>
+    <path d="M460 299V326" stroke="#a28a65" stroke-width="5"/>
+    <path d="M333 344H362M557 346H584" stroke="#d9c4a4" stroke-width="8"/>
+    <path d="M389 348H526M323 375H596" stroke="#8f553b" stroke-width="6"/>
+    <circle cx="371" cy="374" r="25" fill="#1c2b22" stroke-width="6"/>
+    <circle cx="549" cy="374" r="25" fill="#1c2b22" stroke-width="6"/>
+    <circle cx="371" cy="374" r="11" fill="#949a82" stroke-width="4"/>
+    <circle cx="549" cy="374" r="11" fill="#949a82" stroke-width="4"/>
+    <path d="M309 438H600M309 458H551M309 478H579" stroke="#635641" stroke-width="8"/>
+    <path d="M592 492L637 486L637 514Z" fill="#e0d1b3" stroke-width="3"/>
+  </g>
+  <g transform="rotate(27 773 395)" stroke="#223027" stroke-width="8" stroke-linejoin="round">
+    <path d="M755 317L738 288L741 251L761 230L763 271L783 280L803 267L802 228L824 247L831 282L812 313L806 471Q826 488 817 512Q806 535 781 532Q752 527 751 503Q750 484 763 473Z" fill="url(#metal)"/>
+    <path d="M777 326L786 465" fill="none" stroke="#d0ceb0" stroke-width="5"/>
+    <path d="M782 489L798 491L804 504L794 516L779 510L775 498Z" fill="#393b2d" stroke-width="5"/>
+  </g>
+  <path d="M863 141V246M850 141H876L873 201H853Z" fill="#a28a65" stroke="#223027" stroke-width="7" stroke-linejoin="round"/>
+  <path d="M863 246V277" stroke="#aeb39b" stroke-width="8"/>
+  <rect width="1000" height="650" fill="url(#vignette)"/>
+  <rect width="1000" height="650" filter="url(#grit)" opacity=".55"/>
+  <path d="M22 20H87M22 20V72M978 20H913M978 20V72M22 630H87M22 630V578M978 630H913M978 630V578" fill="none" stroke="#d9c4a4" stroke-width="2" stroke-opacity=".37"/>
+</svg>

@@ -1,0 +1,27 @@
+{
+  "name": "zomboard-quest-editor",
+  "productName": "ZomBoard Quest Editor",
+  "version": "0.5.0",
+  "description": "A small desktop editor for ZomBoard quests",
+  "author": "ZomBoard",
+  "private": true,
+  "main": "main.cjs",
+  "engines": {
+    "node": ">=22.13.0",
+    "npm": ">=10.9.0"
+  },
+  "scripts": {
+    "test": "node --test spec/quest-reader.spec.cjs spec/quest-store.spec.cjs spec/asset-library.spec.cjs spec/quest-create.spec.cjs",
+    "start": "electron .",
+    "package": "electron-forge package --platform=win32 --arch=x64",
+    "make": "electron-forge make --platform=win32 --arch=x64"
+  },
+  "dependencies": {
+    "acorn": "8.15.0"
+  },
+  "devDependencies": {
+    "@electron-forge/cli": "8.0.1",
+    "@electron-forge/maker-zip": "8.0.1",
+    "electron": "45.2.1"
+  }
+}

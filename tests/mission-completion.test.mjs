@@ -202,7 +202,7 @@ test('completed quest deep links work over HTTP and direct files, including navi
     const f = board({ href });
     assert.equal(f.elements.get('mission-dialog').open, true);
     assert.match(f.elements.get('dialog-content').innerHTML, /I MISS OLD MOVIES/);
-    assert.match(f.elements.get('dialog-content').innerHTML, /DOSSIER 10 \/ 16/);
+    assert.ok(f.elements.get('dialog-content').innerHTML.includes(`DOSSIER 10 / ${missions.length}`));
     assert.equal(f.location.href, href);
     f.elements.get('dialog-close').emit('click');
     const list = f.elements.get('completed-mission-list');
