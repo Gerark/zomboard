@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 650" width="1000" height="650" role="img" aria-labelledby="title desc">
+  <title id="title">Plan B has canned beans</title>
+  <desc id="desc">Concept artwork of emergency food, water and a medical bag beside a small roadside refuge and a West Point sign. Not a map, gameplay screenshot or confirmed shelter layout.</desc>
+  <defs>
+    <linearGradient id="sky" x2="0" y2="1">
+      <stop stop-color="#687269"/><stop offset="1" stop-color="#303e31"/>
+    </linearGradient>
+    <linearGradient id="wood" x2="1" y2=".3">
+      <stop stop-color="#8b7858"/><stop offset=".5" stop-color="#635641"/><stop offset="1" stop-color="#393b2d"/>
+    </linearGradient>
+    <linearGradient id="metal" x2="1" y2=".3">
+      <stop stop-color="#687269"/><stop offset=".5" stop-color="#bdbea4"/><stop offset="1" stop-color="#536459"/>
+    </linearGradient>
+    <linearGradient id="water" x2="1" y2="1">
+      <stop stop-color="#92aaa0"/><stop offset="1" stop-color="#3f645b"/>
+    </linearGradient>
+    <radialGradient id="vignette">
+      <stop offset=".55" stop-color="#081310" stop-opacity="0"/><stop offset="1" stop-color="#081310" stop-opacity=".76"/>
+    </radialGradient>
+    <filter id="grit">
+      <feTurbulence type="fractalNoise" baseFrequency=".48" numOctaves="3" seed="18" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer><feFuncA type="linear" slope=".19"/></feComponentTransfer>
+    </filter>
+    <g id="pine" fill="#24392f" stroke="#1c2b22" stroke-width="7" stroke-linejoin="round">
+      <path d="M0 0V178M0 0L-36 63H-20L-56 116H-30L-71 159H71L30 116H56L20 63H36Z"/>
+    </g>
+    <g id="can" stroke="#223027" stroke-width="6" stroke-linejoin="round">
+      <path d="M0 0H70V91Q35 106 0 91Z" fill="url(#metal)"/>
+      <path d="M2 22H68V72H2Z" fill="#c77850"/>
+      <ellipse cx="35" cy="0" rx="35" ry="11" fill="#aeb39b"/>
+      <path d="M12 40H58M12 54H47" stroke="#d9c4a4" stroke-width="6"/>
+      <path d="M9 84Q35 94 61 84" fill="none" stroke="#536459" stroke-width="3"/>
+    </g>
+    <g id="bottle" stroke="#223027" stroke-width="6" stroke-linejoin="round">
+      <path d="M17 0H43V25L57 43V132Q30 143 3 132V43L17 25Z" fill="url(#water)"/>
+      <path d="M18 2H42V16H18Z" fill="#b1a17a"/>
+      <path d="M5 67H55V104H5Z" fill="#c3bea0"/>
+      <path d="M17 42V59M17 114V125" stroke="#c6ccbb" stroke-width="5"/>
+    </g>
+  </defs>
+  <rect width="1000" height="650" fill="url(#sky)"/>
+  <path d="M0 276Q152 227 303 268T615 251T1000 260V650H0Z" fill="#4b5a43"/>
+  <g opacity=".7">
+    <use href="#pine" x="52" y="109"/><use href="#pine" x="158" y="133"/>
+    <use href="#pine" x="889" y="118"/><use href="#pine" x="978" y="95"/>
+  </g>
+  <path d="M365 258H463L699 650H166Z" fill="#53574d" stroke="#273328" stroke-width="8"/>
+  <path d="M413 277L424 310M437 342L453 387M472 432L498 501M521 555L559 650" stroke="#b1a17a" stroke-width="7"/>
+  <path d="M0 405Q135 368 283 412M643 386Q791 360 1000 419" fill="none" stroke="#7b886c" stroke-width="6" opacity=".45"/>
+  <g stroke="#1c2b22" stroke-width="8" stroke-linejoin="round">
+    <path d="M551 218H839V390H551Z" fill="url(#wood)"/>
+    <path d="M526 222L685 116L862 222Z" fill="#303f35"/>
+    <path d="M555 211L685 133L831 211" fill="none" stroke="#687269" stroke-width="5"/>
+    <path d="M561 264H829M561 310H829M561 356H829" stroke="#453f30" stroke-width="5"/>
+    <rect x="592" y="252" width="75" height="68" fill="#24392f"/>
+    <path d="M581 263L673 285M582 295L671 313" stroke="#a28a65" stroke-width="13"/>
+    <path d="M712 248H793V390H712Z" fill="#1c2b22"/>
+    <path d="M751 254L788 260V389H751Z" fill="#687258" stroke-width="5"/>
+    <path d="M775 326V341" stroke="#bdac85" stroke-width="5"/>
+    <path d="M696 393H808L820 407H687Z" fill="#8b7858" stroke-width="5"/>
+  </g>
+  <g stroke="#223027" stroke-width="7" stroke-linejoin="round">
+    <path d="M217 172V389" stroke="#8b7858" stroke-width="15"/>
+    <path d="M78 145H308L345 181L308 217H78Z" fill="#2c4337"/>
+    <path d="M93 158H300L322 181L300 203H93Z" fill="none" stroke="#b1a17a" stroke-width="2"/>
+    <text x="204" y="189" fill="#d9c4a4" stroke="none" font-family="monospace" font-size="25" font-weight="bold" text-anchor="middle">WEST POINT</text>
+  </g>
+  <path d="M0 524Q227 464 448 512T1000 493V650H0Z" fill="#273b2f"/>
+  <ellipse cx="559" cy="560" rx="336" ry="48" fill="#14261e" opacity=".65"/>
+  <g stroke="#223027" stroke-width="8" stroke-linejoin="round">
+    <path d="M203 431L254 402H611L646 431V574H203Z" fill="url(#wood)"/>
+    <path d="M203 431H646M211 477H638M211 524H638M242 436V566M605 436V566" fill="none" stroke="#393b2d" stroke-width="6"/>
+    <path d="M252 414H595M220 552L310 444M542 554L626 448" stroke="#a28a65" stroke-width="5" opacity=".45"/>
+    <rect x="330" y="492" width="195" height="50" fill="#c3bea0" stroke-width="4"/>
+    <text x="428" y="524" fill="#303e31" stroke="none" font-family="monospace" font-size="23" font-weight="bold" text-anchor="middle">EMERGENCY</text>
+  </g>
+  <use href="#can" x="253" y="328"/>
+  <use href="#can" x="335" y="321"/>
+  <use href="#bottle" x="442" y="274"/>
+  <use href="#bottle" x="517" y="281"/>
+  <g transform="rotate(7 735 486)" stroke="#223027" stroke-width="8" stroke-linejoin="round">
+    <path d="M640 445Q640 423 661 423H811Q832 423 832 445V546Q832 562 813 562H659Q640 562 640 546Z" fill="#7b886c"/>
+    <path d="M691 421V396Q735 378 780 396V421" fill="none" stroke="#a28a65" stroke-width="13"/>
+    <path d="M646 453H826M667 427V554M805 427V554" stroke="#4b5a43" stroke-width="5"/>
+    <path d="M723 470H750V491H772V517H750V540H723V517H702V491H723Z" fill="#d9c4a4" stroke-width="4"/>
+  </g>
+  <g transform="rotate(-16 885 510)" stroke="#223027" stroke-width="7" stroke-linejoin="round">
+    <path d="M865 459H905V561H865Z" fill="#536459"/>
+    <path d="M860 432H910V464H860Z" fill="url(#metal)"/>
+    <path d="M868 434H902" stroke="#d9c4a4" stroke-width="10"/>
+    <path d="M878 481H892V499H878Z" fill="#c77850" stroke-width="4"/>
+  </g>
+  <rect width="1000" height="650" fill="url(#vignette)"/>
+  <rect width="1000" height="650" filter="url(#grit)" opacity=".55"/>
+  <path d="M22 20H87M22 20V72M978 20H913M978 20V72M22 630H87M22 630V578M978 630H913M978 630V578" fill="none" stroke="#d9c4a4" stroke-width="2" stroke-opacity=".37"/>
+</svg>

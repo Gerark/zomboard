@@ -210,5 +210,24 @@ const missions = [
     description: 'Find a mechanics magazine that teaches us how to work on and repair sports cars. Having something fast in the yard is excellent. Knowing what to do when it stops being fast would be even better. Check reading material during supply runs, confirm it covers sports cars, and bring it home for our mechanic to read. No confirmed magazine location yet.',
     objectives: [{ text: 'Find a mechanics magazine covering work on and repairs to sports cars' }, { text: 'Bring the magazine back to the safehouse' }, { text: 'Have our mechanic read it to learn how to work on the sports cars' }],
     note: 'Check that it covers sports cars. Racing stripes do not count as a qualification.'
+  },
+  {
+    id: 'west-point-fallback', number: '18', title: 'PLAN B HAS CANNED BEANS',
+    completed: false,
+    kicker: 'CHECKPOINT & FALLBACK SUPPLIES', category: 'field', risk: 'HIGH',
+    image: 'assets/west-point-fallback.svg', imageAlt: 'Concept illustration of canned food, water and a medical bag beside a roadside shelter and a West Point sign; not a gameplay screenshot or a confirmed safehouse layout.',
+    location: 'West Point checkpoint / route from the safehouse', crew: '2 survivors + cargo vehicle recommended',
+    teaser: 'Stock the West Point checkpoint. Set up a refuge halfway home. Bad days need a pantry.',
+    description: 'We have a little checkpoint established in West Point. Now give it something useful to offer when a run goes sideways. Stock it for emergencies, then scout the route between McCoy and West Point for a small fallback safehouse where we can stop, patch ourselves up and wait out trouble instead of gambling everything on the drive home. The halfway location still needs choosing. Keep both stops modest: a few canned meals, drinking water, medical supplies and practical tools. We need somewhere to catch our breath, not a second warehouse to fill.',
+    objectives: [
+      { text: 'Revisit the established West Point checkpoint and check its shelter, vehicle access and escape route' },
+      { text: 'Scout between McCoy and West Point and choose a small fallback safehouse with a clear approach and another way out' },
+      { text: 'Prepare the fallback shelter with a sleeping spot, basic storage and barricades where needed, keeping an escape route usable' },
+      { text: 'Stash a few cans of food, a manual can opener and drinking water at both the checkpoint and the fallback safehouse' },
+      { text: 'Leave a basic emergency medical kit at each stop: clean bandages, disinfectant and painkillers' },
+      { text: 'Add a flashlight, spare batteries and basic repair tools at both stops; leave a small fuel reserve if supplies allow' },
+      { text: 'Mark both stops and their approaches on the group map, record the supplies and agree to restock after every use' }
+    ],
+    note: 'Keep enough supplies at McCoy before splitting the stockpile. Check each stop is still safe before settling in. Plan B should contain beans, bandages and an exit.'
   }
 ];
