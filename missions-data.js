@@ -214,20 +214,20 @@ const missions = [
   {
     id: 'west-point-fallback', number: '18', title: 'PLAN B HAS CANNED BEANS',
     completed: false,
-    kicker: 'CHECKPOINT & FALLBACK SUPPLIES', category: 'field', risk: 'HIGH',
-    image: 'assets/west-point-fallback.svg', imageAlt: 'Concept illustration of canned food, water and a medical bag beside a roadside shelter and a West Point sign; not a gameplay screenshot or a confirmed safehouse layout.',
-    location: 'West Point checkpoint / route from the safehouse', crew: '2 survivors + cargo vehicle recommended',
-    teaser: 'Stock the West Point checkpoint. Set up a refuge halfway home. Bad days need a pantry.',
-    description: 'We have a little checkpoint established in West Point. Now give it something useful to offer when a run goes sideways. Stock it for emergencies, then scout the route between McCoy and West Point for a small fallback safehouse where we can stop, patch ourselves up and wait out trouble instead of gambling everything on the drive home. The halfway location still needs choosing. Keep both stops modest: a few canned meals, drinking water, medical supplies and practical tools. We need somewhere to catch our breath, not a second warehouse to fill.',
+    kicker: 'CHECKPOINT CONSTRUCTION', category: 'field', risk: 'HIGH',
+    image: 'assets/west-point-fallback.svg', imageAlt: 'Concept illustration of emergency supplies beside a proposed roadside checkpoint on the route to West Point; not a gameplay screenshot or a confirmed checkpoint layout.',
+    location: 'Between Muldraugh and West Point', crew: '2 survivors + cargo vehicle recommended',
+    teaser: 'Build a checkpoint between Muldraugh and West Point. Bad days need a pantry.',
+    description: 'Establish a small checkpoint between Muldraugh and West Point so runs from McCoy have somewhere to fall back to when things go badly. Scout a suitable site, build or secure a basic shelter, and stock it with a few canned meals, drinking water, medical supplies and practical tools. The site still needs choosing and the checkpoint still needs building. Give us somewhere to stop, patch ourselves up and wait out trouble instead of gambling everything on the drive home. Keep the project modest and leave enough supplies at McCoy for everyone back home.',
     objectives: [
-      { text: 'Revisit the established West Point checkpoint and check its shelter, vehicle access and escape route' },
-      { text: 'Scout between McCoy and West Point and choose a small fallback safehouse with a clear approach and another way out' },
-      { text: 'Prepare the fallback shelter with a sleeping spot, basic storage and barricades where needed, keeping an escape route usable' },
-      { text: 'Stash a few cans of food, a manual can opener and drinking water at both the checkpoint and the fallback safehouse' },
-      { text: 'Leave a basic emergency medical kit at each stop: clean bandages, disinfectant and painkillers' },
-      { text: 'Add a flashlight, spare batteries and basic repair tools at both stops; leave a small fuel reserve if supplies allow' },
-      { text: 'Mark both stops and their approaches on the group map, record the supplies and agree to restock after every use' }
+      { text: 'Scout the route from McCoy toward West Point and choose a checkpoint site between the two towns with vehicle access and a clear escape route' },
+      { text: 'Build or secure a small checkpoint shelter with a sleeping spot, basic storage and barricades where needed, keeping an escape route usable' },
+      { text: 'Stash a few cans of food, a manual can opener and drinking water at the checkpoint' },
+      { text: 'Stock a basic emergency medical kit with clean bandages, disinfectant and painkillers' },
+      { text: 'Add a flashlight, spare batteries and basic repair tools; leave a small fuel reserve if supplies allow' },
+      { text: 'Check the checkpoint approach, vehicle parking and exit routes toward both towns' },
+      { text: 'Mark the checkpoint and its approaches on the group map, record the supplies and agree to restock after every use' }
     ],
-    note: 'Keep enough supplies at McCoy before splitting the stockpile. Check each stop is still safe before settling in. Plan B should contain beans, bandages and an exit.'
+    note: 'Keep enough supplies at McCoy before splitting the stockpile. Check the checkpoint is still safe before settling in. Plan B should contain beans, bandages and an exit.'
   }
 ];
